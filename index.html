@@ -2127,39 +2127,86 @@
                 data.push([`対象シフト: ${availableShifts.join('・')}`]);
                 data.push([]);
                 
-                // HC集計セクション
-                data.push(['HC', '', '日勤', '夜勤', '合計']);
+                // HC集計セクション（詳細な内訳付き）
+                data.push(['【人数（HC）集計】']);
+                data.push(['会社名', '日勤', '夜勤', '合計']);
                 const sortedByHC = Object.entries(companySummary).sort((a, b) => {
                     if (a[0] === 'Gworker') return -1;
                     if (b[0] === 'Gworker') return 1;
                     return b[1].hc - a[1].hc;
                 });
+                
                 sortedByHC.forEach(([company, summary]) => {
-                    data.push([company, '', summary.dayShiftHC || 0, summary.nightShiftHC || 0, summary.hc]);
+                    data.push([
+                        company, 
+                        summary.dayShiftHC || 0, 
+                        summary.nightShiftHC || 0, 
+                        summary.hc
+                    ]);
                 });
                 
                 const totalHC = Object.values(companySummary).reduce((sum, s) => sum + s.hc, 0);
                 const totalDayHC = Object.values(companySummary).reduce((sum, s) => sum + (s.dayShiftHC || 0), 0);
                 const totalNightHC = Object.values(companySummary).reduce((sum, s) => sum + (s.nightShiftHC || 0), 0);
-                data.push(['合計', '', totalDayHC, totalNightHC, totalHC]);
+                data.push(['合計', totalDayHC, totalNightHC, totalHC]);
                 data.push([]);
                 
-                // 経費・LH集計も同様に処理...
-                data.push(['経費']);
+                // LH集計セクション
+                data.push(['【労働時間（LH）集計】']);
+                data.push(['会社名', '日勤', '夜勤', '合計']);
                 sortedByHC.forEach(([company, summary]) => {
-                    data.push([company, Math.round(summary.totalCost)]);
+                    data.push([
+                        company, 
+                        Math.round((summary.dayShiftLH || 0) * 10) / 10,
+                        Math.round((summary.nightShiftLH || 0) * 10) / 10,
+                        Math.round(summary.totalLH * 10) / 10
+                    ]);
                 });
-                data.push(['合計', Math.round(Object.values(companySummary).reduce((sum, s) => sum + s.totalCost, 0))]);
+                const totalLH = Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0);
+                const totalDayLH = Object.values(companySummary).reduce((sum, s) => sum + (s.dayShiftLH || 0), 0);
+                const totalNightLH = Object.values(companySummary).reduce((sum, s) => sum + (s.nightShiftLH || 0), 0);
+                data.push(['合計', Math.round(totalDayLH * 10) / 10, Math.round(totalNightLH * 10) / 10, Math.round(totalLH * 10) / 10]);
                 data.push([]);
                 
-                data.push(['LH']);
+                // 経費集計セクション
+                data.push(['【経費集計】']);
+                data.push(['会社名', '日勤', '夜勤', '合計']);
                 sortedByHC.forEach(([company, summary]) => {
-                    data.push([company, Math.round(summary.totalLH)]);
+                    data.push([
+                        company, 
+                        Math.round(summary.dayShiftCost || 0),
+                        Math.round(summary.nightShiftCost || 0),
+                        Math.round(summary.totalCost)
+                    ]);
                 });
-                data.push(['合計', Math.round(Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0))]);
+                const totalCost = Object.values(companySummary).reduce((sum, s) => sum + s.totalCost, 0);
+                const totalDayCost = Object.values(companySummary).reduce((sum, s) => sum + (s.dayShiftCost || 0), 0);
+                const totalNightCost = Object.values(companySummary).reduce((sum, s) => sum + (s.nightShiftCost || 0), 0);
+                data.push(['合計', Math.round(totalDayCost), Math.round(totalNightCost), Math.round(totalCost)]);
+                data.push([]);
+                
+                // 総合サマリー
+                data.push(['【総合サマリー】']);
+                data.push(['項目', '日勤', '夜勤', '合計']);
+                data.push(['HC', totalDayHC, totalNightHC, totalHC]);
+                data.push(['LH', Math.round(totalDayLH * 10) / 10, Math.round(totalNightLH * 10) / 10, Math.round(totalLH * 10) / 10]);
+                data.push(['経費', Math.round(totalDayCost), Math.round(totalNightCost), Math.round(totalCost)]);
+                if (totalLH > 0) {
+                    const avgDayCost = totalDayLH > 0 ? totalDayCost / totalDayLH : 0;
+                    const avgNightCost = totalNightLH > 0 ? totalNightCost / totalNightLH : 0;
+                    const avgTotalCost = totalCost / totalLH;
+                    data.push(['平均時給', Math.round(avgDayCost), Math.round(avgNightCost), Math.round(avgTotalCost)]);
+                }
 
                 const ws = XLSX.utils.aoa_to_sheet(data);
-                ws['!cols'] = [{ width: 15 }, { width: 8 }, { width: 8 }, { width: 8 }, { width: 10 }];
+                ws['!cols'] = [{ width: 15 }, { width: 12 }, { width: 12 }, { width: 12 }];
+                
+                // スタイリング（可能な範囲で）
+                ws['!merges'] = [
+                    { s: { r: 0, c: 0 }, e: { r: 0, c: 3 } },  // タイトル
+                    { s: { r: 1, c: 0 }, e: { r: 1, c: 3 } }   // 対象シフト
+                ];
+
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, '日勤夜勤合算集計');
                 
@@ -2175,52 +2222,128 @@
 
         function generateCombinedCompanySummary() {
             const targetDateStr = document.getElementById('targetDate').value;
-            if (!targetDateStr) return null;
+            if (!targetDateStr || !workbook) return null;
 
+            const targetDate = new Date(targetDateStr);
             const companySummary = {};
-            const currentData = getCurrentTableData();
             
-            currentData.forEach(emp => {
-                if (emp.isWorking) {
-                    const company = emp.company.trim();
-                    const hourlyWageStr = emp.hourlyWage || '0';
-                    const transportationStr = emp.transportation || '0';
+            // 日勤と夜勤の両方のシートを処理
+            const shiftsToProcess = [
+                { sheetName: '日勤', isNight: false },
+                { sheetName: '夜勤', isNight: true }
+            ];
+            
+            shiftsToProcess.forEach(({ sheetName, isNight }) => {
+                if (!workbook.SheetNames.includes(sheetName)) return;
+                
+                try {
+                    const worksheet = workbook.Sheets[sheetName];
+                    const sheetData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                     
-                    const hourlyWage = parseFloat(String(hourlyWageStr).replace(/[^\d.]/g, '')) || 0;
-                    const transportation = parseFloat(String(transportationStr).replace(/[^\d.]/g, '')) || 0;
+                    if (!sheetData || sheetData.length < 2) return;
                     
-                    if (!companySummary[company]) {
-                        companySummary[company] = {
-                            hc: 0, totalLH: 0, totalCost: 0,
-                            dayShiftHC: 0, nightShiftHC: 0
-                        };
-                    }
+                    // 日付列を分析
+                    const headerRow = sheetData[0];
+                    const sheetDateColumns = [];
                     
-                    companySummary[company].hc += 1;
+                    headerRow.forEach((cell, index) => {
+                        if (typeof cell === 'number' && cell >= 45000) {
+                            const excelDate = new Date((cell - 25569) * 86400 * 1000);
+                            sheetDateColumns.push({
+                                index: index,
+                                excelValue: cell,
+                                date: excelDate
+                            });
+                        }
+                    });
                     
-                    if (isNightShift) {
-                        companySummary[company].nightShiftHC += 1;
-                    } else {
-                        companySummary[company].dayShiftHC += 1;
-                    }
+                    // 目標日付に最も近い列を見つける
+                    let targetColumnIndex = -1;
+                    let minDiff = Infinity;
                     
-                    const startTime = parseTime(emp.startTime);
-                    const endTime = parseTime(emp.endTime);
-                    const breakTime = parseTime(emp.break);
+                    sheetDateColumns.forEach(col => {
+                        const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            targetColumnIndex = col.index;
+                        }
+                    });
                     
-                    if (startTime !== null && endTime !== null) {
-                        const workHours = calculateWorkHours(startTime, endTime, breakTime);
-                        const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
-                        const regularHours = workHours - nightHours;
+                    if (targetColumnIndex === -1) return;
+                    
+                    // シフトデータを抽出
+                    for (let i = 1; i < sheetData.length; i++) {
+                        const row = sheetData[i];
+                        if (!row || row.length === 0) continue;
                         
-                        companySummary[company].totalLH += workHours;
+                        const status = row[targetColumnIndex] != null ? String(row[targetColumnIndex]) : '';
                         
-                        const regularCost = regularHours * hourlyWage;
-                        const nightCost = nightHours * hourlyWage * 1.25;
-                        companySummary[company].totalCost += regularCost + nightCost + transportation;
-                    } else {
-                        companySummary[company].totalCost += transportation;
+                        if (status === '◯' || status === '○') {
+                            const company = row[0] != null ? String(row[0]).trim() : '';
+                            const hourlyWageStr = row[5] != null ? String(row[5]) : '0';
+                            const transportationStr = row[6] != null ? String(row[6]) : '0';
+                            const startTimeStr = row[7] != null ? String(row[7]) : '';
+                            const endTimeStr = row[8] != null ? String(row[8]) : '';
+                            const breakTimeStr = row[9] != null ? String(row[9]) : '';
+                            
+                            const hourlyWage = parseFloat(hourlyWageStr.replace(/[^\d.]/g, '')) || 0;
+                            const transportation = parseFloat(transportationStr.replace(/[^\d.]/g, '')) || 0;
+                            
+                            if (!company) continue;
+                            
+                            if (!companySummary[company]) {
+                                companySummary[company] = {
+                                    hc: 0, totalLH: 0, totalCost: 0,
+                                    dayShiftHC: 0, nightShiftHC: 0,
+                                    dayShiftLH: 0, nightShiftLH: 0,
+                                    dayShiftCost: 0, nightShiftCost: 0
+                                };
+                            }
+                            
+                            companySummary[company].hc += 1;
+                            
+                            if (isNight) {
+                                companySummary[company].nightShiftHC += 1;
+                            } else {
+                                companySummary[company].dayShiftHC += 1;
+                            }
+                            
+                            const startTime = parseTime(startTimeStr);
+                            const endTime = parseTime(endTimeStr);
+                            const breakTime = parseTime(breakTimeStr);
+                            
+                            if (startTime !== null && endTime !== null) {
+                                const workHours = calculateWorkHours(startTime, endTime, breakTime);
+                                const nightHours = isNight ? calculateNightShiftHours(startTime, endTime, breakTime) : 0;
+                                const regularHours = workHours - nightHours;
+                                
+                                companySummary[company].totalLH += workHours;
+                                
+                                const regularCost = regularHours * hourlyWage;
+                                const nightCost = nightHours * hourlyWage * 1.25;
+                                const totalEmployeeCost = regularCost + nightCost + transportation;
+                                
+                                companySummary[company].totalCost += totalEmployeeCost;
+                                
+                                if (isNight) {
+                                    companySummary[company].nightShiftLH += workHours;
+                                    companySummary[company].nightShiftCost += totalEmployeeCost;
+                                } else {
+                                    companySummary[company].dayShiftLH += workHours;
+                                    companySummary[company].dayShiftCost += totalEmployeeCost;
+                                }
+                            } else {
+                                companySummary[company].totalCost += transportation;
+                                if (isNight) {
+                                    companySummary[company].nightShiftCost += transportation;
+                                } else {
+                                    companySummary[company].dayShiftCost += transportation;
+                                }
+                            }
+                        }
                     }
+                } catch (error) {
+                    console.error(`${sheetName}シートの処理中にエラー:`, error);
                 }
             });
             
