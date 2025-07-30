@@ -1,0 +1,2488 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2196F3">
+    <meta name="description" content="プロフェッショナルシフト管理アプリ - Excel連携対応">
+    <title>シフト管理プロ v3.0</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json,{
+        'name': 'シフト管理プロ',
+        'short_name': 'シフト管理',
+        'description': 'プロフェッショナルシフト管理アプリ',
+        'start_url': '/',
+        'display': 'standalone',
+        'background_color': '#ffffff',
+        'theme_color': '#2196F3',
+        'icons': [
+            {
+                'src': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0iIzIxOTZGMyIgcng9IjQiLz48cGF0aCBkPSJNNiA5aDEydjJINnptMCA0aDEydjJINnptMC00aDEyVjlINnoiIGZpbGw9IndoaXRlIi8+PC9zdmc+',
+                'sizes': '192x192',
+                'type': 'image/svg+xml'
+            }
+        ]
+    }">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --primary-dark: #1976D2;
+            --secondary-color: #4CAF50;
+            --accent-color: #FF9800;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+        }
+
+        [data-theme="dark"] {
+            --background: #0f172a;
+            --surface: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --glass: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(51, 65, 85, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Noto Sans JP', system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 24px 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            background: var(--surface);
+        }
+
+        .install-btn {
+            background: linear-gradient(45deg, var(--accent-color), #FF6F00);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .install-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 152, 0, 0.3);
+        }
+
+        .step-container {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            animation: slideUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .step-container:nth-child(2) { animation-delay: 0.1s; }
+        .step-container:nth-child(3) { animation-delay: 0.2s; }
+        .step-container:nth-child(4) { animation-delay: 0.3s; }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .step-number {
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .step-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .step-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        .upload-zone {
+            border: 3px dashed var(--border);
+            border-radius: 16px;
+            padding: 48px 24px;
+            text-align: center;
+            background: var(--surface);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.drag-over {
+            border-color: var(--primary-color);
+            background: linear-gradient(45deg, rgba(33, 150, 243, 0.05), rgba(76, 175, 80, 0.05));
+            transform: translateY(-2px);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+            animation: bounce 2s infinite;
+        }
+
+        .upload-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .upload-hint {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .file-input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .progress-container {
+            margin-top: 16px;
+            display: none;
+        }
+
+        .progress-bar {
+            background: var(--border);
+            border-radius: 8px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .file-info {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .select-section {
+            display: none;
+        }
+
+        .sheet-select {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-width: 200px;
+        }
+
+        .sheet-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .date-controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .date-input {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .generate-btn {
+            background: linear-gradient(45deg, var(--secondary-color), #388E3C);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 28px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        .results-container {
+            display: none;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, var(--secondary-color), #43A047);
+            color: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .summary-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .summary-icon {
+            font-size: 1.8rem;
+        }
+
+        .summary-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .calculation-panel {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .calc-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .calc-card {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(76, 175, 80, 0.1));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .calc-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .calc-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .calc-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .calc-unit {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .calc-input {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            width: 100%;
+            max-width: 120px;
+            margin: 4px auto;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .table-container {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: auto;
+        }
+
+        .shift-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .shift-table th {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+            border: none;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .shift-table th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .shift-table th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .shift-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .shift-table tr:hover {
+            background: rgba(33, 150, 243, 0.05);
+        }
+
+        .working {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(139, 195, 74, 0.1)) !important;
+        }
+
+        .editable-cell {
+            background: rgba(255, 193, 7, 0.1) !important;
+            cursor: text;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            min-width: 60px;
+            position: relative;
+        }
+
+        .editable-cell:hover {
+            background: rgba(255, 193, 7, 0.2) !important;
+        }
+
+        .editable-cell:focus {
+            background: var(--surface) !important;
+            outline: 2px solid var(--primary-color);
+            outline-offset: -2px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            background: linear-gradient(45deg, var(--accent-color), #F57C00);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.3);
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+        }
+
+        .action-btn.success {
+            background: linear-gradient(45deg, var(--secondary-color), #388E3C);
+        }
+
+        .action-btn.danger {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+
+        .status-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .status-message.show {
+            transform: translateX(0);
+        }
+
+        .status-message.success {
+            background: linear-gradient(45deg, var(--secondary-color), #43A047);
+        }
+
+        .status-message.error {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 12px;
+            }
+
+            .header {
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .step-container {
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            .upload-zone {
+                padding: 32px 16px;
+            }
+
+            .date-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .calc-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 12px;
+            }
+
+            .summary-stats {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 12px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .shift-table {
+                font-size: 0.8rem;
+            }
+
+            .shift-table th,
+            .shift-table td {
+                padding: 8px 6px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .step-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .calc-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .header,
+            .action-buttons,
+            .install-btn,
+            .theme-toggle {
+                display: none;
+            }
+
+            .step-container {
+                background: white;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">📊</div>
+                    <div>
+                        <h1 class="title">シフト管理プロ</h1>
+                        <p class="subtitle">Professional Shift Management v3.0</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="theme-toggle" onclick="toggleTheme()" title="ダークモード切替">
+                        <span id="themeIcon">🌙</span>
+                    </button>
+                    <button class="install-btn" id="installBtn" onclick="installApp()">
+                        📱 アプリをインストール
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Step 1: File Upload -->
+        <section class="step-container">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <div>
+                    <h2 class="step-title">Excelファイルをアップロード</h2>
+                    <p class="step-description">月間シフト表のExcelファイル（.xlsx/.xls）をドラッグ＆ドロップまたはクリックして選択</p>
+                </div>
+            </div>
+            
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">ファイルをドラッグ＆ドロップ</div>
+                <div class="upload-hint">または、クリックしてファイルを選択してください</div>
+                <input type="file" class="file-input" id="fileInput" accept=".xlsx,.xls">
+            </div>
+            
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div id="progressText">ファイルを読み込み中...</div>
+            </div>
+            
+            <div class="file-info" id="fileInfo">
+                <div id="fileName"></div>
+            </div>
+        </section>
+
+        <!-- Step 2: Sheet Selection -->
+        <section class="step-container select-section" id="sheetSection">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <div>
+                    <h2 class="step-title">シートを選択</h2>
+                    <p class="step-description">分析したい勤務シート（日勤・夜勤）を選択してください</p>
+                </div>
+            </div>
+            
+            <select class="sheet-select" id="sheetSelect">
+                <option value="">シートを選択してください</option>
+            </select>
+        </section>
+
+        <!-- Step 3: Date Selection and Generation -->
+        <section class="step-container" id="dateSection">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <div>
+                    <h2 class="step-title">日付選択とシフト表生成</h2>
+                    <p class="step-description">表示したい日付を選択してシフト表を生成してください</p>
+                </div>
+            </div>
+            
+            <div class="date-controls">
+                <label for="targetDate">📅 対象日付:</label>
+                <input type="date" class="date-input" id="targetDate">
+                <button class="generate-btn" id="generateBtn" onclick="generateDailyShift()" disabled>
+                    <div class="loading-spinner" id="loadingSpinner"></div>
+                    <span id="generateText">🚀 シフト表を生成</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <div class="results-container" id="resultsContainer">
+            <!-- Summary Card -->
+            <div class="summary-card" id="summaryCard">
+                <div class="summary-header">
+                    <div class="summary-icon">📊</div>
+                    <div class="summary-title" id="summaryTitle">シフト概要</div>
+                </div>
+                <div id="summaryContent"></div>
+                <div class="summary-stats" id="summaryStats"></div>
+            </div>
+
+            <!-- Calculation Panel -->
+            <div class="calculation-panel" id="calculationPanel">
+                <div class="calc-header">
+                    <div class="step-number">📈</div>
+                    <div>
+                        <h3>LH計算・分析</h3>
+                        <p class="step-description">労働時間と生産性の詳細分析</p>
+                    </div>
+                </div>
+                <div class="calc-grid" id="calcGrid"></div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="table-container" id="tableContainer">
+                <table class="shift-table" id="shiftTable"></table>
+                <div class="action-buttons">
+                    <button class="action-btn primary" onclick="generateAttendanceCheck()">
+                        📋 出退勤確認表
+                    </button>
+                    <button class="action-btn" onclick="exportToExcel()">
+                        📊 詳細データ
+                    </button>
+                    <button class="action-btn" onclick="exportCompanySummary()">
+                        📈 会社別集計
+                    </button>
+                    <button class="action-btn success" onclick="exportCombinedSummary()">
+                        🔄 日勤+夜勤合算
+                    </button>
+                    <button class="action-btn danger" onclick="resetData()">
+                        🔄 リセット
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Message -->
+    <div class="status-message" id="statusMessage"></div>
+
+    <script>
+        // Global variables
+        let workbook = null;
+        let workbookData = null;
+        let dateColumns = [];
+        let originalShiftData = [];
+        let planValue = 12200;
+        let fcstValue = 16273;
+        let baseUPH = 22;
+        let isNightShift = false;
+        let deferredPrompt = null;
+
+        // App initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            registerServiceWorker();
+            setupPWA();
+        });
+
+        function initializeApp() {
+            // Set today's date as default
+            document.getElementById('targetDate').value = new Date().toISOString().split('T')[0];
+            
+            // Setup file upload
+            setupFileUpload();
+            
+            // Setup event listeners
+            document.getElementById('sheetSelect').addEventListener('change', handleSheetChange);
+            
+            // Load theme preference
+            loadTheme();
+            
+            showStatus('アプリが準備完了しました', 'success');
+        }
+
+        // PWA Setup
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('data:application/javascript;base64,' + btoa(`
+                    const CACHE_NAME = 'shift-app-v3';
+                    const urlsToCache = ['/'];
+                    
+                    self.addEventListener('install', event => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(cache => cache.addAll(urlsToCache))
+                        );
+                    });
+                    
+                    self.addEventListener('fetch', event => {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(response => {
+                                    if (response) {
+                                        return response;
+                                    }
+                                    return fetch(event.request);
+                                })
+                        );
+                    });
+                `))
+                .then(registration => {
+                    console.log('ServiceWorker registered successfully');
+                })
+                .catch(error => {
+                    console.log('ServiceWorker registration failed');
+                });
+            }
+        }
+
+        function setupPWA() {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('installBtn').style.display = 'block';
+            });
+        }
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showStatus('アプリがインストールされました！', 'success');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('installBtn').style.display = 'none';
+                });
+            }
+        }
+
+        // Theme management
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('themeIcon');
+            
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+            }
+        }
+
+        // File upload with drag & drop
+        function setupFileUpload() {
+            const uploadZone = document.getElementById('uploadZone');
+            const fileInput = document.getElementById('fileInput');
+
+            // Drag & drop events
+            uploadZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadZone.classList.add('drag-over');
+            });
+
+            uploadZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('drag-over');
+            });
+
+            uploadZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('drag-over');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileSelect(files[0]);
+                }
+            });
+
+            // Click to select
+            uploadZone.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
+        }
+
+        function handleFileSelect(file) {
+            if (!file.name.match(/\.(xlsx|xls)$/i)) {
+                showStatus('Excelファイル（.xlsx/.xls）を選択してください', 'error');
+                return;
+            }
+
+            showProgress(true);
+            
+            setTimeout(() => {
+                processFile(file);
+            }, 100);
+        }
+
+        function showProgress(show, progress = 0) {
+            const container = document.getElementById('progressContainer');
+            const fill = document.getElementById('progressFill');
+            const text = document.getElementById('progressText');
+            
+            if (show) {
+                container.style.display = 'block';
+                fill.style.width = progress + '%';
+                
+                if (progress === 0) {
+                    text.textContent = 'ファイルを読み込み中...';
+                } else if (progress < 50) {
+                    text.textContent = 'データを解析中...';
+                } else if (progress < 90) {
+                    text.textContent = 'シート情報を取得中...';
+                } else {
+                    text.textContent = '処理完了';
+                }
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
+        function processFile(file) {
+            const reader = new FileReader();
+            
+            reader.onprogress = (e) => {
+                if (e.lengthComputable) {
+                    const progress = (e.loaded / e.total) * 100;
+                    showProgress(true, progress);
+                }
+            };
+            
+            reader.onload = function(e) {
+                try {
+                    showProgress(true, 90);
+                    
+                    const data = new Uint8Array(e.target.result);
+                    workbook = XLSX.read(data, { type: 'array' });
+                    
+                    // Show file info
+                    document.getElementById('fileName').textContent = `✅ ${file.name} (${formatFileSize(file.size)})`;
+                    document.getElementById('fileInfo').style.display = 'block';
+                    
+                    // Setup sheet selection
+                    setupSheetSelection();
+                    
+                    showProgress(false);
+                    showStatus('ファイルが正常に読み込まれました', 'success');
+                    
+                } catch (error) {
+                    showProgress(false);
+                    showStatus('ファイルの読み込みに失敗しました: ' + error.message, 'error');
+                }
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function setupSheetSelection() {
+            const sheetSelect = document.getElementById('sheetSelect');
+            const sheetSection = document.getElementById('sheetSection');
+            
+            // Clear existing options
+            sheetSelect.innerHTML = '<option value="">シートを選択してください</option>';
+            
+            // Add available sheets
+            const targetSheets = ['日勤', '夜勤'];
+            let hasSheets = false;
+            
+            targetSheets.forEach(sheetName => {
+                if (workbook.SheetNames.includes(sheetName)) {
+                    const option = document.createElement('option');
+                    option.value = sheetName;
+                    option.textContent = `${sheetName}シフト`;
+                    sheetSelect.appendChild(option);
+                    hasSheets = true;
+                }
+            });
+            
+            if (!hasSheets) {
+                sheetSelect.innerHTML = '<option value="">日勤・夜勤シートが見つかりません</option>';
+                showStatus('ファイルに「日勤」または「夜勤」シートが見つかりません', 'error');
+                return;
+            }
+            
+            // Show sheet selection
+            sheetSection.style.display = 'block';
+        }
+
+        function handleSheetChange(event) {
+            const selectedSheet = event.target.value;
+            if (!selectedSheet || !workbook) {
+                document.getElementById('generateBtn').disabled = true;
+                return;
+            }
+
+            isNightShift = selectedSheet === '夜勤';
+
+            try {
+                const worksheet = workbook.Sheets[selectedSheet];
+                workbookData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                
+                analyzeDateColumns();
+                extractPlanValue();
+                extractFcstValue();
+                
+                document.getElementById('generateBtn').disabled = false;
+                showStatus(`「${selectedSheet}」シートが選択されました`, 'success');
+            } catch (error) {
+                showStatus('シートの読み込みに失敗しました: ' + error.message, 'error');
+                document.getElementById('generateBtn').disabled = true;
+            }
+        }
+
+        function analyzeDateColumns() {
+            if (!workbookData || workbookData.length < 2) return;
+            
+            const headerRow = workbookData[0];
+            dateColumns = [];
+            
+            headerRow.forEach((cell, index) => {
+                if (typeof cell === 'number' && cell >= 45000) {
+                    const excelDate = new Date((cell - 25569) * 86400 * 1000);
+                    dateColumns.push({
+                        index: index,
+                        excelValue: cell,
+                        date: excelDate
+                    });
+                }
+            });
+            
+            console.log(`${dateColumns.length}個の日付列が見つかりました`);
+        }
+
+        function extractPlanValue() {
+            if (!workbookData || workbookData.length < 2) return;
+            
+            const targetDateStr = document.getElementById('targetDate').value;
+            if (!targetDateStr) return;
+            
+            const targetDate = new Date(targetDateStr);
+            let targetColumnIndex = -1;
+            let minDiff = Infinity;
+            
+            dateColumns.forEach(col => {
+                const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    targetColumnIndex = col.index;
+                }
+            });
+            
+            if (targetColumnIndex === -1) return;
+            
+            // Find PLAN row in column E (index 4)
+            for (let i = 0; i < workbookData.length; i++) {
+                const row = workbookData[i];
+                if (row && row[4] != null) {
+                    const cellValue = String(row[4]).toUpperCase();
+                    if (cellValue.includes('PLAN')) {
+                        const planRow = workbookData[i];
+                        const planCell = planRow[targetColumnIndex];
+                        
+                        if (typeof planCell === 'number' && planCell > 0 && planCell < 1000000) {
+                            planValue = planCell;
+                            return;
+                        }
+                        
+                        if (planCell != null) {
+                            const numMatch = String(planCell).match(/(\d+)/);
+                            if (numMatch) {
+                                const extractedNum = parseInt(numMatch[1]);
+                                if (extractedNum > 0 && extractedNum < 1000000) {
+                                    planValue = extractedNum;
+                                    return;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        function extractFcstValue() {
+            if (!workbookData || workbookData.length < 2) return;
+            
+            const targetDateStr = document.getElementById('targetDate').value;
+            if (!targetDateStr) return;
+            
+            const targetDate = new Date(targetDateStr);
+            let targetColumnIndex = -1;
+            let minDiff = Infinity;
+            
+            dateColumns.forEach(col => {
+                const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    targetColumnIndex = col.index;
+                }
+            });
+            
+            if (targetColumnIndex === -1) return;
+            
+            // Find FCST row in column E (index 4)
+            for (let i = 0; i < workbookData.length; i++) {
+                const row = workbookData[i];
+                if (row && row[4] != null) {
+                    const cellValue = String(row[4]).toUpperCase();
+                    if (cellValue.includes('FCST')) {
+                        const fcstRow = workbookData[i];
+                        const fcstCell = fcstRow[targetColumnIndex];
+                        
+                        if (typeof fcstCell === 'number' && fcstCell > 0 && fcstCell < 1000000) {
+                            fcstValue = fcstCell;
+                            return;
+                        }
+                        
+                        if (fcstCell != null) {
+                            const numMatch = String(fcstCell).match(/(\d+)/);
+                            if (numMatch) {
+                                const extractedNum = parseInt(numMatch[1]);
+                                if (extractedNum > 0 && extractedNum < 1000000) {
+                                    fcstValue = extractedNum;
+                                    return;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        function generateDailyShift() {
+            if (!workbookData || dateColumns.length === 0) {
+                showStatus('データが読み込まれていません', 'error');
+                return;
+            }
+
+            const targetDateStr = document.getElementById('targetDate').value;
+            if (!targetDateStr) {
+                showStatus('日付を選択してください', 'error');
+                return;
+            }
+
+            // Show loading state
+            const generateBtn = document.getElementById('generateBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const generateText = document.getElementById('generateText');
+            
+            generateBtn.disabled = true;
+            loadingSpinner.style.display = 'block';
+            generateText.textContent = '生成中...';
+
+            setTimeout(() => {
+                try {
+                    const targetDate = new Date(targetDateStr);
+                    
+                    // Find closest date column
+                    let targetColumnIndex = -1;
+                    let minDiff = Infinity;
+                    
+                    dateColumns.forEach(col => {
+                        const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            targetColumnIndex = col.index;
+                        }
+                    });
+
+                    if (targetColumnIndex === -1) {
+                        throw new Error('指定された日付に対応する列が見つかりません');
+                    }
+
+                    // Extract shift data
+                    const shiftData = [];
+                    let workingCount = 0;
+                    
+                    for (let i = 1; i < workbookData.length; i++) {
+                        const row = workbookData[i];
+                        if (!row || row.length === 0) continue;
+                        
+                        // 安全にデータを取得（null/undefinedを空文字に変換）
+                        const employeeData = {
+                            company: row[0] != null ? String(row[0]) : '',
+                            timeSlot: row[1] != null ? String(row[1]) : '',
+                            mainJob: row[2] != null ? String(row[2]) : '',
+                            name: row[3] != null ? String(row[3]) : '',
+                            gender: row[4] != null ? String(row[4]) : '',
+                            hourlyWage: row[5] != null ? String(row[5]) : '',
+                            transportation: row[6] != null ? String(row[6]) : '',
+                            startTime: row[7] != null ? String(row[7]) : '',
+                            endTime: row[8] != null ? String(row[8]) : '',
+                            break: row[9] != null ? String(row[9]) : '',
+                            status: row[targetColumnIndex] != null ? String(row[targetColumnIndex]) : ''
+                        };
+                        
+                        if (employeeData.status === '◯' || employeeData.status === '○') {
+                            employeeData.isWorking = true;
+                            workingCount++;
+                        } else if (employeeData.status && employeeData.status !== '') {
+                            employeeData.isWorking = false;
+                        } else {
+                            continue;
+                        }
+                        
+                        shiftData.push(employeeData);
+                    }
+
+                    originalShiftData = JSON.parse(JSON.stringify(shiftData));
+
+                    // Extract values for this date
+                    extractPlanValue();
+                    extractFcstValue();
+
+                    // Display results
+                    displayResults(shiftData, targetDate, workingCount);
+                    
+                    // Reset button state
+                    generateBtn.disabled = false;
+                    loadingSpinner.style.display = 'none';
+                    generateText.textContent = '🚀 シフト表を生成';
+                    
+                    showStatus(`${targetDate.toLocaleDateString('ja-JP')}のシフト表を生成しました`, 'success');
+                    
+                } catch (error) {
+                    console.error('シフト表生成エラー詳細:', error);
+                    console.error('エラースタック:', error.stack);
+                    console.log('デバッグ情報:', {
+                        workbookData: workbookData ? workbookData.length : 'null',
+                        dateColumns: dateColumns.length,
+                        targetDateStr: targetDateStr,
+                        targetColumnIndex: targetColumnIndex
+                    });
+                    
+                    generateBtn.disabled = false;
+                    loadingSpinner.style.display = 'none';
+                    generateText.textContent = '🚀 シフト表を生成';
+                    showStatus('シフト表の生成に失敗しました: ' + error.message, 'error');
+                }
+            }, 500);
+        }
+
+        function displayResults(data, date, workingCount) {
+            const selectedSheet = document.getElementById('sheetSelect').value;
+            
+            // Show results container
+            document.getElementById('resultsContainer').style.display = 'block';
+            
+            // Update summary
+            updateSummary(date, selectedSheet, workingCount, data.length);
+            
+            // Update calculations
+            updateCalculations(data);
+            
+            // Update table
+            updateTable(data);
+            
+            // Scroll to results
+            document.getElementById('resultsContainer').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        function updateSummary(date, sheetType, workingCount, totalCount) {
+            const title = document.getElementById('summaryTitle');
+            const stats = document.getElementById('summaryStats');
+            
+            title.textContent = `${date.toLocaleDateString('ja-JP')} ${sheetType}シフト概要`;
+            
+            stats.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-value">${workingCount}</div>
+                    <div class="stat-label">出勤者数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${totalCount}</div>
+                    <div class="stat-label">総登録者</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${Math.round((workingCount / totalCount) * 100)}%</div>
+                    <div class="stat-label">出勤率</div>
+                </div>
+            `;
+        }
+
+        function updateCalculations(data) {
+            const calcGrid = document.getElementById('calcGrid');
+            
+            // Calculate totals
+            let totalLH = 0;
+            let totalCost = 0;
+            let workingCount = 0;
+            
+            data.forEach(emp => {
+                if (emp.isWorking) {
+                    workingCount++;
+                    
+                    const startTime = parseTime(emp.startTime);
+                    const endTime = parseTime(emp.endTime);
+                    const breakTime = parseTime(emp.break);
+                    
+                    // 安全な数値変換
+                    const hourlyWageStr = emp.hourlyWage != null ? String(emp.hourlyWage) : '0';
+                    const transportationStr = emp.transportation != null ? String(emp.transportation) : '0';
+                    
+                    const hourlyWage = parseFloat(hourlyWageStr.replace(/[^\d.]/g, '')) || 0;
+                    const transportation = parseFloat(transportationStr.replace(/[^\d.]/g, '')) || 0;
+                    
+                    if (startTime !== null && endTime !== null) {
+                        const workHours = calculateWorkHours(startTime, endTime, breakTime);
+                        const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
+                        const regularHours = workHours - nightHours;
+                        
+                        totalLH += workHours;
+                        
+                        const regularCost = regularHours * hourlyWage;
+                        const nightCost = nightHours * hourlyWage * 1.25;
+                        totalCost += regularCost + nightCost + transportation;
+                    } else {
+                        totalCost += transportation;
+                    }
+                }
+            });
+            
+            const requiredLH = planValue / baseUPH;
+            const shortage = totalLH - requiredLH;
+            const currentUPH = totalLH > 0 ? planValue / totalLH : 0; // PLAN ÷ 出勤LH
+            const hcConversion = shortage / 8;
+            const averageHourlyCost = totalLH > 0 ? totalCost / totalLH : 0;
+            
+            calcGrid.innerHTML = `
+                <div class="calc-card">
+                    <div class="calc-label">FCST数量</div>
+                    <div class="calc-value">${fcstValue.toLocaleString()}</div>
+                    <div class="calc-unit">個</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">出勤HC</div>
+                    <div class="calc-value">${workingCount}</div>
+                    <div class="calc-unit">人</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">出勤LH</div>
+                    <div class="calc-value">${totalLH.toFixed(1)}</div>
+                    <div class="calc-unit">時間</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">平均単価</div>
+                    <div class="calc-value">¥${Math.round(averageHourlyCost).toLocaleString()}</div>
+                    <div class="calc-unit">円/時</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">PLAN数量</div>
+                    <input type="number" class="calc-input" value="${planValue}" onchange="updatePlan(this.value)">
+                    <div class="calc-unit">個</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">基準UPH</div>
+                    <input type="number" class="calc-input" value="${baseUPH}" onchange="updateUPH(this.value)">
+                    <div class="calc-unit">個/時</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">必要LH</div>
+                    <div class="calc-value">${requiredLH.toFixed(1)}</div>
+                    <div class="calc-unit">時間</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">実績UPH</div>
+                    <div class="calc-value" style="color: ${currentUPH >= baseUPH ? 'var(--secondary-color)' : '#f44336'}">${Math.round(currentUPH)}</div>
+                    <div class="calc-unit">個/時</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">過不足</div>
+                    <div class="calc-value" style="color: ${shortage >= 0 ? 'var(--secondary-color)' : '#f44336'}">${shortage.toFixed(1)}</div>
+                    <div class="calc-unit">時間</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">HC換算</div>
+                    <div class="calc-value">${hcConversion.toFixed(1)}</div>
+                    <div class="calc-unit">人</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">総費用</div>
+                    <div class="calc-value">¥${Math.round(totalCost).toLocaleString()}</div>
+                    <div class="calc-unit">円 ${isNightShift ? '(夜勤手当込)' : ''}</div>
+                </div>
+            `;
+        }
+
+        function updateTable(data) {
+            const table = document.getElementById('shiftTable');
+            
+            const headers = ['会社名', '時間帯', 'メイン業務', '氏名', '性別', '時給', '交通費', '開始時間', '終了時間', '休憩', '勤務状況', '勤務LH'];
+            
+            let tableHTML = '<thead><tr>';
+            headers.forEach(header => {
+                tableHTML += `<th>${header}</th>`;
+            });
+            tableHTML += '</tr></thead><tbody>';
+            
+            data.forEach((emp, index) => {
+                const workHours = emp.isWorking ? calculateWorkHours(
+                    parseTime(emp.startTime), 
+                    parseTime(emp.endTime), 
+                    parseTime(emp.break)
+                ) : 0;
+                
+                tableHTML += `
+                    <tr class="${emp.isWorking ? 'working' : ''}" data-row-index="${index}">
+                        <td>${emp.company}</td>
+                        <td>${emp.timeSlot}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="mainJob">${emp.mainJob}</td>
+                        <td>${emp.name}</td>
+                        <td>${emp.gender}</td>
+                        <td>${emp.hourlyWage}</td>
+                        <td>${emp.transportation}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="startTime">${emp.startTime}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="endTime">${emp.endTime}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="break">${emp.break}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="status">${emp.status}</td>
+                        <td>${workHours > 0 ? workHours.toFixed(2) : ''}</td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += '</tbody>';
+            table.innerHTML = tableHTML;
+            
+            // Add edit listeners
+            addEditListeners();
+        }
+
+        function addEditListeners() {
+            const editableCells = document.querySelectorAll('.editable-cell');
+            
+            editableCells.forEach(cell => {
+                cell.addEventListener('blur', function() {
+                    const row = this.closest('tr');
+                    const field = this.getAttribute('data-field');
+                    const newValue = this.textContent.trim();
+                    
+                    // Update calculations if needed
+                    if (['startTime', 'endTime', 'break', 'status'].includes(field)) {
+                        updateCalculations(getCurrentTableData());
+                    }
+                    
+                    // Visual feedback
+                    this.style.background = 'rgba(76, 175, 80, 0.2)';
+                    setTimeout(() => {
+                        this.style.background = '';
+                    }, 1000);
+                });
+                
+                cell.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.blur();
+                    }
+                });
+            });
+        }
+
+        function getCurrentTableData() {
+            const rows = document.querySelectorAll('#shiftTable tbody tr');
+            const data = [];
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const statusCell = row.querySelector('[data-field="status"]');
+                const status = statusCell ? statusCell.textContent.trim() : '';
+                
+                // セルのデータを安全に取得
+                const getData = (index) => {
+                    return cells[index] ? cells[index].textContent.trim() : '';
+                };
+                
+                data.push({
+                    company: getData(0),
+                    timeSlot: getData(1),
+                    mainJob: getData(2),
+                    name: getData(3),
+                    gender: getData(4),
+                    hourlyWage: getData(5),
+                    transportation: getData(6),
+                    startTime: getData(7),
+                    endTime: getData(8),
+                    break: getData(9),
+                    status: status,
+                    isWorking: status === '◯' || status === '○'
+                });
+            });
+            
+            return data;
+        }
+
+        // Utility functions
+        function parseTime(timeStr) {
+            // null, undefined, 空文字の場合
+            if (!timeStr || timeStr === '' || timeStr === '：' || timeStr === '　：　') {
+                return null;
+            }
+            
+            // 数値の場合（Excelの時間形式）
+            if (typeof timeStr === 'number') {
+                // Excelの時間数値を時間に変換（0.5 = 12時間など）
+                if (timeStr < 1) {
+                    // 1未満は時間の小数表現（例：0.5 = 12:00）
+                    return (timeStr * 24) % 24;
+                } else if (timeStr > 40000) {
+                    // 大きな数値はExcelの日付シリアル値の可能性
+                    // 時間部分のみを抽出
+                    const timePart = timeStr % 1;
+                    return (timePart * 24) % 24;
+                } else {
+                    // 通常の時間数値として扱う
+                    return timeStr % 24;
+                }
+            }
+            
+            // 文字列に変換してから処理
+            const timeString = timeStr.toString().trim();
+            
+            // 空文字チェック
+            if (timeString === '' || timeString === '：' || timeString === '　：　') {
+                return null;
+            }
+            
+            // 文字列の場合の処理
+            const cleanTimeStr = timeString.replace(/[：\s]/g, ':');
+            
+            if (cleanTimeStr.includes(':')) {
+                const parts = cleanTimeStr.split(':');
+                const hours = parseInt(parts[0]) || 0;
+                const minutes = parseInt(parts[1]) || 0;
+                return (hours % 24) + minutes / 60;
+            } else {
+                // 数字のみの文字列の場合
+                const numValue = parseFloat(cleanTimeStr) || 0;
+                return numValue % 24;
+            }
+        }
+
+        function calculateWorkHours(startTime, endTime, breakTime) {
+            if (startTime === null || endTime === null) {
+                return 0;
+            }
+            
+            let workHours;
+            
+            if (isNightShift) {
+                if (endTime < startTime) {
+                    workHours = (24 + endTime) - startTime;
+                } else {
+                    workHours = endTime - startTime;
+                }
+            } else {
+                if (endTime < startTime) {
+                    workHours = endTime - startTime + 24;
+                } else {
+                    workHours = endTime - startTime;
+                }
+            }
+            
+            if (breakTime !== null && breakTime > 0) {
+                workHours -= breakTime;
+            }
+            
+            return Math.max(0, workHours);
+        }
+
+        function calculateNightShiftHours(startTime, endTime, breakTime) {
+            if (startTime === null || endTime === null) {
+                return 0;
+            }
+            
+            const nightStart = 22.0;
+            const nightEnd = 5.0;
+            let nightHours = 0;
+            
+            if (isNightShift) {
+                if (endTime < startTime) {
+                    if (startTime >= nightStart) {
+                        nightHours += (24 - startTime);
+                    } else if (startTime < nightStart) {
+                        nightHours += (24 - nightStart);
+                    }
+                    
+                    if (endTime <= nightEnd) {
+                        nightHours += endTime;
+                    } else {
+                        nightHours += nightEnd;
+                    }
+                } else {
+                    if (startTime >= nightStart) {
+                        nightHours = Math.min(endTime, 24) - startTime;
+                    }
+                }
+                
+                if (nightHours > 0 && breakTime !== null && breakTime > 0) {
+                    nightHours = Math.max(0, nightHours - 1);
+                }
+            }
+            
+            return Math.max(0, nightHours);
+        }
+
+        function updatePlan(value) {
+            planValue = parseFloat(value) || 12200;
+            updateCalculations(getCurrentTableData());
+        }
+
+        function updateUPH(value) {
+            baseUPH = parseFloat(value) || 22;
+            updateCalculations(getCurrentTableData());
+        }
+
+        function showStatus(message, type) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message ${type} show`;
+            
+            setTimeout(() => {
+                statusMessage.classList.remove('show');
+            }, 3000);
+        }
+
+        // Export functions - Full Implementation
+        function generateAttendanceCheck() {
+            if (!document.querySelector('.shift-table')) {
+                showStatus('シフト表が生成されていません', 'error');
+                return;
+            }
+
+            try {
+                const targetDate = document.getElementById('targetDate').value;
+                const selectedSheet = document.getElementById('sheetSelect').value;
+                const dateObj = new Date(targetDate);
+                const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日 ${selectedSheet}シフト表`;
+
+                // 出勤者のみのデータを収集
+                const attendanceData = [];
+                const rows = document.querySelectorAll('#shiftTable tbody tr');
+                
+                rows.forEach(row => {
+                    const statusCell = row.querySelector('[data-field="status"]');
+                    const status = statusCell ? statusCell.textContent.trim() : '';
+                    
+                    if (status === '◯' || status === '○') {
+                        const cells = row.querySelectorAll('td');
+                        const getData = (index) => cells[index] ? cells[index].textContent.trim() : '';
+                        
+                        attendanceData.push({
+                            company: getData(0),
+                            timeSlot: '',
+                            mainJob: getData(2),
+                            name: getData(3),
+                            startTime: ':',
+                            endTime: ':',
+                            break: ':',
+                            healthCheck: '',
+                            heatstrokeCheck: '',
+                            memo: ''
+                        });
+                    }
+                });
+
+                // 現在の計算結果を取得
+                const calculationData = {
+                    totalHC: parseInt(document.querySelector('[data-calc="totalHC"]')?.textContent) || attendanceData.length,
+                    totalLH: parseFloat(document.querySelector('[data-calc="totalLH"]')?.textContent) || 0,
+                    forecast: fcstValue,
+                    planValue: planValue,
+                    baseUPH: baseUPH
+                };
+
+                // 出退勤確認表のHTMLを生成
+                const attendanceHTML = createAttendanceHTML(formattedDate, attendanceData, calculationData);
+                
+                // 新しいウィンドウで表示
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(attendanceHTML);
+                printWindow.document.close();
+                
+                showStatus('出退勤確認表を生成しました', 'success');
+                
+            } catch (error) {
+                console.error('出退勤確認表生成エラー:', error);
+                showStatus('出退勤確認表の生成に失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        function createAttendanceHTML(dateTitle, data, calculationData) {
+            return `
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>出退勤確認表</title>
+    <style>
+        @media print {
+            body { margin: 0; }
+            .no-print { display: none; }
+        }
+        
+        body {
+            font-family: 'Yu Gothic', 'Meiryo', sans-serif;
+            margin: 15px;
+            background-color: white;
+            font-size: 12px;
+            line-height: 1.2;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+        
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 11px;
+            line-height: 1.1;
+        }
+        
+        .attendance-table th,
+        .attendance-table td {
+            border: 1px solid #333;
+            padding: 4px 6px;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 1.1;
+        }
+        
+        .attendance-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            font-size: 11px;
+            padding: 5px 6px;
+        }
+        
+        .attendance-table td {
+            height: 20px;
+            padding: 3px 6px;
+        }
+        
+        .name-cell { text-align: left; padding-left: 8px; min-width: 100px; }
+        .company-cell { text-align: left; padding-left: 8px; min-width: 70px; }
+        .job-cell { text-align: left; padding-left: 8px; min-width: 85px; }
+        .time-cell { width: 55px; font-size: 14px; font-weight: bold; padding: 3px 4px; }
+        .memo-cell { width: 100px; padding: 3px 4px; }
+        .layer-cell { width: 45px; padding: 3px 4px; }
+        .health-cell { width: 60px; padding: 3px 4px; font-size: 10px; }
+        .heatstroke-cell { width: 65px; padding: 3px 4px; font-size: 10px; }
+        
+        .print-buttons {
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .print-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0 8px;
+        }
+        
+        .print-btn:hover { background-color: #45a049; }
+        .pdf-btn { background-color: #2196F3; }
+        .pdf-btn:hover { background-color: #1976D2; }
+        
+        .calculation-summary {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+        }
+        
+        .calc-item {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        
+        .calc-label {
+            font-weight: bold;
+            font-size: 10px;
+            margin-bottom: 3px;
+        }
+        
+        .calc-value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        @media print {
+            .attendance-table { font-size: 10px; }
+            .attendance-table th, .attendance-table td { padding: 2px 4px; line-height: 1.0; }
+            .attendance-table td { height: 18px; }
+            .time-cell { font-size: 12px; padding: 2px 3px; }
+            body { margin: 10px; font-size: 11px; }
+            .header { margin-bottom: 15px; padding-bottom: 8px; }
+            .header h1 { font-size: 18px; }
+            .health-cell, .heatstroke-cell { font-size: 9px; padding: 2px 3px; }
+            .calc-item { padding: 5px; }
+            .calc-label { font-size: 9px; }
+            .calc-value { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="print-buttons no-print">
+        <button class="print-btn" onclick="window.print()">🖨️ 印刷</button>
+        <button class="print-btn pdf-btn" onclick="window.print()">📄 PDF保存</button>
+        <button class="print-btn" onclick="window.close()" style="background-color: #FF5722;">❌ 閉じる</button>
+    </div>
+
+    <div class="header">
+        <h1>${dateTitle}</h1>
+        <p style="margin: 8px 0 0 0; font-size: 13px;">出退勤確認表</p>
+    </div>
+
+    <div class="calculation-summary">
+        <div class="calc-grid">
+            <div class="calc-item">
+                <div class="calc-label">出勤HC</div>
+                <div class="calc-value">${calculationData.totalHC}</div>
+            </div>
+            <div class="calc-item">
+                <div class="calc-label">出勤LH</div>
+                <div class="calc-value">${calculationData.totalLH.toFixed(2)}</div>
+            </div>
+            <div class="calc-item">
+                <div class="calc-label">FCST</div>
+                <div class="calc-value">${calculationData.forecast}</div>
+            </div>
+        </div>
+    </div>
+
+    <table class="attendance-table">
+        <thead>
+            <tr>
+                <th>会社名</th>
+                <th>階層</th>
+                <th>メイン業務</th>
+                <th>氏名</th>
+                <th>開始時間</th>
+                <th>終了時間</th>
+                <th>休憩</th>
+                <th>自己申告<br>体調</th>
+                <th>熱中症<br>対策確認</th>
+                <th>備考</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${data.map(emp => `
+                <tr>
+                    <td class="company-cell">${emp.company}</td>
+                    <td class="layer-cell">${emp.timeSlot}</td>
+                    <td class="job-cell">${emp.mainJob}</td>
+                    <td class="name-cell">${emp.name}</td>
+                    <td class="time-cell">${emp.startTime}</td>
+                    <td class="time-cell">${emp.endTime}</td>
+                    <td class="time-cell">${emp.break}</td>
+                    <td class="health-cell">&nbsp;</td>
+                    <td class="heatstroke-cell">&nbsp;</td>
+                    <td class="memo-cell">${emp.memo}</td>
+                </tr>
+            `).join('')}
+            ${Array.from({length: Math.max(0, 20 - data.length)}, () => `
+                <tr>
+                    <td class="company-cell">&nbsp;</td>
+                    <td class="layer-cell">&nbsp;</td>
+                    <td class="job-cell">&nbsp;</td>
+                    <td class="name-cell">&nbsp;</td>
+                    <td class="time-cell">:</td>
+                    <td class="time-cell">:</td>
+                    <td class="time-cell">:</td>
+                    <td class="health-cell">&nbsp;</td>
+                    <td class="heatstroke-cell">&nbsp;</td>
+                    <td class="memo-cell">&nbsp;</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    </table>
+
+    <div style="margin-top: 20px; text-align: right; font-size: 11px; line-height: 1.3;">
+        <p>責任者確認：_________________　　日付：_______________</p>
+    </div>
+</body>
+</html>`;
+        }
+
+        function exportToExcel() {
+            if (!document.querySelector('.shift-table')) {
+                showStatus('エクスポートするデータがありません', 'error');
+                return;
+            }
+
+            try {
+                const targetDate = document.getElementById('targetDate').value;
+                const selectedSheet = document.getElementById('sheetSelect').value;
+                const dateObj = new Date(targetDate);
+                const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日 ${selectedSheet}シフト表`;
+
+                const data = [];
+                data.push([formattedDate]);
+                data.push([]);
+
+                // ヘッダー行
+                const headers = ['会社名', '時間帯', 'メイン業務', '氏名', '性別', '時給', '交通費', '開始時間', '終了時間', '休憩', '勤務状況', '勤務LH'];
+                data.push(headers);
+
+                // データ行
+                const tableData = getCurrentTableData();
+                tableData.forEach(emp => {
+                    const workHours = emp.isWorking ? calculateWorkHours(
+                        parseTime(emp.startTime), 
+                        parseTime(emp.endTime), 
+                        parseTime(emp.break)
+                    ) : 0;
+                    
+                    data.push([
+                        emp.company,
+                        emp.timeSlot,
+                        emp.mainJob,
+                        emp.name,
+                        emp.gender,
+                        emp.hourlyWage,
+                        emp.transportation,
+                        emp.startTime,
+                        emp.endTime,
+                        emp.break,
+                        emp.status,
+                        workHours > 0 ? workHours.toFixed(2) : ''
+                    ]);
+                });
+
+                // ワークシートを作成
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                
+                // 列幅を設定
+                ws['!cols'] = [
+                    { width: 15 }, { width: 10 }, { width: 12 }, { width: 15 },
+                    { width: 8 }, { width: 10 }, { width: 12 }, { width: 10 },
+                    { width: 10 }, { width: 8 }, { width: 10 }, { width: 10 }
+                ];
+
+                // ワークブックを作成
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, '詳細データ');
+                
+                const fileName = targetDate ? 
+                    `${targetDate}_${selectedSheet}_詳細データ.xlsx` : 
+                    `${selectedSheet}_詳細データ.xlsx`;
+                
+                XLSX.writeFile(wb, fileName);
+                showStatus('詳細データをダウンロードしました', 'success');
+                
+            } catch (error) {
+                console.error('エクスポートエラー:', error);
+                showStatus('エクスポートに失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        function exportCompanySummary() {
+            if (!document.querySelector('.shift-table')) {
+                showStatus('エクスポートするデータがありません', 'error');
+                return;
+            }
+
+            try {
+                const companySummary = generateCompanySummary();
+                if (!companySummary || Object.keys(companySummary).length === 0) {
+                    showStatus('集計データがありません', 'error');
+                    return;
+                }
+
+                const targetDate = document.getElementById('targetDate').value;
+                const selectedSheet = document.getElementById('sheetSelect').value;
+                const dateObj = new Date(targetDate);
+                const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日 ${selectedSheet}`;
+
+                const data = [];
+                data.push([formattedDate + ' 会社別集計']);
+                data.push([]);
+                
+                // HC集計
+                data.push(['HC']);
+                const sortedByHC = Object.entries(companySummary).sort((a, b) => {
+                    if (a[0] === 'Gworker') return -1;
+                    if (b[0] === 'Gworker') return 1;
+                    return b[1].hc - a[1].hc;
+                });
+                sortedByHC.forEach(([company, summary]) => {
+                    data.push([company, summary.hc]);
+                });
+                
+                const totalHC = Object.values(companySummary).reduce((sum, s) => sum + s.hc, 0);
+                data.push(['', totalHC]);
+                data.push([]);
+                
+                // 経費集計
+                data.push(['経費']);
+                const sortedByCost = Object.entries(companySummary).sort((a, b) => {
+                    if (a[0] === 'Gworker') return -1;
+                    if (b[0] === 'Gworker') return 1;
+                    return b[1].totalCost - a[1].totalCost;
+                });
+                sortedByCost.forEach(([company, summary]) => {
+                    data.push([company, Math.round(summary.totalCost)]);
+                });
+                
+                const totalCost = Object.values(companySummary).reduce((sum, s) => sum + s.totalCost, 0);
+                data.push(['', Math.round(totalCost)]);
+                data.push([]);
+                
+                // LH集計
+                data.push(['LH']);
+                const sortedByLH = Object.entries(companySummary).sort((a, b) => {
+                    if (a[0] === 'Gworker') return -1;
+                    if (b[0] === 'Gworker') return 1;
+                    return b[1].totalLH - a[1].totalLH;
+                });
+                sortedByLH.forEach(([company, summary]) => {
+                    data.push([company, Math.round(summary.totalLH)]);
+                });
+                
+                const totalLH = Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0);
+                data.push(['', Math.round(totalLH)]);
+
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                ws['!cols'] = [{ width: 15 }, { width: 12 }];
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, '会社別集計');
+                
+                const fileName = targetDate ? 
+                    `${targetDate}_${selectedSheet}_会社別集計.xlsx` : 
+                    `${selectedSheet}_会社別集計.xlsx`;
+                
+                XLSX.writeFile(wb, fileName);
+                showStatus('会社別集計データをダウンロードしました', 'success');
+                
+            } catch (error) {
+                console.error('会社別集計エラー:', error);
+                showStatus('会社別集計エクスポートに失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        function generateCompanySummary() {
+            const tableData = getCurrentTableData();
+            const companySummary = {};
+            
+            tableData.forEach(emp => {
+                if (emp.isWorking) {
+                    const company = emp.company.trim();
+                    const hourlyWageStr = emp.hourlyWage || '0';
+                    const transportationStr = emp.transportation || '0';
+                    
+                    const hourlyWage = parseFloat(String(hourlyWageStr).replace(/[^\d.]/g, '')) || 0;
+                    const transportation = parseFloat(String(transportationStr).replace(/[^\d.]/g, '')) || 0;
+                    
+                    if (!companySummary[company]) {
+                        companySummary[company] = { hc: 0, totalLH: 0, totalCost: 0 };
+                    }
+                    
+                    companySummary[company].hc += 1;
+                    
+                    const startTime = parseTime(emp.startTime);
+                    const endTime = parseTime(emp.endTime);
+                    const breakTime = parseTime(emp.break);
+                    
+                    if (startTime !== null && endTime !== null) {
+                        const workHours = calculateWorkHours(startTime, endTime, breakTime);
+                        const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
+                        const regularHours = workHours - nightHours;
+                        
+                        companySummary[company].totalLH += workHours;
+                        
+                        const regularCost = regularHours * hourlyWage;
+                        const nightCost = nightHours * hourlyWage * 1.25;
+                        companySummary[company].totalCost += regularCost + nightCost + transportation;
+                    } else {
+                        companySummary[company].totalCost += transportation;
+                    }
+                }
+            });
+            
+            return companySummary;
+        }
+
+        function exportCombinedSummary() {
+            if (!workbook) {
+                showStatus('Excelファイルが読み込まれていません', 'error');
+                return;
+            }
+
+            const hasDay = workbook.SheetNames.includes('日勤');
+            const hasNight = workbook.SheetNames.includes('夜勤');
+            
+            if (!hasDay && !hasNight) {
+                showStatus('日勤・夜勤シートが見つかりません', 'error');
+                return;
+            }
+
+            try {
+                const companySummary = generateCombinedCompanySummary();
+                if (!companySummary || Object.keys(companySummary).length === 0) {
+                    showStatus('合算集計データがありません', 'error');
+                    return;
+                }
+
+                const targetDate = document.getElementById('targetDate').value;
+                const dateObj = new Date(targetDate);
+                const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日`;
+
+                const data = [];
+                data.push([formattedDate + ' 日勤+夜勤合算集計']);
+                
+                const availableShifts = [];
+                if (hasDay) availableShifts.push('日勤');
+                if (hasNight) availableShifts.push('夜勤');
+                data.push([`対象シフト: ${availableShifts.join('・')}`]);
+                data.push([]);
+                
+                // HC集計セクション
+                data.push(['HC', '', '日勤', '夜勤', '合計']);
+                const sortedByHC = Object.entries(companySummary).sort((a, b) => {
+                    if (a[0] === 'Gworker') return -1;
+                    if (b[0] === 'Gworker') return 1;
+                    return b[1].hc - a[1].hc;
+                });
+                sortedByHC.forEach(([company, summary]) => {
+                    data.push([
+                        company, 
+                        '', 
+                        summary.dayShiftHC || 0, 
+                        summary.nightShiftHC || 0, 
+                        summary.hc
+                    ]);
+                });
+                
+                const totalHC = Object.values(companySummary).reduce((sum, s) => sum + s.hc, 0);
+                const totalDayHC = Object.values(companySummary).reduce((sum, s) => sum + (s.dayShiftHC || 0), 0);
+                const totalNightHC = Object.values(companySummary).reduce((sum, s) => sum + (s.nightShiftHC || 0), 0);
+                data.push(['合計', '', totalDayHC, totalNightHC, totalHC]);
+                data.push([]);
+                
+                // 経費集計
+                data.push(['経費']);
+                const sortedByCost = Object.entries(companySummary).sort((a, b) => {
+                    if (a[0] === 'Gworker') return -1;
+                    if (b[0] === 'Gworker') return 1;
+                    return b[1].totalCost - a[1].totalCost;
+                });
+                sortedByCost.forEach(([company, summary]) => {
+                    data.push([company, Math.round(summary.totalCost)]);
+                });
+                
+                const totalCost = Object.values(companySummary).reduce((sum, s) => sum + s.totalCost, 0);
+                data.push(['合計', Math.round(totalCost)]);
+                data.push([]);
+                
+                // LH集計
+                data.push(['LH']);
+                const sortedByLH = Object.entries(companySummary).sort((a, b) => {
+                    if (a[0] === 'Gworker') return -1;
+                    if (b[0] === 'Gworker') return 1;
+                    return b[1].totalLH - a[1].totalLH;
+                });
+                sortedByLH.forEach(([company, summary]) => {
+                    data.push([company, Math.round(summary.totalLH)]);
+                });
+                
+                const totalLH = Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0);
+                data.push(['合計', Math.round(totalLH)]);
+
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                ws['!cols'] = [
+                    { width: 15 }, { width: 8 }, { width: 8 }, { width: 8 }, { width: 10 }
+                ];
+
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, '日勤夜勤合算集計');
+                
+                const fileName = targetDate ? 
+                    `${targetDate}_日勤夜勤合算集計.xlsx` : 
+                    '日勤夜勤合算集計.xlsx';
+                
+                XLSX.writeFile(wb, fileName);
+                showStatus('日勤+夜勤合算集計データをダウンロードしました', 'success');
+                
+            } catch (error) {
+                console.error('合算集計エラー:', error);
+                showStatus('合算集計エクスポートに失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        function generateCombinedCompanySummary() {
+            const targetDateStr = document.getElementById('targetDate').value;
+            if (!targetDateStr) return null;
+
+            const targetDate = new Date(targetDateStr);
+            const companySummary = {};
+
+            // 現在表示中のデータを基準に合算集計を作成
+            const currentData = getCurrentTableData();
+            
+            currentData.forEach(emp => {
+                if (emp.isWorking) {
+                    const company = emp.company.trim();
+                    const hourlyWageStr = emp.hourlyWage || '0';
+                    const transportationStr = emp.transportation || '0';
+                    
+                    const hourlyWage = parseFloat(String(hourlyWageStr).replace(/[^\d.]/g, '')) || 0;
+                    const transportation = parseFloat(String(transportationStr).replace(/[^\d.]/g, '')) || 0;
+                    
+                    if (!companySummary[company]) {
+                        companySummary[company] = {
+                            hc: 0, totalLH: 0, totalCost: 0,
+                            dayShiftHC: 0, nightShiftHC: 0
+                        };
+                    }
+                    
+                    companySummary[company].hc += 1;
+                    
+                    if (isNightShift) {
+                        companySummary[company].nightShiftHC += 1;
+                    } else {
+                        companySummary[company].dayShiftHC += 1;
+                    }
+                    
+                    const startTime = parseTime(emp.startTime);
+                    const endTime = parseTime(emp.endTime);
+                    const breakTime = parseTime(emp.break);
+                    
+                    if (startTime !== null && endTime !== null) {
+                        const workHours = calculateWorkHours(startTime, endTime, breakTime);
+                        const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
+                        const regularHours = workHours - nightHours;
+                        
+                        companySummary[company].totalLH += workHours;
+                        
+                        const regularCost = regularHours * hourlyWage;
+                        const nightCost = nightHours * hourlyWage * 1.25;
+                        companySummary[company].totalCost += regularCost + nightCost + transportation;
+                    } else {
+                        companySummary[company].totalCost += transportation;
+                    }
+                }
+            });
+            
+            return companySummary;
+        }
+
+        function resetData() {
+            if (confirm('すべてのデータをリセットしますか？')) {
+                // アニメーション付きでリセット
+                document.body.style.opacity = '0.5';
+                setTimeout(() => {
+                    location.reload();
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>
