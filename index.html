@@ -2,22 +2,17 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#2196F3">
     <meta name="description" content="プロフェッショナルシフト管理アプリ - Excel連携対応">
-    <title>シフト管理プロ v3.1</title>
+    <title>シフト管理プロ v3.0</title>
     
-    <!-- iOS PWA対応 -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="シフト管理プロ">
+    <!-- PWA用のアイコンとメタデータ -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9IiMyMTk2RjMiIHJ4PSI0Ii8+PHBhdGggZD0iTTYgOWgxMnYySDE2em0wIDRoMTJ2MkgxNnptMC00aDEyVjlIMTZ6IiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==">
+    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFJklEQVR4nO3d0W4TMRRF0fH//5TyQKnUqI7tmdzeaxFVtO3c2bPGnknSdd33fQBHffrXCwBnCQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQ9hdNHBXz0j6qYwAAAABJRU5ErkJggg==">
     
-    <!-- アイコン設定 -->
-    <link rel="icon" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFJklEQVR4nO3d0W4TMRRF0fH//5TyQKnUqI7tmdzeaxFVtO3c2bPGnknSdd33fQBHffrXCwBnCQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQ9hdNHBXz0j6qYwAAAABJRU5ErkJggg==">
-    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFJklEQVR4nO3d0W4TMRRF0fH//5TyQKnUqI7tmdzeaxFVtO3c2bPGnknSdd33fQBHffrXCwBnCQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQ9hdNHBXz0j6qYwAAAABJRU5ErkJggg==">
-    
-    <!-- Manifest -->
-    <link rel="manifest" href="#" id="manifest-placeholder">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
@@ -55,14 +50,11 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', system-ui, sans-serif;
+            font-family: 'Segoe UI', 'Noto Sans JP', system-ui, sans-serif;
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             min-height: 100vh;
             color: var(--text-primary);
             transition: all 0.3s ease;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            touch-action: manipulation;
         }
 
         .app-container {
@@ -75,7 +67,6 @@
         .header {
             background: var(--glass);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
             padding: 24px 32px;
@@ -136,10 +127,9 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 1.2rem;
-            -webkit-tap-highlight-color: transparent;
         }
 
-        .theme-toggle:hover, .theme-toggle:active {
+        .theme-toggle:hover {
             transform: scale(1.05);
             background: var(--surface);
         }
@@ -154,10 +144,9 @@
             cursor: pointer;
             transition: all 0.3s ease;
             display: none;
-            -webkit-tap-highlight-color: transparent;
         }
 
-        .install-btn:hover, .install-btn:active {
+        .install-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(255, 152, 0, 0.3);
         }
@@ -165,7 +154,6 @@
         .step-container {
             background: var(--glass);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 32px;
@@ -221,12 +209,10 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            -webkit-tap-highlight-color: transparent;
         }
 
         .upload-zone:hover,
-        .upload-zone.drag-over,
-        .upload-zone:active {
+        .upload-zone.drag-over {
             border-color: var(--primary-color);
             background: linear-gradient(45deg, rgba(33, 150, 243, 0.05), rgba(76, 175, 80, 0.05));
             transform: translateY(-2px);
@@ -301,8 +287,6 @@
             transition: all 0.3s ease;
             cursor: pointer;
             min-width: 200px;
-            -webkit-appearance: none;
-            appearance: none;
         }
 
         .sheet-select:focus {
@@ -349,11 +333,9 @@
             gap: 8px;
             position: relative;
             overflow: hidden;
-            -webkit-tap-highlight-color: transparent;
         }
 
-        .generate-btn:hover:not(:disabled),
-        .generate-btn:active:not(:disabled) {
+        .generate-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
         }
@@ -361,7 +343,6 @@
         .generate-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
         }
 
         .loading-spinner {
@@ -414,7 +395,6 @@
         .stat-item {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border-radius: 12px;
             padding: 16px;
             text-align: center;
@@ -507,14 +487,12 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             overflow: auto;
-            -webkit-overflow-scrolling: touch;
         }
 
         .shift-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.9rem;
-            min-width: 800px;
         }
 
         .shift-table th {
@@ -590,10 +568,9 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            -webkit-tap-highlight-color: transparent;
         }
 
-        .action-btn:hover, .action-btn:active {
+        .action-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(255, 152, 0, 0.3);
         }
@@ -622,8 +599,6 @@
             transform: translateX(100%);
             transition: all 0.3s ease;
             box-shadow: var(--shadow);
-            max-width: calc(100vw - 40px);
-            word-break: break-word;
         }
 
         .status-message.show {
@@ -694,7 +669,7 @@
             }
         }
 
-        /* iOS and Mobile Responsive Design */
+        /* Responsive Design */
         @media (max-width: 768px) {
             .app-container {
                 padding: 12px;
@@ -727,10 +702,6 @@
                 padding: 32px 16px;
             }
 
-            .upload-icon {
-                font-size: 2.5rem;
-            }
-
             .date-controls {
                 flex-direction: column;
                 align-items: stretch;
@@ -750,10 +721,6 @@
                 flex-direction: column;
             }
 
-            .table-container {
-                padding: 16px;
-            }
-
             .shift-table {
                 font-size: 0.8rem;
             }
@@ -761,18 +728,6 @@
             .shift-table th,
             .shift-table td {
                 padding: 8px 6px;
-            }
-
-            .status-message {
-                top: 10px;
-                right: 10px;
-                left: 10px;
-                transform: translateY(-100%);
-                max-width: none;
-            }
-
-            .status-message.show {
-                transform: translateY(0);
             }
         }
 
@@ -783,38 +738,11 @@
             }
 
             .calc-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
+                grid-template-columns: 1fr;
             }
 
             .summary-stats {
                 grid-template-columns: 1fr;
-            }
-
-            .shift-table {
-                font-size: 0.75rem;
-            }
-
-            .shift-table th,
-            .shift-table td {
-                padding: 6px 4px;
-            }
-        }
-
-        /* iOS specific fixes */
-        @supports (-webkit-touch-callout: none) {
-            body {
-                -webkit-overflow-scrolling: touch;
-            }
-            
-            .upload-zone {
-                -webkit-user-select: none;
-                user-select: none;
-            }
-            
-            input, select, button {
-                -webkit-appearance: none;
-                border-radius: 0;
             }
         }
 
@@ -848,7 +776,7 @@
                     <div class="logo">📊</div>
                     <div>
                         <h1 class="title">シフト管理プロ</h1>
-                        <p class="subtitle">Professional Shift Management v3.1</p>
+                        <p class="subtitle">Professional Shift Management v3.0</p>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -868,14 +796,14 @@
                 <div class="step-number">1</div>
                 <div>
                     <h2 class="step-title">Excelファイルをアップロード</h2>
-                    <p class="step-description" id="stepDescription">月間シフト表のExcelファイル（.xlsx/.xls）をドラッグ＆ドロップまたはクリックして選択</p>
+                    <p class="step-description">月間シフト表のExcelファイル（.xlsx/.xls）をドラッグ＆ドロップまたはクリックして選択</p>
                 </div>
             </div>
             
             <div class="upload-zone" id="uploadZone">
                 <div class="upload-icon">📁</div>
-                <div class="upload-text" id="uploadText">ファイルをドラッグ＆ドロップ または クリックして選択</div>
-                <div class="upload-hint" id="uploadHint">Excelファイル（.xlsx/.xls）を選択してください</div>
+                <div class="upload-text">ファイルをドラッグ＆ドロップ</div>
+                <div class="upload-hint">または、クリックしてファイルを選択してください</div>
                 <input type="file" class="file-input" id="fileInput" accept=".xlsx,.xls">
             </div>
             
@@ -992,93 +920,37 @@
         // App initialization
         document.addEventListener('DOMContentLoaded', function() {
             initializeApp();
+            registerServiceWorker();
             setupPWA();
         });
 
         function initializeApp() {
-            console.log('=== アプリ初期化開始 ===');
-            console.log('User Agent:', navigator.userAgent);
-            console.log('Touch support:', 'ontouchstart' in window);
-            console.log('XLSX library loaded:', typeof XLSX !== 'undefined');
-            
             // Set today's date as default
-            const today = new Date();
-            const dateString = today.getFullYear() + '-' + 
-                String(today.getMonth() + 1).padStart(2, '0') + '-' + 
-                String(today.getDate()).padStart(2, '0');
-            document.getElementById('targetDate').value = dateString;
-            console.log('Default date set:', dateString);
+            document.getElementById('targetDate').value = new Date().toISOString().split('T')[0];
             
-            // Setup file upload with cross-platform support
-            console.log('Setting up file upload...');
+            // Setup file upload
             setupFileUpload();
             
             // Setup event listeners
-            console.log('Setting up event listeners...');
             document.getElementById('sheetSelect').addEventListener('change', handleSheetChange);
             
             // Load theme preference
             loadTheme();
             
-            // Create dynamic manifest for iOS
-            if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-                createManifest();
-            }
-            
-            console.log('=== アプリ初期化完了 ===');
             showStatus('アプリが準備完了しました', 'success');
         }
 
-        // Create manifest dynamically for iOS PWA support
-        function createManifest() {
-            const manifest = {
-                "name": "シフト管理プロ",
-                "short_name": "シフト管理",
-                "description": "プロフェッショナルシフト管理アプリ",
-                "start_url": "./",
-                "display": "standalone",
-                "background_color": "#2196F3",
-                "theme_color": "#2196F3",
-                "orientation": "portrait",
-                "icons": [
-                    {
-                        "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFJklEQVR4nO3d0W4TMRRF0fH//5TyQKnUqI7tmdzeaxFVtO3c2bPGnknSdd33fQBHffrXCwBnCQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQ9hdNHBXz0j6qYwAAAABJRU5ErkJggg==",
-                        "sizes": "192x192",
-                        "type": "image/png"
-                    },
-                    {
-                        "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFJklEQVR4nO3d0W4TMRRF0fH//5TyQKnUqI7tmdzeaxFVtO3c2bPGnknSdd33fQBHffrXCwBnCQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQ9hdNHBXz0j6qYwAAAABJRU5ErkJggg==",
-                        "sizes": "512x512",
-                        "type": "image/png"
-                    }
-                ]
-            };
-
-            const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
-            const manifestURL = URL.createObjectURL(manifestBlob);
-            document.getElementById('manifest-placeholder').href = manifestURL;
-        }
-
-        // PWA Setup with iOS support
-        function setupPWA() {
-            // Register service worker if available
+        // PWA Setup
+        function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
-                const swCode = `
-                    const CACHE_NAME = 'shift-app-v3-1';
-                    const urlsToCache = [
-                        './',
-                        'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'
-                    ];
+                navigator.serviceWorker.register('data:application/javascript;base64,' + btoa(`
+                    const CACHE_NAME = 'shift-app-v3';
+                    const urlsToCache = ['/'];
                     
                     self.addEventListener('install', event => {
                         event.waitUntil(
                             caches.open(CACHE_NAME)
-                                .then(cache => {
-                                    return cache.addAll(urlsToCache).catch(err => {
-                                        console.log('Cache addAll failed:', err);
-                                        return cache.add('./');
-                                    });
-                                })
+                                .then(cache => cache.addAll(urlsToCache))
                         );
                     });
                     
@@ -1089,37 +961,26 @@
                                     if (response) {
                                         return response;
                                     }
-                                    return fetch(event.request).catch(() => {
-                                        return caches.match('./');
-                                    });
+                                    return fetch(event.request);
                                 })
                         );
                     });
-                `;
-                
-                const swBlob = new Blob([swCode], {type: 'application/javascript'});
-                const swURL = URL.createObjectURL(swBlob);
-                
-                navigator.serviceWorker.register(swURL)
-                    .then(registration => {
-                        console.log('ServiceWorker registered successfully');
-                    })
-                    .catch(error => {
-                        console.log('ServiceWorker registration failed');
-                    });
+                `))
+                .then(registration => {
+                    console.log('ServiceWorker registered successfully');
+                })
+                .catch(error => {
+                    console.log('ServiceWorker registration failed');
+                });
             }
+        }
 
-            // Handle PWA install prompt
+        function setupPWA() {
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
                 document.getElementById('installBtn').style.display = 'block';
             });
-
-            // iOS standalone mode detection
-            if (window.navigator.standalone) {
-                document.body.classList.add('ios-standalone');
-            }
         }
 
         function installApp() {
@@ -1132,9 +993,6 @@
                     deferredPrompt = null;
                     document.getElementById('installBtn').style.display = 'none';
                 });
-            } else {
-                // iOS fallback
-                showStatus('Safariのメニューから「ホーム画面に追加」を選択してください', 'success');
             }
         }
 
@@ -1158,143 +1016,58 @@
             const savedTheme = localStorage.getItem('theme');
             const themeIcon = document.getElementById('themeIcon');
             
-            if (savedTheme === 'dark' || 
-                (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            if (savedTheme === 'dark') {
                 document.body.setAttribute('data-theme', 'dark');
                 themeIcon.textContent = '☀️';
             }
         }
 
-        // File upload with iOS support
+        // File upload with drag & drop
         function setupFileUpload() {
             const uploadZone = document.getElementById('uploadZone');
             const fileInput = document.getElementById('fileInput');
 
-            // Detect if this is a touch device
-            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-            
-            // Update UI text based on device type
-            const uploadText = document.getElementById('uploadText');
-            const uploadHint = document.getElementById('uploadHint');
-            const stepDescription = document.getElementById('stepDescription');
-            
-            if (isTouchDevice) {
-                uploadText.textContent = 'ファイルを選択';
-                uploadHint.textContent = 'タップしてExcelファイルを選択してください';
-                stepDescription.textContent = '月間シフト表のExcelファイル（.xlsx/.xls）をタップして選択';
-            } else {
-                uploadText.textContent = 'ファイルをドラッグ＆ドロップ または クリック';
-                uploadHint.textContent = 'Excelファイル（.xlsx/.xls）をドラッグ＆ドロップまたはクリックして選択';
-                stepDescription.textContent = '月間シフト表のExcelファイル（.xlsx/.xls）をドラッグ＆ドロップまたはクリックして選択';
-            }
-
-            console.log('Upload zone setup for', isTouchDevice ? 'touch' : 'desktop', 'device');
-
-            // Click handler for all devices
-            uploadZone.addEventListener('click', (e) => {
+            // Drag & drop events
+            uploadZone.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                e.stopPropagation();
-                console.log('Upload zone clicked');
-                fileInput.click();
+                uploadZone.classList.add('drag-over');
             });
 
-            // Touch support for iOS (only add if touch device)
-            if (isTouchDevice) {
-                uploadZone.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Upload zone touched');
-                    fileInput.click();
-                });
-            }
+            uploadZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('drag-over');
+            });
 
-            // File input change handler with cross-platform support
-            fileInput.addEventListener('change', (e) => {
-                console.log('File input changed:', e.target.files);
-                if (e.target.files && e.target.files.length > 0) {
-                    const file = e.target.files[0];
-                    console.log('Selected file:', file.name, file.type, file.size);
-                    handleFileSelect(file);
-                } else {
-                    console.log('No file selected');
+            uploadZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('drag-over');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileSelect(files[0]);
                 }
             });
 
-            // Drag & drop support for desktop (only if not a touch device)
-            if (!isTouchDevice) {
-                console.log('Adding drag & drop support for desktop');
-                
-                uploadZone.addEventListener('dragenter', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    uploadZone.classList.add('drag-over');
-                });
+            // Click to select
+            uploadZone.addEventListener('click', () => {
+                fileInput.click();
+            });
 
-                uploadZone.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    uploadZone.classList.add('drag-over');
-                });
-
-                uploadZone.addEventListener('dragleave', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    // Only remove drag-over if we're actually leaving the upload zone
-                    if (!uploadZone.contains(e.relatedTarget)) {
-                        uploadZone.classList.remove('drag-over');
-                    }
-                });
-
-                uploadZone.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    uploadZone.classList.remove('drag-over');
-                    
-                    console.log('Files dropped');
-                    const files = e.dataTransfer.files;
-                    if (files.length > 0) {
-                        console.log('Dropped file:', files[0].name);
-                        handleFileSelect(files[0]);
-                    }
-                });
-            } else {
-                console.log('Skipping drag & drop for touch device');
-            }
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
         }
 
         function handleFileSelect(file) {
-            console.log('=== ファイル選択処理開始 ===');
-            console.log('File details:', {
-                name: file.name,
-                type: file.type,
-                size: file.size,
-                lastModified: file.lastModified
-            });
-            
-            // Validate file type
             if (!file.name.match(/\.(xlsx|xls)$/i)) {
-                console.log('Invalid file type:', file.name);
                 showStatus('Excelファイル（.xlsx/.xls）を選択してください', 'error');
                 return;
             }
 
-            // Validate file size (max 50MB)
-            if (file.size > 50 * 1024 * 1024) {
-                console.log('File too large:', file.size);
-                showStatus('ファイルサイズが大きすぎます（最大50MB）', 'error');
-                return;
-            }
-
-            console.log('File validation passed, starting processing...');
-            showProgress(true, 10);
-            showStatus('ファイルを読み込んでいます...', 'success');
+            showProgress(true);
             
-            // Clear previous data
-            workbook = null;
-            workbookData = null;
-            dateColumns = [];
-            
-            // Process file with a short delay to ensure UI updates
             setTimeout(() => {
                 processFile(file);
             }, 100);
@@ -1309,9 +1082,9 @@
                 container.style.display = 'block';
                 fill.style.width = progress + '%';
                 
-                if (progress < 30) {
+                if (progress === 0) {
                     text.textContent = 'ファイルを読み込み中...';
-                } else if (progress < 60) {
+                } else if (progress < 50) {
                     text.textContent = 'データを解析中...';
                 } else if (progress < 90) {
                     text.textContent = 'シート情報を取得中...';
@@ -1324,47 +1097,21 @@
         }
 
         function processFile(file) {
-            console.log('Processing file:', file.name, 'Size:', file.size, 'Type:', file.type);
-            
             const reader = new FileReader();
             
             reader.onprogress = (e) => {
                 if (e.lengthComputable) {
-                    const progress = Math.min(80, (e.loaded / e.total) * 80);
+                    const progress = (e.loaded / e.total) * 100;
                     showProgress(true, progress);
                 }
             };
             
             reader.onload = function(e) {
                 try {
-                    console.log('File loaded successfully, data length:', e.target.result.byteLength);
-                    showProgress(true, 85);
+                    showProgress(true, 90);
                     
-                    // Convert ArrayBuffer to Uint8Array
                     const data = new Uint8Array(e.target.result);
-                    console.log('Data converted to Uint8Array, length:', data.length);
-                    
-                    // Check if XLSX library is available
-                    if (typeof XLSX === 'undefined') {
-                        throw new Error('XLSXライブラリが読み込まれていません');
-                    }
-                    
-                    // Process with XLSX
-                    console.log('Processing with XLSX library...');
-                    workbook = XLSX.read(data, { 
-                        type: 'array',
-                        cellDates: true,
-                        cellStyles: true,
-                        cellFormulas: false,
-                        sheetStubs: false
-                    });
-                    
-                    if (!workbook || !workbook.SheetNames || workbook.SheetNames.length === 0) {
-                        throw new Error('有効なExcelファイルではありません');
-                    }
-                    
-                    console.log('Workbook processed successfully. Sheets:', workbook.SheetNames);
-                    showProgress(true, 95);
+                    workbook = XLSX.read(data, { type: 'array' });
                     
                     // Show file info
                     document.getElementById('fileName').textContent = `✅ ${file.name} (${formatFileSize(file.size)})`;
@@ -1373,51 +1120,16 @@
                     // Setup sheet selection
                     setupSheetSelection();
                     
-                    showProgress(true, 100);
-                    setTimeout(() => {
-                        showProgress(false);
-                        showStatus('ファイルが正常に読み込まれました', 'success');
-                    }, 500);
+                    showProgress(false);
+                    showStatus('ファイルが正常に読み込まれました', 'success');
                     
                 } catch (error) {
-                    console.error('File processing error:', error);
-                    console.error('Error stack:', error.stack);
                     showProgress(false);
-                    
-                    let errorMessage = 'ファイルの読み込みに失敗しました';
-                    if (error.message.includes('XLSX')) {
-                        errorMessage = 'Excelファイルの解析に失敗しました。ファイルが破損している可能性があります。';
-                    } else if (error.message.includes('有効な')) {
-                        errorMessage = error.message;
-                    } else {
-                        errorMessage += ': ' + error.message;
-                    }
-                    
-                    showStatus(errorMessage, 'error');
+                    showStatus('ファイルの読み込みに失敗しました: ' + error.message, 'error');
                 }
             };
             
-            reader.onerror = function(error) {
-                console.error('FileReader error:', error);
-                showProgress(false);
-                showStatus('ファイルの読み込みでエラーが発生しました', 'error');
-            };
-            
-            reader.onabort = function() {
-                console.log('FileReader aborted');
-                showProgress(false);
-                showStatus('ファイル読み込みが中断されました', 'error');
-            };
-            
-            // Start reading the file
-            try {
-                console.log('Starting to read file as ArrayBuffer...');
-                reader.readAsArrayBuffer(file);
-            } catch (error) {
-                console.error('Failed to start reading file:', error);
-                showProgress(false);
-                showStatus('ファイル読み込みを開始できませんでした: ' + error.message, 'error');
-            }
+            reader.readAsArrayBuffer(file);
         }
 
         function formatFileSize(bytes) {
@@ -1431,8 +1143,6 @@
         function setupSheetSelection() {
             const sheetSelect = document.getElementById('sheetSelect');
             const sheetSection = document.getElementById('sheetSection');
-            
-            console.log('Setting up sheet selection, available sheets:', workbook.SheetNames);
             
             // Clear existing options
             sheetSelect.innerHTML = '<option value="">シートを選択してください</option>';
@@ -1448,7 +1158,6 @@
                     option.textContent = `${sheetName}シフト`;
                     sheetSelect.appendChild(option);
                     hasSheets = true;
-                    console.log('Added sheet option:', sheetName);
                 }
             });
             
@@ -1460,22 +1169,10 @@
             
             // Show sheet selection
             sheetSection.style.display = 'block';
-            
-            // Auto-select if only one sheet is available
-            const availableOptions = Array.from(sheetSelect.querySelectorAll('option')).filter(opt => opt.value !== '');
-            if (availableOptions.length === 1) {
-                sheetSelect.value = availableOptions[0].value;
-                console.log('Auto-selected sheet:', availableOptions[0].value);
-                // Trigger change event
-                const event = new Event('change');
-                sheetSelect.dispatchEvent(event);
-            }
         }
 
         function handleSheetChange(event) {
             const selectedSheet = event.target.value;
-            console.log('Sheet changed to:', selectedSheet);
-            
             if (!selectedSheet || !workbook) {
                 document.getElementById('generateBtn').disabled = true;
                 return;
@@ -1485,14 +1182,7 @@
 
             try {
                 const worksheet = workbook.Sheets[selectedSheet];
-                workbookData = XLSX.utils.sheet_to_json(worksheet, { 
-                    header: 1,
-                    defval: '',
-                    blankrows: false
-                });
-                
-                console.log('Workbook data rows:', workbookData.length);
-                console.log('Sample data:', workbookData.slice(0, 3));
+                workbookData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                 
                 analyzeDateColumns();
                 extractPlanValue();
@@ -1501,26 +1191,19 @@
                 document.getElementById('generateBtn').disabled = false;
                 showStatus(`「${selectedSheet}」シートが選択されました`, 'success');
             } catch (error) {
-                console.error('Sheet processing error:', error);
                 showStatus('シートの読み込みに失敗しました: ' + error.message, 'error');
                 document.getElementById('generateBtn').disabled = true;
             }
         }
 
         function analyzeDateColumns() {
-            if (!workbookData || workbookData.length < 2) {
-                console.log('No data available for date analysis');
-                return;
-            }
+            if (!workbookData || workbookData.length < 2) return;
             
             const headerRow = workbookData[0];
             dateColumns = [];
             
-            console.log('Header row:', headerRow);
-            
             headerRow.forEach((cell, index) => {
-                // Check for Excel date numbers (typically > 40000 for dates after 2009)
-                if (typeof cell === 'number' && cell >= 40000 && cell <= 50000) {
+                if (typeof cell === 'number' && cell >= 45000) {
                     const excelDate = new Date((cell - 25569) * 86400 * 1000);
                     dateColumns.push({
                         index: index,
@@ -1528,17 +1211,9 @@
                         date: excelDate
                     });
                 }
-                // Also check for Date objects
-                else if (cell instanceof Date) {
-                    dateColumns.push({
-                        index: index,
-                        excelValue: null,
-                        date: cell
-                    });
-                }
             });
             
-            console.log(`Found ${dateColumns.length} date columns:`, dateColumns);
+            console.log(`${dateColumns.length}個の日付列が見つかりました`);
         }
 
         function extractPlanValue() {
@@ -1548,7 +1223,16 @@
             if (!targetDateStr) return;
             
             const targetDate = new Date(targetDateStr);
-            let targetColumnIndex = findDateColumn(targetDate);
+            let targetColumnIndex = -1;
+            let minDiff = Infinity;
+            
+            dateColumns.forEach(col => {
+                const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    targetColumnIndex = col.index;
+                }
+            });
             
             if (targetColumnIndex === -1) return;
             
@@ -1563,7 +1247,6 @@
                         
                         if (typeof planCell === 'number' && planCell > 0 && planCell < 1000000) {
                             planValue = planCell;
-                            console.log('Found PLAN value:', planValue);
                             return;
                         }
                         
@@ -1573,7 +1256,6 @@
                                 const extractedNum = parseInt(numMatch[1]);
                                 if (extractedNum > 0 && extractedNum < 1000000) {
                                     planValue = extractedNum;
-                                    console.log('Extracted PLAN value:', planValue);
                                     return;
                                 }
                             }
@@ -1591,7 +1273,16 @@
             if (!targetDateStr) return;
             
             const targetDate = new Date(targetDateStr);
-            let targetColumnIndex = findDateColumn(targetDate);
+            let targetColumnIndex = -1;
+            let minDiff = Infinity;
+            
+            dateColumns.forEach(col => {
+                const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    targetColumnIndex = col.index;
+                }
+            });
             
             if (targetColumnIndex === -1) return;
             
@@ -1606,7 +1297,6 @@
                         
                         if (typeof fcstCell === 'number' && fcstCell > 0 && fcstCell < 1000000) {
                             fcstValue = fcstCell;
-                            console.log('Found FCST value:', fcstValue);
                             return;
                         }
                         
@@ -1616,7 +1306,6 @@
                                 const extractedNum = parseInt(numMatch[1]);
                                 if (extractedNum > 0 && extractedNum < 1000000) {
                                     fcstValue = extractedNum;
-                                    console.log('Extracted FCST value:', fcstValue);
                                     return;
                                 }
                             }
@@ -1625,21 +1314,6 @@
                     }
                 }
             }
-        }
-
-        function findDateColumn(targetDate) {
-            let targetColumnIndex = -1;
-            let minDiff = Infinity;
-            
-            dateColumns.forEach(col => {
-                const diff = Math.abs(col.date.getTime() - targetDate.getTime());
-                if (diff < minDiff) {
-                    minDiff = diff;
-                    targetColumnIndex = col.index;
-                }
-            });
-            
-            return targetColumnIndex;
         }
 
         function generateDailyShift() {
@@ -1653,8 +1327,6 @@
                 showStatus('日付を選択してください', 'error');
                 return;
             }
-
-            console.log('Generating shift for date:', targetDateStr);
 
             // Show loading state
             const generateBtn = document.getElementById('generateBtn');
@@ -1670,13 +1342,20 @@
                     const targetDate = new Date(targetDateStr);
                     
                     // Find closest date column
-                    let targetColumnIndex = findDateColumn(targetDate);
+                    let targetColumnIndex = -1;
+                    let minDiff = Infinity;
+                    
+                    dateColumns.forEach(col => {
+                        const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            targetColumnIndex = col.index;
+                        }
+                    });
 
                     if (targetColumnIndex === -1) {
                         throw new Error('指定された日付に対応する列が見つかりません');
                     }
-
-                    console.log('Target column index:', targetColumnIndex);
 
                     // Extract shift data
                     const shiftData = [];
@@ -1686,26 +1365,20 @@
                         const row = workbookData[i];
                         if (!row || row.length === 0) continue;
                         
-                        // Skip empty rows or header rows
-                        if (!row[3] || String(row[3]).trim() === '') continue;
-                        
                         // 安全にデータを取得（null/undefinedを空文字に変換）
                         const employeeData = {
-                            company: row[0] != null ? String(row[0]).trim() : '',
-                            timeSlot: row[1] != null ? String(row[1]).trim() : '',
-                            mainJob: row[2] != null ? String(row[2]).trim() : '',
-                            name: row[3] != null ? String(row[3]).trim() : '',
-                            gender: row[4] != null ? String(row[4]).trim() : '',
-                            hourlyWage: row[5] != null ? String(row[5]).trim() : '',
-                            transportation: row[6] != null ? String(row[6]).trim() : '',
-                            startTime: row[7] != null ? String(row[7]).trim() : '',
-                            endTime: row[8] != null ? String(row[8]).trim() : '',
-                            break: row[9] != null ? String(row[9]).trim() : '',
-                            status: row[targetColumnIndex] != null ? String(row[targetColumnIndex]).trim() : ''
+                            company: row[0] != null ? String(row[0]) : '',
+                            timeSlot: row[1] != null ? String(row[1]) : '',
+                            mainJob: row[2] != null ? String(row[2]) : '',
+                            name: row[3] != null ? String(row[3]) : '',
+                            gender: row[4] != null ? String(row[4]) : '',
+                            hourlyWage: row[5] != null ? String(row[5]) : '',
+                            transportation: row[6] != null ? String(row[6]) : '',
+                            startTime: row[7] != null ? String(row[7]) : '',
+                            endTime: row[8] != null ? String(row[8]) : '',
+                            break: row[9] != null ? String(row[9]) : '',
+                            status: row[targetColumnIndex] != null ? String(row[targetColumnIndex]) : ''
                         };
-                        
-                        // Skip if no name
-                        if (!employeeData.name) continue;
                         
                         if (employeeData.status === '◯' || employeeData.status === '○') {
                             employeeData.isWorking = true;
@@ -1713,13 +1386,11 @@
                         } else if (employeeData.status && employeeData.status !== '') {
                             employeeData.isWorking = false;
                         } else {
-                            continue; // Skip empty status rows
+                            continue;
                         }
                         
                         shiftData.push(employeeData);
                     }
-
-                    console.log('Shift data extracted:', shiftData.length, 'rows, working:', workingCount);
 
                     originalShiftData = JSON.parse(JSON.stringify(shiftData));
 
@@ -1739,6 +1410,13 @@
                     
                 } catch (error) {
                     console.error('シフト表生成エラー詳細:', error);
+                    console.error('エラースタック:', error.stack);
+                    console.log('デバッグ情報:', {
+                        workbookData: workbookData ? workbookData.length : 'null',
+                        dateColumns: dateColumns.length,
+                        targetDateStr: targetDateStr,
+                        targetColumnIndex: targetColumnIndex
+                    });
                     
                     generateBtn.disabled = false;
                     loadingSpinner.style.display = 'none';
@@ -1750,8 +1428,6 @@
 
         function displayResults(data, date, workingCount) {
             const selectedSheet = document.getElementById('sheetSelect').value;
-            
-            console.log('Displaying results for', data.length, 'employees');
             
             // Show results container
             document.getElementById('resultsContainer').style.display = 'block';
@@ -1766,12 +1442,10 @@
             updateTable(data);
             
             // Scroll to results
-            setTimeout(() => {
-                document.getElementById('resultsContainer').scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }, 100);
+            document.getElementById('resultsContainer').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
         }
 
         function updateSummary(date, sheetType, workingCount, totalCount) {
@@ -1779,8 +1453,6 @@
             const stats = document.getElementById('summaryStats');
             
             title.textContent = `${date.toLocaleDateString('ja-JP')} ${sheetType}シフト概要`;
-            
-            const attendanceRate = totalCount > 0 ? Math.round((workingCount / totalCount) * 100) : 0;
             
             stats.innerHTML = `
                 <div class="stat-item">
@@ -1792,7 +1464,7 @@
                     <div class="stat-label">総登録者</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value">${attendanceRate}%</div>
+                    <div class="stat-value">${Math.round((workingCount / totalCount) * 100)}%</div>
                     <div class="stat-label">出勤率</div>
                 </div>
             `;
@@ -1981,12 +1653,14 @@
             
             editableCells.forEach(cell => {
                 cell.addEventListener('blur', function() {
+                    const row = this.closest('tr');
                     const field = this.getAttribute('data-field');
+                    const newValue = this.textContent.trim();
                     
                     // Update calculations if needed
                     if (['startTime', 'endTime', 'break', 'status'].includes(field)) {
                         updateCalculations(getCurrentTableData());
-                        updateTable(getCurrentTableData());
+                        updateTable(getCurrentTableData()); // テーブルも再更新
                     }
                     
                     // Visual feedback
@@ -2184,10 +1858,10 @@
             
             setTimeout(() => {
                 statusMessage.classList.remove('show');
-            }, 4000);
+            }, 3000);
         }
 
-        // Export functions
+        // Export functions - Full Implementation
         function generateAttendanceCheck() {
             if (!document.querySelector('.shift-table')) {
                 showStatus('シフト表が生成されていません', 'error');
@@ -2227,8 +1901,17 @@
                     }
                 });
 
+                // 現在の計算結果を取得
+                const calculationData = {
+                    totalHC: attendanceData.length,
+                    totalLH: parseFloat(document.querySelector('.calc-value')?.textContent) || 0,
+                    forecast: fcstValue,
+                    planValue: planValue,
+                    baseUPH: baseUPH
+                };
+
                 // 出退勤確認表のHTMLを生成
-                const attendanceHTML = createAttendanceHTML(formattedDate, attendanceData);
+                const attendanceHTML = createAttendanceHTML(formattedDate, attendanceData, calculationData);
                 
                 // 新しいウィンドウで表示
                 const printWindow = window.open('', '_blank');
@@ -2243,7 +1926,7 @@
             }
         }
 
-        function createAttendanceHTML(dateTitle, data) {
+        function createAttendanceHTML(dateTitle, data, calculationData) {
             return `<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -2396,7 +2079,7 @@
                 data.push(['', totalHC]);
                 data.push([]);
                 
-                // 経費・LH集計
+                // 経費・LH集計も同様に処理...
                 data.push(['経費']);
                 sortedByHC.forEach(([company, summary]) => {
                     data.push([company, Math.round(summary.totalCost)]);
@@ -2451,14 +2134,21 @@
                     if (startTime !== null && endTime !== null) {
                         const workHours = calculateWorkHours(startTime, endTime, breakTime);
                         const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
-                        const overtimeHours = Math.max(0, workHours - 8);
+                        const overtimeHours = Math.max(0, workHours - 8); // 8時間超過分
                         
                         companySummary[company].totalLH += workHours;
                         
+                        // 基本給の計算
                         const regularHours = Math.max(0, workHours - overtimeHours);
                         const baseCost = regularHours * hourlyWage;
+                        
+                        // 残業時間の基本時給
                         const overtimeBaseCost = overtimeHours * hourlyWage;
+                        
+                        // 夜勤手当（22:00-5:00の0.25倍増し）
                         const nightAllowance = nightHours * hourlyWage * 0.25;
+                        
+                        // 残業代（8時間超過分の0.25倍増し）
                         const overtimeAllowance = overtimeHours * hourlyWage * 0.25;
                         
                         companySummary[company].totalCost += baseCost + overtimeBaseCost + nightAllowance + overtimeAllowance + transportation;
@@ -2522,7 +2212,7 @@
                 data.push(['合計', '', totalDayHC, totalNightHC, totalHC]);
                 data.push([]);
                 
-                // 経費・LH集計
+                // 経費・LH集計も同様に処理...
                 data.push(['経費']);
                 sortedByHC.forEach(([company, summary]) => {
                     data.push([company, Math.round(summary.totalCost)]);
@@ -2589,14 +2279,21 @@
                     if (startTime !== null && endTime !== null) {
                         const workHours = calculateWorkHours(startTime, endTime, breakTime);
                         const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
-                        const overtimeHours = Math.max(0, workHours - 8);
+                        const overtimeHours = Math.max(0, workHours - 8); // 8時間超過分
                         
                         companySummary[company].totalLH += workHours;
                         
+                        // 基本給の計算
                         const regularHours = Math.max(0, workHours - overtimeHours);
                         const baseCost = regularHours * hourlyWage;
+                        
+                        // 残業時間の基本時給
                         const overtimeBaseCost = overtimeHours * hourlyWage;
+                        
+                        // 夜勤手当（22:00-5:00の0.25倍増し）
                         const nightAllowance = nightHours * hourlyWage * 0.25;
+                        
+                        // 残業代（8時間超過分の0.25倍増し）
                         const overtimeAllowance = overtimeHours * hourlyWage * 0.25;
                         
                         companySummary[company].totalCost += baseCost + overtimeBaseCost + nightAllowance + overtimeAllowance + transportation;
@@ -2611,124 +2308,12 @@
 
         function resetData() {
             if (confirm('すべてのデータをリセットしますか？')) {
-                // Visual feedback
                 document.body.style.opacity = '0.5';
-                showStatus('リセット中...', 'success');
-                
                 setTimeout(() => {
-                    // Clear all data
-                    workbook = null;
-                    workbookData = null;
-                    dateColumns = [];
-                    originalShiftData = [];
-                    
-                    // Reset form
-                    document.getElementById('fileInput').value = '';
-                    document.getElementById('sheetSelect').innerHTML = '<option value="">シートを選択してください</option>';
-                    document.getElementById('generateBtn').disabled = true;
-                    
-                    // Hide sections
-                    document.getElementById('fileInfo').style.display = 'none';
-                    document.getElementById('sheetSection').style.display = 'none';
-                    document.getElementById('resultsContainer').style.display = 'none';
-                    
-                    // Reset progress
-                    document.getElementById('progressContainer').style.display = 'none';
-                    
-                    // Restore opacity
-                    document.body.style.opacity = '1';
-                    
-                    showStatus('データがリセットされました', 'success');
+                    location.reload();
                 }, 300);
             }
         }
-
-        // Touch event handling for better iOS support (only for touch devices)
-        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-            document.addEventListener('touchstart', function() {}, { passive: true });
-            document.addEventListener('touchmove', function() {}, { passive: true });
-        }
-        
-        // Prevent zoom on double tap for form inputs on iOS (only for iOS)
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', function (event) {
-                const now = (new Date()).getTime();
-                if (now - lastTouchEnd <= 300) {
-                    event.preventDefault();
-                }
-                lastTouchEnd = now;
-            }, false);
-        }
-
-        // Handle iOS viewport changes
-        function handleViewportChange() {
-            const viewport = document.querySelector('meta[name=viewport]');
-            if (viewport) {
-                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
-            }
-        }
-
-        // iOS Safari address bar handling
-        window.addEventListener('resize', function() {
-            // Small delay to ensure proper resize handling on iOS
-            setTimeout(function() {
-                const vh = window.innerHeight * 0.01;
-                document.documentElement.style.setProperty('--vh', `${vh}px`);
-            }, 100);
-        });
-
-        // Initialize viewport handling
-        const vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-
-        // Better error handling for iOS file operations
-        window.addEventListener('error', function(e) {
-            console.error('Global error:', e.error);
-            if (e.error && e.error.message) {
-                showStatus('エラーが発生しました: ' + e.error.message, 'error');
-            }
-        });
-
-        // Handle unhandled promise rejections
-        window.addEventListener('unhandledrejection', function(e) {
-            console.error('Unhandled promise rejection:', e.reason);
-            if (e.reason && e.reason.message) {
-                showStatus('処理エラー: ' + e.reason.message, 'error');
-            }
-        });
-
-        // iOS specific fixes (only apply to iOS devices)
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-            console.log('iOS device detected, applying iOS-specific fixes');
-            
-            // Fix for iOS Safari file input
-            document.addEventListener('change', function(e) {
-                if (e.target.type === 'file') {
-                    // Force iOS to recognize the file change
-                    setTimeout(() => {
-                        if (e.target.files && e.target.files.length > 0) {
-                            console.log('iOS file detected:', e.target.files[0].name);
-                        }
-                    }, 100);
-                }
-            });
-            
-            // Prevent iOS from zooming on input focus
-            const inputs = document.querySelectorAll('input, select, textarea');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.style.fontSize = '16px';
-                });
-                input.addEventListener('blur', function() {
-                    this.style.fontSize = '';
-                });
-            });
-        } else {
-            console.log('Non-iOS device detected, skipping iOS-specific fixes');
-        }
-
-        console.log('シフト管理プロ v3.1 - iOS対応版が初期化されました');
     </script>
 </body>
 </html>
