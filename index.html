@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#2196F3">
     <meta name="description" content="プロフェッショナルシフト管理アプリ - Excel連携対応">
-    <title>シフト管理プロ v3.0</title>
+    <title>シフト管理プロ v3.4</title>
     
     <!-- PWA用のアイコンとメタデータ -->
     <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9IiMyMTk2RjMiIHJ4PSI0Ii8+PHBhdGggZD0iTTYgOWgxMnYySDE2em0wIDRoMTJ2MkgxNnptMC00aDEyVjlIMTZ6IiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==">
-    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFJklEQVR4nO3d0W4TMRRF0fH//5TyQKnUqI7tmdzeaxFVtO3c2bPGnknSdd33fQBHffrXCwBnCQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQ9hdNHBXz0j6qYwAAAABJRU5ErkJggg==">
+    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFJklEQVR4nO3d0W4TMRRF0fH//5TyQKnUqI7tmdzeaxFVtO3c2bPGnknSdd33fQBHffrXCwBnCQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQ9hdNHBXz0j6qYwAAAABJRU5ErkJggg==">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -548,6 +548,95 @@
             outline-offset: -2px;
         }
 
+        .time-cell {
+            min-width: 80px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+
+        .status-cell {
+            padding: 6px 8px;
+        }
+
+        .status-select {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            max-width: 70px;
+        }
+
+        .status-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+        }
+
+        .status-select option {
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+
+        .action-cell {
+            padding: 6px 8px;
+            text-align: center;
+            width: 60px;
+        }
+
+        .row-reset-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 36px;
+            height: 28px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .row-reset-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .row-reset-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+        }
+
+        .row-reset-btn:hover::before {
+            left: 100%;
+        }
+
+        .row-reset-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .row-reset-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5);
+        }
+
         .action-buttons {
             display: flex;
             gap: 12px;
@@ -729,6 +818,19 @@
             .shift-table td {
                 padding: 8px 6px;
             }
+
+            .status-select {
+                max-width: 60px;
+                font-size: 0.8rem;
+                padding: 2px 4px;
+            }
+
+            .row-reset-btn {
+                width: 32px;
+                height: 24px;
+                font-size: 0.7rem;
+                border-radius: 6px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -755,7 +857,8 @@
             .header,
             .action-buttons,
             .install-btn,
-            .theme-toggle {
+            .theme-toggle,
+            .row-reset-btn {
                 display: none;
             }
 
@@ -776,7 +879,7 @@
                     <div class="logo">📊</div>
                     <div>
                         <h1 class="title">シフト管理プロ</h1>
-                        <p class="subtitle">Professional Shift Management v3.0</p>
+                        <p class="subtitle">Professional Shift Management v3.4</p>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -895,7 +998,7 @@
                         🔄 日勤+夜勤合算
                     </button>
                     <button class="action-btn danger" onclick="resetData()">
-                        🔄 リセット
+                        🔄 完全リセット
                     </button>
                 </div>
             </div>
@@ -944,7 +1047,7 @@
         function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('data:application/javascript;base64,' + btoa(`
-                    const CACHE_NAME = 'shift-app-v3';
+                    const CACHE_NAME = 'shift-app-v3-4';
                     const urlsToCache = ['/'];
                     
                     self.addEventListener('install', event => {
@@ -1361,6 +1464,14 @@
                     const shiftData = [];
                     let workingCount = 0;
                     
+                    // 除外するキーワードリスト
+                    const excludeKeywords = [
+                        'PLAN', 'FCST', 'UPH', 'HC', 'LH', 
+                        '出勤HC', '出勤LH', '必要LH', '過不足', 'HC換算',
+                        '夜勤手当', '残業手当', '総費用', '平均単価',
+                        '実績UPH', '基準UPH', 'FCST数量', 'PLAN数量'
+                    ];
+                    
                     for (let i = 1; i < workbookData.length; i++) {
                         const row = workbookData[i];
                         if (!row || row.length === 0) continue;
@@ -1380,7 +1491,25 @@
                             status: row[targetColumnIndex] != null ? String(row[targetColumnIndex]) : ''
                         };
                         
-                        if (employeeData.status === '◯' || employeeData.status === '○') {
+                        // 除外条件をチェック
+                        const shouldExclude = excludeKeywords.some(keyword => {
+                            return employeeData.company.includes(keyword) ||
+                                   employeeData.timeSlot.includes(keyword) ||
+                                   employeeData.mainJob.includes(keyword) ||
+                                   employeeData.name.includes(keyword) ||
+                                   employeeData.gender.includes(keyword);
+                        });
+                        
+                        // 計算行や集計行を除外
+                        if (shouldExclude) continue;
+                        
+                        // 空白行や無効なデータを除外
+                        if (!employeeData.name.trim() && !employeeData.company.trim()) continue;
+                        
+                        // 明らかに従業員ではないデータを除外（数値のみの名前など）
+                        if (employeeData.name.trim() && /^\d+$/.test(employeeData.name.trim())) continue;
+                        
+                        if (employeeData.status === '◯') {
                             employeeData.isWorking = true;
                             workingCount++;
                         } else if (employeeData.status && employeeData.status !== '') {
@@ -1602,7 +1731,7 @@
         function updateTable(data) {
             const table = document.getElementById('shiftTable');
             
-            const headers = ['会社名', '時間帯', 'メイン業務', '氏名', '性別', '時給', '交通費', '開始時間', '終了時間', '休憩', '勤務状況', '勤務LH', '夜勤H', '残業H'];
+            const headers = ['会社名', '時間帯', 'メイン業務', '氏名', '性別', '時給', '交通費', '開始時間', '終了時間', '休憩', '勤務状況', '勤務LH', '夜勤H', '残業H', '操作'];
             
             let tableHTML = '<thead><tr>';
             headers.forEach(header => {
@@ -1621,6 +1750,15 @@
                     calculateNightShiftHours(startTime, endTime, breakTime) : 0;
                 const overtimeHours = emp.isWorking ? Math.max(0, workHours - 8) : 0;
                 
+                // 勤務状況のセレクトボックス
+                const statusOptions = ['◯', '欠勤', '有休'];
+                let statusSelect = '<select class="status-select" data-row-index="' + index + '" data-field="status">';
+                statusOptions.forEach(option => {
+                    const selected = emp.status === option ? ' selected' : '';
+                    statusSelect += `<option value="${option}"${selected}>${option}</option>`;
+                });
+                statusSelect += '</select>';
+                
                 tableHTML += `
                     <tr class="${emp.isWorking ? 'working' : ''}" data-row-index="${index}">
                         <td>${emp.company}</td>
@@ -1630,13 +1768,16 @@
                         <td>${emp.gender}</td>
                         <td>${emp.hourlyWage}</td>
                         <td>${emp.transportation}</td>
-                        <td class="editable-cell" contenteditable="true" data-field="startTime">${emp.startTime}</td>
-                        <td class="editable-cell" contenteditable="true" data-field="endTime">${emp.endTime}</td>
-                        <td class="editable-cell" contenteditable="true" data-field="break">${emp.break}</td>
-                        <td class="editable-cell" contenteditable="true" data-field="status">${emp.status}</td>
+                        <td class="editable-cell time-cell" contenteditable="true" data-field="startTime">${emp.startTime}</td>
+                        <td class="editable-cell time-cell" contenteditable="true" data-field="endTime">${emp.endTime}</td>
+                        <td class="editable-cell time-cell" contenteditable="true" data-field="break">${emp.break}</td>
+                        <td class="status-cell">${statusSelect}</td>
                         <td>${workHours > 0 ? workHours.toFixed(2) : ''}</td>
                         <td>${nightHours > 0 ? nightHours.toFixed(2) : ''}</td>
                         <td>${overtimeHours > 0 ? overtimeHours.toFixed(2) : ''}</td>
+                        <td class="action-cell">
+                            <button class="row-reset-btn" onclick="resetRow(${index})" title="この行をリセット">↺</button>
+                        </td>
                     </tr>
                 `;
             });
@@ -1650,7 +1791,9 @@
 
         function addEditListeners() {
             const editableCells = document.querySelectorAll('.editable-cell');
+            const statusSelects = document.querySelectorAll('.status-select');
             
+            // 編集可能セルのリスナー
             editableCells.forEach(cell => {
                 cell.addEventListener('blur', function() {
                     const row = this.closest('tr');
@@ -1658,9 +1801,8 @@
                     const newValue = this.textContent.trim();
                     
                     // Update calculations if needed
-                    if (['startTime', 'endTime', 'break', 'status'].includes(field)) {
-                        updateCalculations(getCurrentTableData());
-                        updateTable(getCurrentTableData()); // テーブルも再更新
+                    if (['startTime', 'endTime', 'break'].includes(field)) {
+                        updateRowCalculations();
                     }
                     
                     // Visual feedback
@@ -1677,6 +1819,61 @@
                     }
                 });
             });
+            
+            // 勤務状況セレクトボックスのリスナー
+            statusSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    const rowIndex = this.getAttribute('data-row-index');
+                    const newStatus = this.value;
+                    const row = this.closest('tr');
+                    
+                    // 欠勤関連の状況の場合、出退勤時間をクリア
+                    if (['欠勤', '有休'].includes(newStatus)) {
+                        const startTimeCell = row.querySelector('[data-field="startTime"]');
+                        const endTimeCell = row.querySelector('[data-field="endTime"]');
+                        const breakCell = row.querySelector('[data-field="break"]');
+                        
+                        if (startTimeCell) startTimeCell.textContent = '';
+                        if (endTimeCell) endTimeCell.textContent = '';
+                        if (breakCell) breakCell.textContent = '';
+                        
+                        // 行のスタイルを更新
+                        row.classList.remove('working');
+                        
+                        showStatus(`${newStatus}に設定し、時間をクリアしました`, 'success');
+                    } else if (newStatus === '◯') {
+                        row.classList.add('working');
+                        
+                        // 時間が空白の場合はデフォルト値を設定
+                        const startTimeCell = row.querySelector('[data-field="startTime"]');
+                        const endTimeCell = row.querySelector('[data-field="endTime"]');
+                        const breakCell = row.querySelector('[data-field="break"]');
+                        
+                        if (startTimeCell && !startTimeCell.textContent.trim()) {
+                            startTimeCell.textContent = isNightShift ? '22:00' : '8:00';
+                        }
+                        if (endTimeCell && !endTimeCell.textContent.trim()) {
+                            endTimeCell.textContent = isNightShift ? '7:00' : '17:00';
+                        }
+                        if (breakCell && !breakCell.textContent.trim()) {
+                            breakCell.textContent = '1:00';
+                        }
+                        
+                        showStatus('出勤に設定しました', 'success');
+                    } else {
+                        row.classList.remove('working');
+                    }
+                    
+                    // 計算を更新
+                    updateRowCalculations();
+                    
+                    // Visual feedback
+                    this.style.background = 'rgba(76, 175, 80, 0.2)';
+                    setTimeout(() => {
+                        this.style.background = '';
+                    }, 1000);
+                });
+            });
         }
 
         function getCurrentTableData() {
@@ -1685,8 +1882,8 @@
             
             rows.forEach(row => {
                 const cells = row.querySelectorAll('td');
-                const statusCell = row.querySelector('[data-field="status"]');
-                const status = statusCell ? statusCell.textContent.trim() : '';
+                const statusSelect = row.querySelector('.status-select');
+                const status = statusSelect ? statusSelect.value : '';
                 
                 // セルのデータを安全に取得
                 const getData = (index) => {
@@ -1705,11 +1902,89 @@
                     endTime: getData(8),
                     break: getData(9),
                     status: status,
-                    isWorking: status === '◯' || status === '○'
+                    isWorking: status === '◯'
                 });
             });
             
             return data;
+        }
+
+        function updateRowCalculations() {
+            const currentData = getCurrentTableData();
+            updateCalculations(currentData);
+            
+            // テーブルの計算列も更新
+            const rows = document.querySelectorAll('#shiftTable tbody tr');
+            rows.forEach((row, index) => {
+                const emp = currentData[index];
+                if (!emp) return;
+                
+                const startTime = parseTime(emp.startTime);
+                const endTime = parseTime(emp.endTime);
+                const breakTime = parseTime(emp.break);
+                
+                const workHours = emp.isWorking && startTime !== null && endTime !== null ? 
+                    calculateWorkHours(startTime, endTime, breakTime) : 0;
+                const nightHours = emp.isWorking && startTime !== null && endTime !== null ? 
+                    calculateNightShiftHours(startTime, endTime, breakTime) : 0;
+                const overtimeHours = emp.isWorking ? Math.max(0, workHours - 8) : 0;
+                
+                const cells = row.querySelectorAll('td');
+                if (cells[11]) cells[11].textContent = workHours > 0 ? workHours.toFixed(2) : '';
+                if (cells[12]) cells[12].textContent = nightHours > 0 ? nightHours.toFixed(2) : '';
+                if (cells[13]) cells[13].textContent = overtimeHours > 0 ? overtimeHours.toFixed(2) : '';
+            });
+        }
+
+        function resetRow(rowIndex) {
+            if (!originalShiftData || !originalShiftData[rowIndex]) {
+                showStatus('リセットするデータがありません', 'error');
+                return;
+            }
+            
+            if (!confirm('この行を元の状態に戻しますか？')) {
+                return;
+            }
+            
+            const row = document.querySelector(`tr[data-row-index="${rowIndex}"]`);
+            if (!row) return;
+            
+            const originalData = originalShiftData[rowIndex];
+            
+            // 編集可能セルを元に戻す
+            const mainJobCell = row.querySelector('[data-field="mainJob"]');
+            if (mainJobCell) mainJobCell.textContent = originalData.mainJob;
+            
+            const startTimeCell = row.querySelector('[data-field="startTime"]');
+            if (startTimeCell) startTimeCell.textContent = originalData.startTime;
+            
+            const endTimeCell = row.querySelector('[data-field="endTime"]');
+            if (endTimeCell) endTimeCell.textContent = originalData.endTime;
+            
+            const breakCell = row.querySelector('[data-field="break"]');
+            if (breakCell) breakCell.textContent = originalData.break;
+            
+            // ステータスセレクトボックスを元に戻す
+            const statusSelect = row.querySelector('.status-select');
+            if (statusSelect) statusSelect.value = originalData.status;
+            
+            // 行のクラスを更新
+            if (originalData.isWorking) {
+                row.classList.add('working');
+            } else {
+                row.classList.remove('working');
+            }
+            
+            // 計算を更新
+            updateRowCalculations();
+            
+            // Visual feedback
+            row.style.background = 'rgba(33, 150, 243, 0.1)';
+            setTimeout(() => {
+                row.style.background = '';
+            }, 1500);
+            
+            showStatus('行をリセットしました', 'success');
         }
 
         // Utility functions
@@ -1879,10 +2154,10 @@
                 const rows = document.querySelectorAll('#shiftTable tbody tr');
                 
                 rows.forEach(row => {
-                    const statusCell = row.querySelector('[data-field="status"]');
-                    const status = statusCell ? statusCell.textContent.trim() : '';
+                    const statusSelect = row.querySelector('.status-select');
+                    const status = statusSelect ? statusSelect.value : '';
                     
-                    if (status === '◯' || status === '○') {
+                    if (status === '◯') {
                         const cells = row.querySelectorAll('td');
                         const getData = (index) => cells[index] ? cells[index].textContent.trim() : '';
                         
@@ -2243,67 +2518,178 @@
 
         function generateCombinedCompanySummary() {
             const targetDateStr = document.getElementById('targetDate').value;
-            if (!targetDateStr) return null;
+            if (!targetDateStr || !workbook) return null;
 
+            const targetDate = new Date(targetDateStr);
             const companySummary = {};
-            const currentData = getCurrentTableData();
             
-            currentData.forEach(emp => {
-                if (emp.isWorking) {
-                    const company = emp.company.trim();
-                    const hourlyWageStr = emp.hourlyWage || '0';
-                    const transportationStr = emp.transportation || '0';
+            // 日勤と夜勤の両方のシートを処理
+            const shiftsToProcess = ['日勤', '夜勤'];
+            
+            shiftsToProcess.forEach(sheetName => {
+                if (!workbook.SheetNames.includes(sheetName)) return;
+                
+                try {
+                    const worksheet = workbook.Sheets[sheetName];
+                    const sheetData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                     
-                    const hourlyWage = parseFloat(String(hourlyWageStr).replace(/[^\d.]/g, '')) || 0;
-                    const transportation = parseFloat(String(transportationStr).replace(/[^\d.]/g, '')) || 0;
+                    if (!sheetData || sheetData.length < 2) return;
                     
-                    if (!companySummary[company]) {
-                        companySummary[company] = {
-                            hc: 0, totalLH: 0, totalCost: 0,
-                            dayShiftHC: 0, nightShiftHC: 0
+                    // 日付列を分析
+                    const headerRow = sheetData[0];
+                    const sheetDateColumns = [];
+                    
+                    headerRow.forEach((cell, index) => {
+                        if (typeof cell === 'number' && cell >= 45000) {
+                            const excelDate = new Date((cell - 25569) * 86400 * 1000);
+                            sheetDateColumns.push({
+                                index: index,
+                                excelValue: cell,
+                                date: excelDate
+                            });
+                        }
+                    });
+                    
+                    // 最も近い日付列を見つける
+                    let targetColumnIndex = -1;
+                    let minDiff = Infinity;
+                    
+                    sheetDateColumns.forEach(col => {
+                        const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            targetColumnIndex = col.index;
+                        }
+                    });
+                    
+                    if (targetColumnIndex === -1) return;
+                    
+                    // 除外するキーワードリスト
+                    const excludeKeywords = [
+                        'PLAN', 'FCST', 'UPH', 'HC', 'LH', 
+                        '出勤HC', '出勤LH', '必要LH', '過不足', 'HC換算',
+                        '夜勤手当', '残業手当', '総費用', '平均単価',
+                        '実績UPH', '基準UPH', 'FCST数量', 'PLAN数量'
+                    ];
+                    
+                    // シートデータを処理
+                    for (let i = 1; i < sheetData.length; i++) {
+                        const row = sheetData[i];
+                        if (!row || row.length === 0) continue;
+                        
+                        const employeeData = {
+                            company: row[0] != null ? String(row[0]) : '',
+                            timeSlot: row[1] != null ? String(row[1]) : '',
+                            mainJob: row[2] != null ? String(row[2]) : '',
+                            name: row[3] != null ? String(row[3]) : '',
+                            gender: row[4] != null ? String(row[4]) : '',
+                            hourlyWage: row[5] != null ? String(row[5]) : '',
+                            transportation: row[6] != null ? String(row[6]) : '',
+                            startTime: row[7] != null ? String(row[7]) : '',
+                            endTime: row[8] != null ? String(row[8]) : '',
+                            break: row[9] != null ? String(row[9]) : '',
+                            status: row[targetColumnIndex] != null ? String(row[targetColumnIndex]) : ''
                         };
+                        
+                        // 除外条件をチェック
+                        const shouldExclude = excludeKeywords.some(keyword => {
+                            return employeeData.company.includes(keyword) ||
+                                   employeeData.timeSlot.includes(keyword) ||
+                                   employeeData.mainJob.includes(keyword) ||
+                                   employeeData.name.includes(keyword) ||
+                                   employeeData.gender.includes(keyword);
+                        });
+                        
+                        if (shouldExclude) continue;
+                        if (!employeeData.name.trim() && !employeeData.company.trim()) continue;
+                        if (employeeData.name.trim() && /^\d+$/.test(employeeData.name.trim())) continue;
+                        
+                        // 出勤している場合のみ処理
+                        if (employeeData.status === '◯') {
+                            const company = employeeData.company.trim();
+                            const hourlyWageStr = employeeData.hourlyWage || '0';
+                            const transportationStr = employeeData.transportation || '0';
+                            
+                            const hourlyWage = parseFloat(String(hourlyWageStr).replace(/[^\d.]/g, '')) || 0;
+                            const transportation = parseFloat(String(transportationStr).replace(/[^\d.]/g, '')) || 0;
+                            
+                            if (!companySummary[company]) {
+                                companySummary[company] = {
+                                    hc: 0, totalLH: 0, totalCost: 0,
+                                    dayShiftHC: 0, nightShiftHC: 0
+                                };
+                            }
+                            
+                            companySummary[company].hc += 1;
+                            
+                            // シフト種別に応じてカウント
+                            if (sheetName === '夜勤') {
+                                companySummary[company].nightShiftHC += 1;
+                            } else {
+                                companySummary[company].dayShiftHC += 1;
+                            }
+                            
+                            const startTime = parseTime(employeeData.startTime);
+                            const endTime = parseTime(employeeData.endTime);
+                            const breakTime = parseTime(employeeData.break);
+                            
+                            if (startTime !== null && endTime !== null) {
+                                // 夜勤かどうかを判定
+                                const isCurrentNightShift = sheetName === '夜勤';
+                                const workHours = calculateWorkHoursForSheet(startTime, endTime, breakTime, isCurrentNightShift);
+                                const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
+                                const overtimeHours = Math.max(0, workHours - 8);
+                                
+                                companySummary[company].totalLH += workHours;
+                                
+                                // 基本給の計算
+                                const regularHours = Math.max(0, workHours - overtimeHours);
+                                const baseCost = regularHours * hourlyWage;
+                                const overtimeBaseCost = overtimeHours * hourlyWage;
+                                const nightAllowance = nightHours * hourlyWage * 0.25;
+                                const overtimeAllowance = overtimeHours * hourlyWage * 0.25;
+                                
+                                companySummary[company].totalCost += baseCost + overtimeBaseCost + nightAllowance + overtimeAllowance + transportation;
+                            } else {
+                                companySummary[company].totalCost += transportation;
+                            }
+                        }
                     }
-                    
-                    companySummary[company].hc += 1;
-                    
-                    if (isNightShift) {
-                        companySummary[company].nightShiftHC += 1;
-                    } else {
-                        companySummary[company].dayShiftHC += 1;
-                    }
-                    
-                    const startTime = parseTime(emp.startTime);
-                    const endTime = parseTime(emp.endTime);
-                    const breakTime = parseTime(emp.break);
-                    
-                    if (startTime !== null && endTime !== null) {
-                        const workHours = calculateWorkHours(startTime, endTime, breakTime);
-                        const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
-                        const overtimeHours = Math.max(0, workHours - 8); // 8時間超過分
-                        
-                        companySummary[company].totalLH += workHours;
-                        
-                        // 基本給の計算
-                        const regularHours = Math.max(0, workHours - overtimeHours);
-                        const baseCost = regularHours * hourlyWage;
-                        
-                        // 残業時間の基本時給
-                        const overtimeBaseCost = overtimeHours * hourlyWage;
-                        
-                        // 夜勤手当（22:00-5:00の0.25倍増し）
-                        const nightAllowance = nightHours * hourlyWage * 0.25;
-                        
-                        // 残業代（8時間超過分の0.25倍増し）
-                        const overtimeAllowance = overtimeHours * hourlyWage * 0.25;
-                        
-                        companySummary[company].totalCost += baseCost + overtimeBaseCost + nightAllowance + overtimeAllowance + transportation;
-                    } else {
-                        companySummary[company].totalCost += transportation;
-                    }
+                } catch (error) {
+                    console.error(`${sheetName}シートの処理エラー:`, error);
                 }
             });
             
             return companySummary;
+        }
+
+        // 特定のシート用の勤務時間計算関数
+        function calculateWorkHoursForSheet(startTime, endTime, breakTime, isNightShift) {
+            if (startTime === null || endTime === null) {
+                return 0;
+            }
+            
+            let workHours;
+            
+            if (isNightShift) {
+                if (endTime < startTime) {
+                    workHours = (24 + endTime) - startTime;
+                } else {
+                    workHours = endTime - startTime;
+                }
+            } else {
+                if (endTime < startTime) {
+                    workHours = endTime - startTime + 24;
+                } else {
+                    workHours = endTime - startTime;
+                }
+            }
+            
+            if (breakTime !== null && breakTime > 0) {
+                workHours -= breakTime;
+            }
+            
+            return Math.max(0, workHours);
         }
 
         function resetData() {
