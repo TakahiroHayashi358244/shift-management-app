@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#2196F3">
     <meta name="description" content="プロフェッショナルシフト管理アプリ - Excel連携対応">
-    <title>シフト管理プロ v3.4</title>
+    <title>シフト管理プロ v4.0 - 完全版</title>
     
     <!-- PWA用のアイコンとメタデータ -->
     <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9IiMyMTk2RjMiIHJ4PSI0Ii8+PHBhdGggZD0iTTYgOWgxMnYySDE2em0wIDRoMTJ2MkgxNnptMC00aDEyVjlIMTZ6IiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==">
@@ -585,7 +585,7 @@
         .action-cell {
             padding: 6px 8px;
             text-align: center;
-            width: 60px;
+            width: 100px;
         }
 
         .row-reset-btn {
@@ -604,6 +604,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            margin-right: 4px;
         }
 
         .row-reset-btn::before {
@@ -635,6 +636,83 @@
         .row-reset-btn:focus {
             outline: none;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5);
+        }
+
+        .row-delete-btn {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 36px;
+            height: 28px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+        }
+
+        .row-delete-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .row-delete-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(244, 67, 54, 0.4);
+            background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+        }
+
+        .row-delete-btn:hover::before {
+            left: 100%;
+        }
+
+        .row-delete-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+        }
+
+        .row-delete-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.5);
+        }
+
+        .add-row-btn {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #43A047 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
+        }
+
+        .add-row-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+            background: linear-gradient(135deg, #43A047 0%, #388E3C 100%);
+        }
+
+        .add-row-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
         }
 
         .action-buttons {
@@ -825,11 +903,16 @@
                 padding: 2px 4px;
             }
 
-            .row-reset-btn {
+            .row-reset-btn,
+            .row-delete-btn {
                 width: 32px;
                 height: 24px;
                 font-size: 0.7rem;
                 border-radius: 6px;
+            }
+
+            .action-cell {
+                width: 80px;
             }
         }
 
@@ -858,7 +941,9 @@
             .action-buttons,
             .install-btn,
             .theme-toggle,
-            .row-reset-btn {
+            .row-reset-btn,
+            .row-delete-btn,
+            .add-row-btn {
                 display: none;
             }
 
@@ -879,7 +964,7 @@
                     <div class="logo">📊</div>
                     <div>
                         <h1 class="title">シフト管理プロ</h1>
-                        <p class="subtitle">Professional Shift Management v3.4</p>
+                        <p class="subtitle">Professional Shift Management v4.0 完全版</p>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -983,7 +1068,12 @@
 
             <!-- Data Table -->
             <div class="table-container" id="tableContainer">
+                <button class="add-row-btn" onclick="addNewRow()">
+                    ➕ 行を追加
+                </button>
+                
                 <table class="shift-table" id="shiftTable"></table>
+                
                 <div class="action-buttons">
                     <button class="action-btn primary" onclick="generateAttendanceCheck()">
                         📋 出退勤確認表
@@ -1047,7 +1137,7 @@
         function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('data:application/javascript;base64,' + btoa(`
-                    const CACHE_NAME = 'shift-app-v3-4';
+                    const CACHE_NAME = 'shift-app-v4-0';
                     const urlsToCache = ['/'];
                     
                     self.addEventListener('install', event => {
@@ -1761,13 +1851,13 @@
                 
                 tableHTML += `
                     <tr class="${emp.isWorking ? 'working' : ''}" data-row-index="${index}">
-                        <td>${emp.company}</td>
-                        <td>${emp.timeSlot}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="company">${emp.company}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="timeSlot">${emp.timeSlot}</td>
                         <td class="editable-cell" contenteditable="true" data-field="mainJob">${emp.mainJob}</td>
-                        <td>${emp.name}</td>
-                        <td>${emp.gender}</td>
-                        <td>${emp.hourlyWage}</td>
-                        <td>${emp.transportation}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="name">${emp.name}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="gender">${emp.gender}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="hourlyWage">${emp.hourlyWage}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="transportation">${emp.transportation}</td>
                         <td class="editable-cell time-cell" contenteditable="true" data-field="startTime">${emp.startTime}</td>
                         <td class="editable-cell time-cell" contenteditable="true" data-field="endTime">${emp.endTime}</td>
                         <td class="editable-cell time-cell" contenteditable="true" data-field="break">${emp.break}</td>
@@ -1777,6 +1867,7 @@
                         <td>${overtimeHours > 0 ? overtimeHours.toFixed(2) : ''}</td>
                         <td class="action-cell">
                             <button class="row-reset-btn" onclick="resetRow(${index})" title="この行をリセット">↺</button>
+                            <button class="row-delete-btn" onclick="deleteRow(${index})" title="この行を削除">✕</button>
                         </td>
                     </tr>
                 `;
@@ -1800,8 +1891,28 @@
                     const field = this.getAttribute('data-field');
                     const newValue = this.textContent.trim();
                     
+                    // 数値フィールドの場合、適切な形式かチェック
+                    if (['hourlyWage', 'transportation'].includes(field)) {
+                        const numValue = parseFloat(newValue.replace(/[^\d.]/g, ''));
+                        if (!isNaN(numValue) && numValue >= 0) {
+                            // 有効な数値の場合、適切な形式に整形
+                            if (field === 'hourlyWage') {
+                                this.textContent = Math.round(numValue).toString();
+                            } else if (field === 'transportation') {
+                                this.textContent = Math.round(numValue).toString();
+                            }
+                        } else if (newValue === '') {
+                            // 空文字の場合は許可
+                            this.textContent = '';
+                        } else {
+                            // 無効な値の場合は元に戻す
+                            showStatus('数値を入力してください', 'error');
+                            return;
+                        }
+                    }
+                    
                     // Update calculations if needed
-                    if (['startTime', 'endTime', 'break'].includes(field)) {
+                    if (['startTime', 'endTime', 'break', 'hourlyWage', 'transportation'].includes(field)) {
                         updateRowCalculations();
                     }
                     
@@ -1810,12 +1921,44 @@
                     setTimeout(() => {
                         this.style.background = '';
                     }, 1000);
+                    
+                    showStatus('変更が保存されました', 'success');
                 });
                 
                 cell.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter') {
                         e.preventDefault();
                         this.blur();
+                    }
+                    
+                    // 数値フィールドの場合、数字とピリオド、バックスペース、矢印キーのみ許可
+                    const field = this.getAttribute('data-field');
+                    if (['hourlyWage', 'transportation'].includes(field)) {
+                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+                        if (!allowedKeys.includes(e.key) && !e.ctrlKey && !e.metaKey) {
+                            if (!/[0-9.]/.test(e.key)) {
+                                e.preventDefault();
+                                return false;
+                            }
+                            // ピリオドの重複を防ぐ
+                            if (e.key === '.' && this.textContent.includes('.')) {
+                                e.preventDefault();
+                                return false;
+                            }
+                        }
+                    }
+                });
+                
+                // フォーカス時の処理
+                cell.addEventListener('focus', function() {
+                    const field = this.getAttribute('data-field');
+                    if (['hourlyWage', 'transportation'].includes(field)) {
+                        // 数値フィールドの場合、選択状態にする
+                        const range = document.createRange();
+                        range.selectNodeContents(this);
+                        const selection = window.getSelection();
+                        selection.removeAllRanges();
+                        selection.addRange(range);
                     }
                 });
             });
@@ -1874,6 +2017,134 @@
                     }, 1000);
                 });
             });
+        }
+
+        function addNewRow() {
+            // 新しい行のデフォルトデータを作成
+            const newEmployee = {
+                company: '',
+                timeSlot: '',
+                mainJob: '',
+                name: '',
+                gender: '',
+                hourlyWage: '',
+                transportation: '',
+                startTime: '',
+                endTime: '',
+                break: '',
+                status: '',
+                isWorking: false
+            };
+            
+            // テーブルに新しい行を追加
+            const table = document.getElementById('shiftTable');
+            const tbody = table.querySelector('tbody');
+            const currentRows = tbody.querySelectorAll('tr');
+            const newIndex = currentRows.length;
+            
+            const startTime = parseTime(newEmployee.startTime);
+            const endTime = parseTime(newEmployee.endTime);
+            const breakTime = parseTime(newEmployee.break);
+            
+            const workHours = 0;
+            const nightHours = 0;
+            const overtimeHours = 0;
+            
+            // 勤務状況のセレクトボックス
+            const statusOptions = ['◯', '欠勤', '有休'];
+            let statusSelect = '<select class="status-select" data-row-index="' + newIndex + '" data-field="status">';
+            statusSelect += '<option value="">選択してください</option>';
+            statusOptions.forEach(option => {
+                statusSelect += `<option value="${option}">${option}</option>`;
+            });
+            statusSelect += '</select>';
+            
+            const newRowHTML = `
+                <tr class="" data-row-index="${newIndex}">
+                    <td class="editable-cell" contenteditable="true" data-field="company">${newEmployee.company}</td>
+                    <td class="editable-cell" contenteditable="true" data-field="timeSlot">${newEmployee.timeSlot}</td>
+                    <td class="editable-cell" contenteditable="true" data-field="mainJob">${newEmployee.mainJob}</td>
+                    <td class="editable-cell" contenteditable="true" data-field="name">${newEmployee.name}</td>
+                    <td class="editable-cell" contenteditable="true" data-field="gender">${newEmployee.gender}</td>
+                    <td class="editable-cell" contenteditable="true" data-field="hourlyWage">${newEmployee.hourlyWage}</td>
+                    <td class="editable-cell" contenteditable="true" data-field="transportation">${newEmployee.transportation}</td>
+                    <td class="editable-cell time-cell" contenteditable="true" data-field="startTime">${newEmployee.startTime}</td>
+                    <td class="editable-cell time-cell" contenteditable="true" data-field="endTime">${newEmployee.endTime}</td>
+                    <td class="editable-cell time-cell" contenteditable="true" data-field="break">${newEmployee.break}</td>
+                    <td class="status-cell">${statusSelect}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="action-cell">
+                        <button class="row-reset-btn" onclick="resetRow(${newIndex})" title="この行をリセット">↺</button>
+                        <button class="row-delete-btn" onclick="deleteRow(${newIndex})" title="この行を削除">✕</button>
+                    </td>
+                </tr>
+            `;
+            
+            tbody.insertAdjacentHTML('beforeend', newRowHTML);
+            
+            // 新しい行にイベントリスナーを追加
+            addEditListeners();
+            
+            // 新しい行の最初のセルにフォーカス
+            const newRow = tbody.querySelector(`tr[data-row-index="${newIndex}"]`);
+            const firstEditableCell = newRow.querySelector('.editable-cell');
+            if (firstEditableCell) {
+                firstEditableCell.focus();
+            }
+            
+            showStatus('新しい行を追加しました', 'success');
+        }
+
+        function deleteRow(rowIndex) {
+            const row = document.querySelector(`tr[data-row-index="${rowIndex}"]`);
+            if (!row) {
+                showStatus('削除する行が見つかりません', 'error');
+                return;
+            }
+            
+            // 従業員名を取得して確認
+            const nameCell = row.querySelector('[data-field="name"]');
+            const employeeName = nameCell ? nameCell.textContent.trim() : '名前なし';
+            const confirmMessage = employeeName ? 
+                `「${employeeName}」の行を削除しますか？` : 
+                'この行を削除しますか？';
+            
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+            
+            // 行を削除
+            row.remove();
+            
+            // 行インデックスを再設定
+            const remainingRows = document.querySelectorAll('#shiftTable tbody tr');
+            remainingRows.forEach((row, index) => {
+                row.setAttribute('data-row-index', index);
+                
+                // セレクトボックスのdata-row-indexも更新
+                const statusSelect = row.querySelector('.status-select');
+                if (statusSelect) {
+                    statusSelect.setAttribute('data-row-index', index);
+                }
+                
+                // ボタンのonclickも更新
+                const resetBtn = row.querySelector('.row-reset-btn');
+                const deleteBtn = row.querySelector('.row-delete-btn');
+                if (resetBtn) {
+                    resetBtn.setAttribute('onclick', `resetRow(${index})`);
+                }
+                if (deleteBtn) {
+                    deleteBtn.setAttribute('onclick', `deleteRow(${index})`);
+                }
+            });
+            
+            // 計算を更新
+            updateRowCalculations();
+            
+            const deletedName = employeeName || '行';
+            showStatus(`${deletedName}を削除しました`, 'success');
         }
 
         function getCurrentTableData() {
@@ -1938,7 +2209,31 @@
 
         function resetRow(rowIndex) {
             if (!originalShiftData || !originalShiftData[rowIndex]) {
-                showStatus('リセットするデータがありません', 'error');
+                // 新規追加行の場合は空にリセット
+                const row = document.querySelector(`tr[data-row-index="${rowIndex}"]`);
+                if (!row) return;
+                
+                if (!confirm('この行をクリアしますか？')) {
+                    return;
+                }
+                
+                // 全ての編集可能セルを空にする
+                const editableCells = row.querySelectorAll('.editable-cell');
+                editableCells.forEach(cell => {
+                    cell.textContent = '';
+                });
+                
+                // ステータスセレクトボックスをリセット
+                const statusSelect = row.querySelector('.status-select');
+                if (statusSelect) statusSelect.value = '';
+                
+                // 行のクラスを更新
+                row.classList.remove('working');
+                
+                // 計算を更新
+                updateRowCalculations();
+                
+                showStatus('行をクリアしました', 'success');
                 return;
             }
             
@@ -1952,8 +2247,26 @@
             const originalData = originalShiftData[rowIndex];
             
             // 編集可能セルを元に戻す
+            const companyCell = row.querySelector('[data-field="company"]');
+            if (companyCell) companyCell.textContent = originalData.company;
+            
+            const timeSlotCell = row.querySelector('[data-field="timeSlot"]');
+            if (timeSlotCell) timeSlotCell.textContent = originalData.timeSlot;
+            
             const mainJobCell = row.querySelector('[data-field="mainJob"]');
             if (mainJobCell) mainJobCell.textContent = originalData.mainJob;
+            
+            const nameCell = row.querySelector('[data-field="name"]');
+            if (nameCell) nameCell.textContent = originalData.name;
+            
+            const genderCell = row.querySelector('[data-field="gender"]');
+            if (genderCell) genderCell.textContent = originalData.gender;
+            
+            const hourlyWageCell = row.querySelector('[data-field="hourlyWage"]');
+            if (hourlyWageCell) hourlyWageCell.textContent = originalData.hourlyWage;
+            
+            const transportationCell = row.querySelector('[data-field="transportation"]');
+            if (transportationCell) transportationCell.textContent = originalData.transportation;
             
             const startTimeCell = row.querySelector('[data-field="startTime"]');
             if (startTimeCell) startTimeCell.textContent = originalData.startTime;
