@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#2196F3">
-    <title>シフトデータ復元ビューア v1.0</title>
+    <title>詳細データ復元ビューア v1.0</title>
     
     <!-- Excel読み込み用ライブラリ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -26,14 +26,18 @@
         }
 
         [data-theme="dark"] {
-            --background: #0f172a;
-            --surface: #1e293b;
+            --background: #3E2723;
+            --surface: #5D4037;
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
-            --border: #334155;
+            --border: #795548;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            --glass: rgba(15, 23, 42, 0.7);
-            --glass-border: rgba(51, 65, 85, 0.3);
+            --glass: rgba(62, 39, 35, 0.7);
+            --glass-border: rgba(121, 85, 72, 0.3);
+        }
+
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #8D6E63 0%, #A1887F 50%, #BCAAA4 100%);
         }
 
         * {
@@ -44,7 +48,7 @@
 
         body {
             font-family: 'Segoe UI', 'Noto Sans JP', system-ui, sans-serif;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            background: linear-gradient(135deg, #FFB74D 0%, #FFC107 50%, #FF9800 100%);
             min-height: 100vh;
             color: var(--text-primary);
             transition: all 0.3s ease;
@@ -746,7 +750,7 @@
                 <div class="logo-section">
                     <div class="logo">📊</div>
                     <div>
-                        <h1 class="title">シフトデータ復元ビューア</h1>
+                        <h1 class="title">詳細データ復元ビューア</h1>
                         <p class="subtitle">エクスポートされたExcelファイルを読み込んで編集・管理</p>
                     </div>
                 </div>
