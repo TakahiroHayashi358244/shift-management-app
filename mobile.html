@@ -1,0 +1,2293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シフト表作成ツール for Mobile</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: 'Yu Gothic', 'Meiryo', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 25%, #2c3e50 50%, #1a252f 75%, #0f1419 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .upload-section {
+            background-color: #f9f9f9;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .file-input {
+            display: none;
+        }
+        .file-label {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .file-label:hover {
+            background-color: #45a049;
+        }
+        .sheet-section {
+            background-color: #f0f8ff;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .date-section {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .date-input {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 0 10px;
+        }
+        .generate-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+        .generate-btn:hover {
+            background-color: #1976D2;
+        }
+        .generate-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .shift-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .shift-table th,
+        .shift-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .shift-table th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        .shift-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .shift-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        .working {
+            background-color: #e8f5e8 !important;
+        }
+        .editable-time {
+            background-color: #fff3e0 !important;
+            cursor: text;
+            transition: background-color 0.3s;
+            border: 2px solid transparent;
+            min-width: 60px;
+        }
+        .editable-time:hover {
+            background-color: #ffe0b2 !important;
+        }
+        .editable-time:focus {
+            background-color: #ffffff !important;
+            border: 2px solid #2196F3 !important;
+            outline: none;
+        }
+        .working .editable-time {
+            background-color: #f1f8e9 !important;
+        }
+        .working .editable-time:hover {
+            background-color: #dcedc8 !important;
+        }
+        .working .editable-time:focus {
+            background-color: #ffffff !important;
+        }
+        .editable-text {
+            background-color: #f3e5f5 !important;
+            cursor: text;
+            transition: background-color 0.3s;
+            border: 2px solid transparent;
+            min-width: 80px;
+        }
+        .editable-text:hover {
+            background-color: #e1bee7 !important;
+        }
+        .editable-text:focus {
+            background-color: #ffffff !important;
+            border: 2px solid #9C27B0 !important;
+            outline: none;
+        }
+        .working .editable-text {
+            background-color: #f1f8e9 !important;
+        }
+        .working .editable-text:hover {
+            background-color: #dcedc8 !important;
+        }
+        .working .editable-text:focus {
+            background-color: #ffffff !important;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .status.success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .export-btn {
+            background-color: #FF9800;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 20px;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+        .export-btn:hover {
+            background-color: #F57C00;
+        }
+        .export-btn.reset {
+            background-color: #FF5722;
+        }
+        .export-btn.reset:hover {
+            background-color: #E64A19;
+        }
+        .summary {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        .calculation-section {
+            background-color: #f8f9fa;
+            border: 2px solid #28a745;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .calc-item {
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .calc-item h4 {
+            margin: 0 0 10px 0;
+            color: #495057;
+            font-size: 14px;
+        }
+        .calc-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+            margin: 5px 0;
+        }
+        .calc-unit {
+            font-size: 12px;
+            color: #6c757d;
+        }
+        .plan-input {
+            width: 100px;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            margin: 5px;
+        }
+        .editable-status {
+            background-color: #fff9c4 !important;
+            cursor: text;
+            transition: background-color 0.3s;
+            border: 2px solid transparent;
+            min-width: 60px;
+        }
+        .editable-status:hover {
+            background-color: #fff59d !important;
+        }
+        .editable-status:focus {
+            background-color: #ffffff !important;
+            border: 2px solid #FF9800 !important;
+            outline: none;
+        }
+        .working .editable-status {
+            background-color: #f1f8e9 !important;
+        }
+        .working .editable-status:hover {
+            background-color: #dcedc8 !important;
+        }
+        .working .editable-status:focus {
+            background-color: #ffffff !important;
+        }
+        .time-warning {
+            background-color: #fff3cd !important;
+            border: 2px solid #ffc107 !important;
+        }
+        .calc-debug {
+            font-size: 10px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>シフト表作成ツール for Mobile</h1>
+        
+        <div class="upload-section">
+            <h3>1. Excelファイルをアップロード</h3>
+            <p>月間シフト表のExcelファイルを選択してください</p>
+            <input type="file" id="fileInput" class="file-input" accept=".xlsx,.xls">
+            <label for="fileInput" class="file-label">📁 ファイルを選択</label>
+            <div id="fileName" style="margin-top: 10px; color: #666;"></div>
+        </div>
+
+        <div class="sheet-section" id="sheetSection" style="display: none; margin-bottom: 30px; text-align: center;">
+            <h3>2. シートを選択</h3>
+            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">日勤または夜勤シートを選択してください</p>
+            <select id="sheetSelect" class="date-input" style="width: 200px;">
+                <option value="">シートを選択してください</option>
+            </select>
+        </div>
+
+        <div class="date-section">
+            <h3 id="dateStepNumber">3. 表示したい日付を選択</h3>
+            <label for="targetDate">日付:</label>
+            <input type="date" id="targetDate" class="date-input">
+            <button id="generateBtn" class="generate-btn" disabled>シフト表生成</button>
+        </div>
+
+        <div id="status"></div>
+        <div id="summary"></div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let workbook = null;
+        let workbookData = null;
+        let dateColumns = [];
+        let originalShiftData = [];
+        let planValue = 12200; // デフォルト値
+        let fcstValue = 16273; // デフォルト値
+        let baseUPH = 22; // 基準UPH ←ここを変更（例：20→25）
+        let isNightShift = false; // 夜勤判定フラグ
+
+        document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+        document.getElementById('sheetSelect').addEventListener('change', handleSheetChange);
+        document.getElementById('generateBtn').addEventListener('click', generateDailyShift);
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+            
+            // 3秒後にステータスを自動的に消去
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+            }, 3000);
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            document.getElementById('fileName').textContent = `選択されたファイル: ${file.name}`;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    workbook = XLSX.read(data, { type: 'array' });
+                    
+                    // シート選択セクションを表示
+                    const sheetSection = document.getElementById('sheetSection');
+                    const sheetSelect = document.getElementById('sheetSelect');
+                    
+                    // シート選択肢をクリア
+                    sheetSelect.innerHTML = '<option value="">シートを選択してください</option>';
+                    
+                    // 日勤と夜勤のシートのみを追加
+                    const targetSheets = ['日勤', '夜勤'];
+                    targetSheets.forEach(targetSheet => {
+                        if (workbook.SheetNames.includes(targetSheet)) {
+                            const option = document.createElement('option');
+                            option.value = targetSheet;
+                            option.textContent = targetSheet;
+                            sheetSelect.appendChild(option);
+                        }
+                    });
+                    
+                    // 利用可能なシートが見つからない場合の処理
+                    if (sheetSelect.children.length === 1) {
+                        sheetSelect.innerHTML = '<option value="">日勤・夜勤シートが見つかりません</option>';
+                        showStatus('ファイルに「日勤」または「夜勤」シートが見つかりません', 'error');
+                        return;
+                    }
+                    
+                    sheetSection.style.display = 'block';
+                    
+                    // ステップ番号を更新
+                    document.getElementById('dateStepNumber').textContent = '3. 表示したい日付を選択';
+                    
+                    showStatus('ファイルが正常に読み込まれました。シートを選択してください。', 'success');
+                } catch (error) {
+                    showStatus('ファイルの読み込みに失敗しました: ' + error.message, 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function handleSheetChange(event) {
+            const selectedSheet = event.target.value;
+            if (!selectedSheet || !workbook) {
+                document.getElementById('generateBtn').disabled = true;
+                return;
+            }
+
+            // 夜勤判定フラグを設定
+            isNightShift = selectedSheet === '夜勤';
+
+            try {
+                const worksheet = workbook.Sheets[selectedSheet];
+                workbookData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                
+                // PLAN数値をE列から取得
+                extractPlanValue();
+                
+                // FCST数値をE列から取得
+                extractFcstValue();
+                
+                // 基準UPH数値をE列から取得
+                extractBaseUphValue();
+                
+                analyzeDateColumns();
+                
+                document.getElementById('generateBtn').disabled = false;
+                showStatus(`「${selectedSheet}」シートが選択されました`, 'success');
+            } catch (error) {
+                showStatus('シートの読み込みに失敗しました: ' + error.message, 'error');
+                document.getElementById('generateBtn').disabled = true;
+            }
+        }
+
+        function analyzeDateColumns() {
+            if (!workbookData || workbookData.length < 2) return;
+            
+            const headerRow = workbookData[0];
+            dateColumns = [];
+            
+            // 日付列を特定（数値で45870以上のものを日付として扱う）
+            headerRow.forEach((cell, index) => {
+                if (typeof cell === 'number' && cell >= 45000) {
+                    // Excelの日付シリアル値をJavaScriptの日付に変換
+                    const excelDate = new Date((cell - 25569) * 86400 * 1000);
+                    dateColumns.push({
+                        index: index,
+                        excelValue: cell,
+                        date: excelDate
+                    });
+                }
+            });
+            
+            console.log(`${dateColumns.length}個の日付列が見つかりました`);
+        }
+
+        function extractPlanValue() {
+            if (!workbookData || workbookData.length < 2) {
+                console.log('ワークブックデータが存在しません。デフォルト値を使用します。');
+                return;
+            }
+            
+            // E列（インデックス4）で「PLAN」を検索
+            let planRowIndex = -1;
+            for (let i = 0; i < workbookData.length; i++) {
+                const row = workbookData[i];
+                if (row && row[4] && typeof row[4] === 'string') {
+                    const cellText = row[4].toString().trim().toUpperCase();
+                    if (cellText.includes('PLAN')) {
+                        planRowIndex = i;
+                        console.log(`E列の${i + 1}行目でPLANを発見: "${row[4]}"`);
+                        break;
+                    }
+                }
+            }
+            
+            if (planRowIndex === -1) {
+                console.log('E列にPLANが見つかりません。デフォルト値を使用します。');
+                return;
+            }
+            
+            // 現在選択されている日付に対応する列のPLAN数値を取得
+            const targetDateStr = document.getElementById('targetDate').value;
+            if (!targetDateStr) {
+                console.log('日付が選択されていません。デフォルト値を使用します。');
+                return;
+            }
+            
+            const targetDate = new Date(targetDateStr);
+            let targetColumnIndex = -1;
+            let minDiff = Infinity;
+            
+            // 指定日付に最も近い日付列を見つける
+            dateColumns.forEach(col => {
+                const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    targetColumnIndex = col.index;
+                }
+            });
+            
+            if (targetColumnIndex === -1) {
+                console.log('指定日付に対応する列が見つかりません。デフォルト値を使用します。');
+                return;
+            }
+            
+            // 指定列のPLAN数値を取得
+            const planRow = workbookData[planRowIndex];
+            const cellValue = planRow[targetColumnIndex];
+            if (typeof cellValue === 'number' && cellValue > 0 && cellValue < 1000000) {
+                planValue = cellValue;
+                console.log(`PLAN行の${targetDate.toLocaleDateString('ja-JP')}列からPLAN数値を取得: ${planValue}`);
+                return;
+            }
+            
+            // 文字列の場合、数値部分を抽出
+            if (typeof cellValue === 'string') {
+                const numMatch = cellValue.match(/(\d+)/);
+                if (numMatch) {
+                    const extractedNum = parseInt(numMatch[1]);
+                    if (extractedNum > 0 && extractedNum < 1000000) {
+                        planValue = extractedNum;
+                        console.log(`PLAN行の${targetDate.toLocaleDateString('ja-JP')}列からPLAN数値を抽出: ${planValue}`);
+                        return;
+                    }
+                }
+            }
+            
+            console.log(`PLAN行の${targetDate.toLocaleDateString('ja-JP')}列からPLAN数値を取得できませんでした。デフォルト値を使用します。`);
+        }
+
+        function extractFcstValue() {
+            if (!workbookData || workbookData.length < 2) {
+                console.log('ワークブックデータが存在しません。デフォルト値を使用します。');
+                return;
+            }
+            
+            // E列（インデックス4）で「FCST」を検索
+            let fcstRowIndex = -1;
+            for (let i = 0; i < workbookData.length; i++) {
+                const row = workbookData[i];
+                if (row && row[4] && typeof row[4] === 'string') {
+                    const cellText = row[4].toString().trim().toUpperCase();
+                    if (cellText.includes('FCST')) {
+                        fcstRowIndex = i;
+                        console.log(`E列の${i + 1}行目でFCSTを発見: "${row[4]}"`);
+                        break;
+                    }
+                }
+            }
+            
+            if (fcstRowIndex === -1) {
+                console.log('E列にFCSTが見つかりません。デフォルト値を使用します。');
+                return;
+            }
+            
+            // 現在選択されている日付に対応する列のFCST数値を取得
+            const targetDateStr = document.getElementById('targetDate').value;
+            if (!targetDateStr) {
+                console.log('日付が選択されていません。デフォルト値を使用します。');
+                return;
+            }
+            
+            const targetDate = new Date(targetDateStr);
+            let targetColumnIndex = -1;
+            let minDiff = Infinity;
+            
+            // 指定日付に最も近い日付列を見つける
+            dateColumns.forEach(col => {
+                const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    targetColumnIndex = col.index;
+                }
+            });
+            
+            if (targetColumnIndex === -1) {
+                console.log('指定日付に対応する列が見つかりません。デフォルト値を使用します。');
+                return;
+            }
+            
+            // 指定列のFCST数値を取得
+            const fcstRow = workbookData[fcstRowIndex];
+            const cellValue = fcstRow[targetColumnIndex];
+            if (typeof cellValue === 'number' && cellValue > 0 && cellValue < 1000000) {
+                fcstValue = cellValue;
+                console.log(`FCST行の${targetDate.toLocaleDateString('ja-JP')}列からFCST数値を取得: ${fcstValue}`);
+                return;
+            }
+            
+            // 文字列の場合、数値部分を抽出
+            if (typeof cellValue === 'string') {
+                const numMatch = cellValue.match(/(\d+)/);
+                if (numMatch) {
+                    const extractedNum = parseInt(numMatch[1]);
+                    if (extractedNum > 0 && extractedNum < 1000000) {
+                        fcstValue = extractedNum;
+                        console.log(`FCST行の${targetDate.toLocaleDateString('ja-JP')}列からFCST数値を抽出: ${fcstValue}`);
+                        return;
+                    }
+                }
+            }
+            
+            console.log(`FCST行の${targetDate.toLocaleDateString('ja-JP')}列からFCST数値を取得できませんでした。デフォルト値を使用します。`);
+        }
+
+        function extractBaseUphValue() {
+            if (!workbookData || workbookData.length < 2) {
+                console.log('ワークブックデータが存在しません。デフォルト値を使用します。');
+                return;
+            }
+            
+            // E列（インデックス4）で「基準UPH」または「UPH」を検索
+            let uphRowIndex = -1;
+            for (let i = 0; i < workbookData.length; i++) {
+                const row = workbookData[i];
+                if (row && row[4] && typeof row[4] === 'string') {
+                    const cellText = row[4].toString().trim();
+                    if (cellText.includes('基準UPH') || cellText.includes('基準 UPH') || 
+                        (cellText.includes('UPH') && cellText.includes('基準'))) {
+                        uphRowIndex = i;
+                        console.log(`E列の${i + 1}行目で基準UPHを発見: "${row[4]}"`);
+                        break;
+                    }
+                }
+            }
+            
+            if (uphRowIndex === -1) {
+                console.log('E列に基準UPHが見つかりません。デフォルト値を使用します。');
+                return;
+            }
+            
+            // 現在選択されている日付に対応する列の基準UPH数値を取得
+            const targetDateStr = document.getElementById('targetDate').value;
+            if (!targetDateStr) {
+                console.log('日付が選択されていません。デフォルト値を使用します。');
+                return;
+            }
+            
+            const targetDate = new Date(targetDateStr);
+            let targetColumnIndex = -1;
+            let minDiff = Infinity;
+            
+            // 指定日付に最も近い日付列を見つける
+            dateColumns.forEach(col => {
+                const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    targetColumnIndex = col.index;
+                }
+            });
+            
+            if (targetColumnIndex === -1) {
+                console.log('指定日付に対応する列が見つかりません。デフォルト値を使用します。');
+                return;
+            }
+            
+            // 指定列の基準UPH数値を取得
+            const uphRow = workbookData[uphRowIndex];
+            const cellValue = uphRow[targetColumnIndex];
+            if (typeof cellValue === 'number' && cellValue > 0 && cellValue < 1000) {
+                baseUPH = cellValue;
+                console.log(`基準UPH行の${targetDate.toLocaleDateString('ja-JP')}列から基準UPH数値を取得: ${baseUPH}`);
+                return;
+            }
+            
+            // 文字列の場合、数値部分を抽出
+            if (typeof cellValue === 'string') {
+                const numMatch = cellValue.match(/(\d+\.?\d*)/);
+                if (numMatch) {
+                    const extractedNum = parseFloat(numMatch[1]);
+                    if (extractedNum > 0 && extractedNum < 1000) {
+                        baseUPH = extractedNum;
+                        console.log(`基準UPH行の${targetDate.toLocaleDateString('ja-JP')}列から基準UPH数値を抽出: ${baseUPH}`);
+                        return;
+                    }
+                }
+            }
+            
+            console.log(`基準UPH行の${targetDate.toLocaleDateString('ja-JP')}列から基準UPH数値を取得できませんでした。デフォルト値を使用します。`);
+        }
+
+        function generateDailyShift() {
+            if (!workbookData || dateColumns.length === 0) {
+                showStatus('データが読み込まれていません', 'error');
+                return;
+            }
+
+            const targetDateStr = document.getElementById('targetDate').value;
+            if (!targetDateStr) {
+                showStatus('日付を選択してください', 'error');
+                return;
+            }
+
+            const targetDate = new Date(targetDateStr);
+            
+            // 指定日付に最も近い日付列を見つける
+            let targetColumnIndex = -1;
+            let minDiff = Infinity;
+            
+            dateColumns.forEach(col => {
+                const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    targetColumnIndex = col.index;
+                }
+            });
+
+            if (targetColumnIndex === -1) {
+                showStatus('指定された日付に対応する列が見つかりません', 'error');
+                return;
+            }
+
+            // シフト表を生成
+            const shiftData = [];
+            let workingCount = 0;
+            
+            for (let i = 1; i < workbookData.length; i++) {
+                const row = workbookData[i];
+                if (!row || row.length === 0) continue;
+                
+                const employeeData = {
+                    company: row[0] || '',
+                    timeSlot: row[1] || '',
+                    mainJob: row[2] || '',
+                    name: row[3] || '',
+                    gender: row[4] || '',
+                    hourlyWage: row[5] || '',
+                    transportation: row[6] || '',
+                    startTime: row[7] || '',
+                    endTime: row[8] || '',
+                    break: row[9] || '',
+                    status: row[targetColumnIndex] || ''
+                };
+                
+                // 会社名が空欄の場合はスキップ
+                if (!employeeData.company || employeeData.company.trim() === '') {
+                    continue;
+                }
+                
+                // 出勤の場合のみテーブルに追加
+                if (employeeData.status === '◯' || employeeData.status === '○') {
+                    employeeData.isWorking = true;
+                    workingCount++;
+                } else if (employeeData.status && employeeData.status !== '') {
+                    employeeData.isWorking = false;
+                } else {
+                    continue; // 空欄の場合はスキップ
+                }
+                
+                shiftData.push(employeeData);
+            }
+
+            // 元データを保存（リセット用）
+            originalShiftData = JSON.parse(JSON.stringify(shiftData));
+
+            // 指定日付のPLAN数値を取得
+            extractPlanValue();
+            
+            // 指定日付のFCST数値を取得
+            extractFcstValue();
+            
+            // 指定日付の基準UPH数値を取得
+            extractBaseUphValue();
+
+            displayShiftTable(shiftData, targetDate, workingCount);
+            showStatus(`${targetDate.toLocaleDateString('ja-JP')}のシフト表を生成しました`, 'success');
+        }
+
+        function displayShiftTable(data, date, workingCount) {
+            const selectedSheet = document.getElementById('sheetSelect').value;
+            const summaryHtml = `
+                <div class="summary">
+                    <h3>📊 ${date.toLocaleDateString('ja-JP')} のシフト概要 (${selectedSheet})</h3>
+                    <p><strong>出勤者数:</strong> ${workingCount}名 | <strong>総登録者:</strong> ${data.length}名</p>
+                    <p style="color: #666; font-size: 14px; margin-top: 10px;">💡 直接編集できます<br>
+                    ⚡ 時間を入力すると自動で出勤状態になり、勤務状況の○を削除すると時間がクリアされます<br>
+                    🌙 夜勤では日をまたぐ勤務時間を自動で計算します（例：23:00-07:00 = 8時間）<br>
+                    📝 会社名が空欄の行は表示されません</p>
+                </div>
+            `;
+
+            // LH計算セクションを追加
+            const calculationHtml = `
+                <div class="calculation-section" id="calculationSection">
+                    <h3 style="margin: 0 0 15px 0; color: #28a745;">📈 LH計算・分析 ${isNightShift ? '(夜勤手当25%増し含む)' : ''}</h3>
+                    <div class="calc-grid">
+                        <div class="calc-item">
+                            <h4>FCST</h4>
+                            <div class="calc-value" id="forecast">${fcstValue}</div>
+                            <div class="calc-unit">個 (E列FCST行指定日列から自動取得)</div>
+                        </div>
+                        <div class="calc-item">
+                            <h4>出勤HC</h4>
+                            <div class="calc-value" id="totalHC">${workingCount}</div>
+                            <div class="calc-unit">人</div>
+                        </div>
+                        <div class="calc-item">
+                            <h4>出勤LH</h4>
+                            <div class="calc-value" id="totalLH">0</div>
+                            <div class="calc-unit">時間</div>
+                            <div class="calc-debug" id="debugLH"></div>
+                        </div>
+                        <div class="calc-item">
+                            <h4>総費用</h4>
+                            <div class="calc-value" id="totalCost">0</div>
+                            <div class="calc-unit">円 (時給+夜勤手当+交通費)</div>
+                        </div>
+                        <div class="calc-item">
+                            <h4>PLAN数量</h4>
+                            <input type="number" id="planInput" class="plan-input" placeholder="12200" value="${planValue}" onchange="updateCalculations()">
+                            <div class="calc-unit">個 (E列PLAN行指定日列から自動取得)</div>
+                        </div>
+                        <div class="calc-item">
+                            <h4>基準UPH</h4>
+                            <input type="number" id="baseUphInput" class="plan-input" placeholder="20" value="${baseUPH}" onchange="updateCalculations()">
+                            <div class="calc-unit">個/時 (E列基準UPH行から自動取得)</div>
+                        </div>
+                        <div class="calc-item">
+                            <h4>必要LH</h4>
+                            <div class="calc-value" id="requiredLH">610</div>
+                            <div class="calc-unit">時間</div>
+                        </div>
+                        <div class="calc-item">
+                            <h4>実績UPH</h4>
+                            <div class="calc-value" id="currentUPH">20</div>
+                            <div class="calc-unit">個/時</div>
+                        </div>
+                        <div class="calc-item">
+                            <h4>過不足</h4>
+                            <div class="calc-value" id="shortage">0</div>
+                            <div class="calc-unit">時間</div>
+                        </div>
+                        <div class="calc-item">
+                            <h4>HC換算</h4>
+                            <div class="calc-value" id="hcConversion">0</div>
+                            <div class="calc-unit">人</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const tableHtml = `
+                <table class="shift-table" id="editableShiftTable">
+                    <thead>
+                        <tr>
+                            <th>会社名</th>
+                            <th>時間帯</th>
+                            <th>メイン業務</th>
+                            <th>氏名</th>
+                            <th>性別</th>
+                            <th>時給</th>
+                            <th>交通費</th>
+                            <th>開始時間</th>
+                            <th>終了時間</th>
+                            <th>休憩</th>
+                            <th>勤務状況</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.map((emp, index) => `
+                            <tr class="${emp.isWorking ? 'working' : ''}" data-row-index="${index}">
+                                <td>${emp.company}</td>
+                                <td>${emp.timeSlot}</td>
+                                <td class="editable-text" contenteditable="true" data-field="mainJob" data-original="${emp.mainJob}">${emp.mainJob}</td>
+                                <td>${emp.name}</td>
+                                <td>${emp.gender}</td>
+                                <td>${emp.hourlyWage}</td>
+                                <td>${emp.transportation}</td>
+                                <td class="editable-time" contenteditable="true" data-field="startTime" data-original="${emp.startTime}">${emp.startTime}</td>
+                                <td class="editable-time" contenteditable="true" data-field="endTime" data-original="${emp.endTime}">${emp.endTime}</td>
+                                <td class="editable-time" contenteditable="true" data-field="break" data-original="${emp.break}">${emp.break}</td>
+                                <td class="editable-status" contenteditable="true" data-field="status" data-original="${emp.status}">${emp.status}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                <div style="margin-top: 15px;">
+                    <button class="export-btn" onclick="exportToExcel()">📊 詳細データをエクスポート</button>
+                    <button class="export-btn" onclick="exportCompanySummary()" style="background-color: #FF9800;">📈 会社別集計をエクスポート</button>
+                    <button class="export-btn" onclick="exportCombinedSummary()" style="background-color: #673AB7;">🔄 日勤+夜勤合算集計</button>
+                    <button class="export-btn" onclick="generateAttendanceCheck()" style="background-color: #9C27B0;">📋 出退勤確認表を生成</button>
+                    <button class="export-btn reset" onclick="resetTimes()">🔄 編集内容をリセット</button>
+                </div>
+            `;
+
+            document.getElementById('summary').innerHTML = summaryHtml;
+            document.getElementById('result').innerHTML = calculationHtml + tableHtml;
+            
+            // 編集可能セルにイベントリスナーを追加
+            addEditableListeners();
+            
+            // 初期計算を実行
+            updateCalculations();
+        }
+
+        // 出退勤確認表生成機能
+        function generateAttendanceCheck() {
+            if (!document.querySelector('.shift-table')) {
+                showStatus('シフト表が生成されていません', 'error');
+                return;
+            }
+
+            try {
+                const targetDate = document.getElementById('targetDate').value;
+                const selectedSheet = document.getElementById('sheetSelect').value;
+                const dateObj = new Date(targetDate);
+                const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日 ${selectedSheet}シフト表`;
+
+                // 出勤者のみのデータを収集
+                const attendanceData = [];
+                const rows = document.querySelectorAll('#editableShiftTable tbody tr');
+                
+                rows.forEach(row => {
+                    const statusCell = row.querySelector('[data-field="status"]');
+                    const status = statusCell ? statusCell.textContent.trim() : '';
+                    
+                    if (status === '◯' || status === '○') {
+                        const cells = row.querySelectorAll('td');
+                        const company = cells[0] ? cells[0].textContent.trim() : '';
+                        
+                        // 会社名が空欄の場合はスキップ
+                        if (!company || company === '') {
+                            return;
+                        }
+                        
+                        attendanceData.push({
+                            company: company,
+                            timeSlot: '', // 階層列は空欄
+                            mainJob: cells[2] ? cells[2].textContent.trim() : '',
+                            name: cells[3] ? cells[3].textContent.trim() : '',
+                            startTime: ':', // 手書き用
+                            endTime: ':', // 手書き用
+                            break: ':', // 手書き用
+                            memo: '' // 備考欄
+                        });
+                    }
+                });
+
+                // 出退勤確認表のHTMLを生成
+                const attendanceHTML = createAttendanceHTML(formattedDate, attendanceData);
+                
+                // 新しいウィンドウで表示
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(attendanceHTML);
+                printWindow.document.close();
+                
+                showStatus('出退勤確認表を生成しました。印刷またはPDF保存してください。', 'success');
+                
+            } catch (error) {
+                console.error('出退勤確認表生成エラー:', error);
+                showStatus('出退勤確認表の生成に失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        // 出退勤確認表のHTML生成
+        function createAttendanceHTML(dateTitle, data) {
+            return `
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>出退勤確認表</title>
+    <style>
+        @media print {
+            body { margin: 0; }
+            .no-print { display: none; }
+        }
+        
+        body {
+            font-family: 'Yu Gothic', 'Meiryo', sans-serif;
+            margin: 20px;
+            background-color: white;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+        
+        .attendance-table th,
+        .attendance-table td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        .attendance-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .attendance-table td {
+            height: 15px;
+        }
+        
+        .name-cell {
+            text-align: left;
+            padding-left: 10px;
+            min-width: 120px;
+        }
+        
+        .company-cell {
+            text-align: left;
+            padding-left: 10px;
+            min-width: 80px;
+        }
+        
+        .job-cell {
+            text-align: left;
+            padding-left: 10px;
+            min-width: 100px;
+        }
+        
+        .time-cell {
+            width: 60px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .memo-cell {
+            width: 120px;
+        }
+        
+        .layer-cell {
+            width: 50px;
+        }
+        
+        .print-buttons {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .print-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+        }
+        
+        .print-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .pdf-btn {
+            background-color: #2196F3;
+        }
+        
+        .pdf-btn:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div class="print-buttons no-print">
+        <button class="print-btn" onclick="window.print()">🖨️ 印刷</button>
+        <button class="print-btn pdf-btn" onclick="window.print()">📄 PDF保存</button>
+        <button class="print-btn" onclick="window.close()" style="background-color: #FF5722;">❌ 閉じる</button>
+    </div>
+
+    <div class="header">
+        <h1>${dateTitle}</h1>
+        <p style="margin: 10px 0 0 0; font-size: 14px;">出退勤確認表</p>
+    </div>
+
+    <table class="attendance-table">
+        <thead>
+            <tr>
+                <th>会社名</th>
+                <th>階層</th>
+                <th>メイン業務</th>
+                <th>氏名</th>
+                <th>開始時間</th>
+                <th>終了時間</th>
+                <th>休憩</th>
+                <th>備考</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${data.map(emp => `
+                <tr>
+                    <td class="company-cell">${emp.company}</td>
+                    <td class="layer-cell">${emp.timeSlot}</td>
+                    <td class="job-cell">${emp.mainJob}</td>
+                    <td class="name-cell">${emp.name}</td>
+                    <td class="time-cell">${emp.startTime}</td>
+                    <td class="time-cell">${emp.endTime}</td>
+                    <td class="time-cell">${emp.break}</td>
+                    <td class="memo-cell">${emp.memo}</td>
+                </tr>
+            `).join('')}
+            ${Array.from({length: Math.max(0, 20 - data.length)}, () => `
+                <tr>
+                    <td class="company-cell">&nbsp;</td>
+                    <td class="layer-cell">&nbsp;</td>
+                    <td class="job-cell">&nbsp;</td>
+                    <td class="name-cell">&nbsp;</td>
+                    <td class="time-cell">:</td>
+                    <td class="time-cell">:</td>
+                    <td class="time-cell">:</td>
+                    <td class="memo-cell">&nbsp;</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    </table>
+
+    <div style="margin-top: 30px; text-align: right; font-size: 12px;">
+        <p>責任者確認：_________________　　日付：_______________</p>
+    </div>
+</body>
+</html>`;
+        }
+
+        function addEditableListeners() {
+            const editableCells = document.querySelectorAll('.editable-time, .editable-text, .editable-status');
+            
+            editableCells.forEach(cell => {
+                // フォーカス時の処理
+                cell.addEventListener('focus', function() {
+                    this.setAttribute('data-before-edit', this.textContent);
+                });
+                
+                // エンターキーで次のセルに移動
+                cell.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.blur();
+                        
+                        // 次の編集可能セルを探して移動
+                        const allEditableCells = Array.from(document.querySelectorAll('.editable-time, .editable-text, .editable-status'));
+                        const currentIndex = allEditableCells.indexOf(this);
+                        const nextCell = allEditableCells[currentIndex + 1];
+                        if (nextCell) {
+                            nextCell.focus();
+                        }
+                    }
+                });
+                
+                // 値の変更時の処理
+                cell.addEventListener('blur', function() {
+                    const newValue = this.textContent.trim();
+                    const beforeValue = this.getAttribute('data-before-edit');
+                    
+                    if (newValue !== beforeValue) {
+                        // 変更があった場合の視覚的フィードバック
+                        this.style.backgroundColor = '#c8e6c9';
+                        setTimeout(() => {
+                            this.style.backgroundColor = '';
+                        }, 1500);
+                        
+                        // 勤務状況が変更された場合の処理
+                        if (this.classList.contains('editable-status')) {
+                            handleStatusChange(this, newValue, beforeValue);
+                        }
+                        
+                        // 時間が変更された場合の処理
+                        if (this.classList.contains('editable-time')) {
+                            handleTimeChange(this, newValue);
+                            updateCalculations();
+                        }
+                    }
+                });
+            });
+
+            // 時間セルのみに数字と時間形式の入力制限を適用
+            const timeCells = document.querySelectorAll('.editable-time');
+            timeCells.forEach(cell => {
+                cell.addEventListener('input', function() {
+                    let value = this.textContent;
+                    // 不正な文字を除去（数字、コロン、空白のみ許可）
+                    value = value.replace(/[^\d:\s]/g, '');
+                    if (value !== this.textContent) {
+                        this.textContent = value;
+                        // カーソル位置を末尾に設定
+                        const range = document.createRange();
+                        const sel = window.getSelection();
+                        range.selectNodeContents(this);
+                        range.collapse(false);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    }
+                });
+            });
+        }
+
+        function handleStatusChange(statusCell, newValue, beforeValue) {
+            const row = statusCell.closest('tr');
+            const startTimeCell = row.querySelector('[data-field="startTime"]');
+            const endTimeCell = row.querySelector('[data-field="endTime"]');
+            const breakCell = row.querySelector('[data-field="break"]');
+            
+            // ○が削除された場合（○→空文字、○→他の値）
+            const wasWorking = beforeValue === '◯' || beforeValue === '○';
+            const isWorking = newValue === '◯' || newValue === '○';
+            
+            if (wasWorking && !isWorking) {
+                // 出勤状態から非出勤状態に変更された場合、時間をクリア
+                if (startTimeCell) {
+                    startTimeCell.textContent = '';
+                    startTimeCell.style.backgroundColor = '#ffcdd2';
+                    setTimeout(() => {
+                        startTimeCell.style.backgroundColor = '';
+                    }, 1000);
+                }
+                if (endTimeCell) {
+                    endTimeCell.textContent = '';
+                    endTimeCell.style.backgroundColor = '#ffcdd2';
+                    setTimeout(() => {
+                        endTimeCell.style.backgroundColor = '';
+                    }, 1000);
+                }
+                if (breakCell) {
+                    breakCell.textContent = '';
+                    breakCell.style.backgroundColor = '#ffcdd2';
+                    setTimeout(() => {
+                        breakCell.style.backgroundColor = '';
+                    }, 1000);
+                }
+                
+                // 行の背景色を変更
+                row.classList.remove('working');
+                
+                showStatus('勤務状況が変更され、時間データをクリアしました', 'success');
+            } else if (!wasWorking && isWorking) {
+                // 非出勤状態から出勤状態に変更された場合
+                row.classList.add('working');
+                
+                // 元の時間データを復元（data-originalから）
+                if (startTimeCell) {
+                    const originalStart = startTimeCell.getAttribute('data-original');
+                    if (originalStart && originalStart !== '') {
+                        startTimeCell.textContent = originalStart;
+                        startTimeCell.style.backgroundColor = '#c8e6c9';
+                        setTimeout(() => {
+                            startTimeCell.style.backgroundColor = '';
+                        }, 1000);
+                    }
+                }
+                if (endTimeCell) {
+                    const originalEnd = endTimeCell.getAttribute('data-original');
+                    if (originalEnd && originalEnd !== '') {
+                        endTimeCell.textContent = originalEnd;
+                        endTimeCell.style.backgroundColor = '#c8e6c9';
+                        setTimeout(() => {
+                            endTimeCell.style.backgroundColor = '';
+                        }, 1000);
+                    }
+                }
+                if (breakCell) {
+                    const originalBreak = breakCell.getAttribute('data-original');
+                    if (originalBreak && originalBreak !== '') {
+                        breakCell.textContent = originalBreak;
+                        breakCell.style.backgroundColor = '#c8e6c9';
+                        setTimeout(() => {
+                            breakCell.style.backgroundColor = '';
+                        }, 1000);
+                    }
+                }
+                
+                showStatus('勤務状況が出勤に変更され、時間データを復元しました', 'success');
+            }
+            
+            // 計算を更新
+            updateCalculations();
+        }
+
+        function handleTimeChange(timeCell, newValue) {
+            const row = timeCell.closest('tr');
+            const statusCell = row.querySelector('[data-field="status"]');
+            
+            if (!statusCell) return;
+            
+            const currentStatus = statusCell.textContent.trim();
+            
+            // 時間が入力されたが勤務状況が○でない場合
+            if (newValue && newValue !== '' && newValue !== '：' && newValue !== '　：　') {
+                const isWorking = currentStatus === '◯' || currentStatus === '○';
+                
+                if (!isWorking) {
+                    // ○を自動で復活
+                    statusCell.textContent = '◯';
+                    row.classList.add('working');
+                    
+                    // 勤務状況セルをハイライト
+                    statusCell.style.backgroundColor = '#c8e6c9';
+                    setTimeout(() => {
+                        statusCell.style.backgroundColor = '';
+                    }, 1500);
+                    
+                    showStatus('時間が入力されたため、勤務状況を出勤（◯）に変更しました', 'success');
+                }
+            }
+        }
+
+        function resetTimes() {
+            if (!confirm('すべての編集内容を元の値にリセットしますか？')) {
+                return;
+            }
+            
+            const editableCells = document.querySelectorAll('.editable-time, .editable-text, .editable-status');
+            editableCells.forEach(cell => {
+                const originalValue = cell.getAttribute('data-original');
+                if (originalValue !== null) {
+                    cell.textContent = originalValue;
+                    // リセット時の視覚的フィードバック
+                    cell.style.backgroundColor = '#ffecb3';
+                    setTimeout(() => {
+                        cell.style.backgroundColor = '';
+                    }, 1000);
+                }
+            });
+            
+            // 行のworkingクラスを更新
+            const rows = document.querySelectorAll('#editableShiftTable tbody tr');
+            rows.forEach(row => {
+                const statusCell = row.querySelector('[data-field="status"]');
+                if (statusCell) {
+                    const status = statusCell.textContent.trim();
+                    if (status === '◯' || status === '○') {
+                        row.classList.add('working');
+                    } else {
+                        row.classList.remove('working');
+                    }
+                }
+            });
+            
+            showStatus('編集内容をリセットしました', 'success');
+            
+            // 計算を更新
+            updateCalculations();
+        }
+
+        // 改良された労働時間計算関数
+        function calculateWorkHours(startTime, endTime, breakTime) {
+            if (startTime === null || endTime === null) {
+                return 0;
+            }
+            
+            let workHours;
+            
+            // 夜勤の場合の特別な処理
+            if (isNightShift) {
+                // 夜勤では、終了時間が開始時間より小さい場合、日をまたぐと判断
+                if (endTime < startTime) {
+                    // 日をまたぐ場合：24時間を加算
+                    workHours = (24 + endTime) - startTime;
+                } else {
+                    // 同日内の場合
+                    workHours = endTime - startTime;
+                }
+            } else {
+                // 日勤の場合
+                if (endTime < startTime) {
+                    // 日勤で終了時間が開始時間より早い場合は警告
+                    workHours = endTime - startTime + 24; // 一応24時間を加算
+                } else {
+                    workHours = endTime - startTime;
+                }
+            }
+            
+            // 休憩時間を引く
+            if (breakTime !== null && breakTime > 0) {
+                workHours -= breakTime;
+            }
+            
+            // 負の値の場合は0に補正
+            if (workHours < 0) {
+                workHours = 0;
+            }
+            
+            return workHours;
+        }
+
+        // 夜勤手当対象時間を計算する関数
+        function calculateNightShiftHours(startTime, endTime, breakTime) {
+            if (startTime === null || endTime === null) {
+                return 0;
+            }
+            
+            // 夜勤手当対象時間: 22:00-05:00
+            const nightStart = 22.0;  // 22:00
+            const nightEnd = 5.0;     // 05:00（翌日）
+            
+            let nightHours = 0;
+            
+            // 夜勤の場合の計算
+            if (isNightShift) {
+                // 終了時間が開始時間より小さい場合、日をまたぐ
+                if (endTime < startTime) {
+                    // 22:00以降の勤務時間を計算
+                    if (startTime >= nightStart) {
+                        nightHours += (24 - startTime);
+                    } else if (startTime < nightStart) {
+                        nightHours += (24 - nightStart);
+                    }
+                    
+                    // 翌日05:00までの勤務時間を計算
+                    if (endTime <= nightEnd) {
+                        nightHours += endTime;
+                    } else {
+                        nightHours += nightEnd;
+                    }
+                } else {
+                    // 同日内の夜勤（稀なケース）
+                    if (startTime >= nightStart) {
+                        nightHours = Math.min(endTime, 24) - startTime;
+                    }
+                }
+                
+                // 休憩時間が夜勤時間帯に含まれる場合は1時間差し引く
+                if (nightHours > 0 && breakTime !== null && breakTime > 0) {
+                    nightHours = Math.max(0, nightHours - 1); // 1時間の休憩を差し引く
+                }
+            } else {
+                // 日勤でも夜勤手当対象時間がある場合
+                if (startTime >= nightStart || endTime <= nightEnd) {
+                    // 22:00以降の時間を計算
+                    if (startTime >= nightStart) {
+                        nightHours = Math.min(endTime, 24) - startTime;
+                    }
+                    // 05:00以前の時間を計算
+                    if (endTime <= nightEnd && startTime < nightEnd) {
+                        nightHours += Math.min(endTime, nightEnd) - Math.max(startTime, 0);
+                    }
+                }
+            }
+            
+            return Math.max(0, nightHours);
+        }
+
+        function updateCalculations() {
+            // 出勤者の労働時間を計算
+            let totalLH = 0;
+            let totalCost = 0; // 夜勤手当込みの総費用
+            let workingCount = 0;
+            let debugInfo = [];
+            
+            const rows = document.querySelectorAll('#editableShiftTable tbody tr');
+            rows.forEach((row, index) => {
+                const statusCell = row.querySelector('td:last-child');
+                const status = statusCell.textContent.trim();
+                
+                if (status === '◯' || status === '○') {
+                    const cells = row.querySelectorAll('td');
+                    const company = cells[0] ? cells[0].textContent.trim() : '';
+                    
+                    // 会社名が空欄の場合はスキップ
+                    if (!company || company === '') {
+                        return;
+                    }
+                    
+                    workingCount++;
+                    
+                    const startTimeCell = row.querySelector('[data-field="startTime"]');
+                    const endTimeCell = row.querySelector('[data-field="endTime"]');
+                    const breakCell = row.querySelector('[data-field="break"]');
+                    const nameCell = row.querySelector('td:nth-child(4)'); // 氏名列
+                    const hourlyWageCell = row.querySelector('td:nth-child(6)'); // 時給列
+                    const transportationCell = row.querySelector('td:nth-child(7)'); // 交通費列
+                    
+                    const startTime = parseTime(startTimeCell.textContent.trim());
+                    const endTime = parseTime(endTimeCell.textContent.trim());
+                    const breakTime = parseTime(breakCell.textContent.trim());
+                    
+                    // 時給と交通費を取得
+                    const hourlyWage = parseFloat(hourlyWageCell.textContent.replace(/[^\d.]/g, '')) || 0;
+                    const transportation = parseFloat(transportationCell.textContent.replace(/[^\d.]/g, '')) || 0;
+                    
+                    if (startTime !== null && endTime !== null) {
+                        const workHours = calculateWorkHours(startTime, endTime, breakTime);
+                        const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
+                        const regularHours = workHours - nightHours;
+                        
+                        if (workHours > 0) {
+                            totalLH += workHours;
+                            
+                            // 費用計算（通常時給 + 夜勤手当25%増し + 交通費）
+                            const regularCost = regularHours * hourlyWage;
+                            const nightCost = nightHours * hourlyWage * 1.25; // 25%増し
+                            const employeeCost = regularCost + nightCost + transportation;
+                            totalCost += employeeCost;
+                            
+                            // デバッグ情報を追加
+                            const name = nameCell ? nameCell.textContent.trim() : `従業員${index+1}`;
+                            let debugText = `${name}: ${workHours.toFixed(2)}h`;
+                            if (nightHours > 0) {
+                                debugText += ` (夜勤${nightHours.toFixed(1)}h)`;
+                            }
+                            debugInfo.push(debugText);
+                            
+                            // 異常な労働時間の警告
+                            if (workHours > 16) {
+                                startTimeCell.classList.add('time-warning');
+                                endTimeCell.classList.add('time-warning');
+                            } else {
+                                startTimeCell.classList.remove('time-warning');
+                                endTimeCell.classList.remove('time-warning');
+                            }
+                        }
+                    } else {
+                        // 時間データが不完全でも交通費は計上
+                        totalCost += transportation;
+                        
+                        // 時間データが不完全な場合の警告
+                        if (startTime === null) startTimeCell.classList.add('time-warning');
+                        if (endTime === null) endTimeCell.classList.add('time-warning');
+                    }
+                }
+            });
+            
+            // PLAN数量とUPHを取得
+            const planInput = document.getElementById('planInput');
+            const planInputValue = planInput ? parseFloat(planInput.value) || planValue : planValue;
+            
+            const baseUphInput = document.getElementById('baseUphInput');
+            const baseUphValue = baseUphInput ? parseFloat(baseUphInput.value) || baseUPH : baseUPH;
+            
+            // 各種計算
+            const requiredLH = planInputValue / baseUphValue; // 設定UPHを基準として計算
+            const shortage = totalLH - requiredLH;
+            const currentUPH = totalLH > 0 ? planInputValue / totalLH : 0;
+            const hcConversion = shortage / 8; // 8時間労働として換算
+            
+            // 表示を更新
+            const updateElement = (id, value, decimals = 2) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    if (typeof value === 'number') {
+                        element.textContent = decimals === 0 ? Math.round(value) : value.toFixed(decimals);
+                    } else {
+                        element.textContent = value;
+                    }
+                }
+            };
+            
+            // FCSTは228行目から取得した固定値を表示
+            updateElement('forecast', fcstValue, 0);
+            updateElement('totalHC', workingCount, 0);
+            updateElement('totalLH', totalLH, 2);
+            updateElement('requiredLH', requiredLH, 2);
+            updateElement('shortage', shortage, 2);
+            updateElement('currentUPH', currentUPH, 0);
+            updateElement('hcConversion', hcConversion, 2);
+            
+            // 総費用を表示（新規追加）
+            const totalCostElement = document.getElementById('totalCost');
+            if (totalCostElement) {
+                updateElement('totalCost', totalCost, 0);
+            }
+            
+            // デバッグ情報を表示
+            const debugElement = document.getElementById('debugLH');
+            if (debugElement && debugInfo.length > 0) {
+                debugElement.textContent = debugInfo.slice(0, 3).join(', ') + 
+                    (debugInfo.length > 3 ? ` 他${debugInfo.length - 3}名` : '');
+            }
+            
+            // 過不足の色を変更
+            const shortageElement = document.getElementById('shortage');
+            if (shortageElement) {
+                if (shortage > 0) {
+                    shortageElement.style.color = '#28a745'; // 緑色（余剰）
+                    shortageElement.parentElement.style.backgroundColor = '#d4edda'; // 薄緑背景
+                } else if (shortage < 0) {
+                    shortageElement.style.color = '#dc3545'; // 赤色（不足）
+                    shortageElement.parentElement.style.backgroundColor = '#f8d7da'; // 薄赤背景
+                } else {
+                    shortageElement.style.color = '#28a745'; // 緑色（ぴったり）
+                    shortageElement.parentElement.style.backgroundColor = '#d4edda'; // 薄緑背景
+                }
+            }
+            
+            // 実績UPHと基準UPHの比較による色分け
+            const currentUPHElement = document.getElementById('currentUPH');
+            if (currentUPHElement) {
+                if (currentUPH > baseUphValue) {
+                    currentUPHElement.style.color = '#28a745'; // 緑色（基準超過）
+                    currentUPHElement.parentElement.style.backgroundColor = '#d4edda'; // 薄緑背景
+                } else if (currentUPH < baseUphValue) {
+                    currentUPHElement.style.color = '#dc3545'; // 赤色（基準未満）
+                    currentUPHElement.parentElement.style.backgroundColor = '#f8d7da'; // 薄赤背景
+                } else {
+                    currentUPHElement.style.color = '#28a745'; // 緑色（基準通り）
+                    currentUPHElement.parentElement.style.backgroundColor = '#d4edda'; // 薄緑背景
+                }
+            }
+        }
+
+        // 改良された時間解析関数
+        function parseTime(timeStr) {
+            if (!timeStr || timeStr === '' || timeStr === '：' || timeStr === '　：　') {
+                return null;
+            }
+            
+            // 時間形式を解析 (例: "9", "9:00", "9.5", "23:30" など)
+            timeStr = timeStr.replace(/[：\s]/g, ':').trim();
+            
+            if (timeStr.includes(':')) {
+                const parts = timeStr.split(':');
+                const hours = parseInt(parts[0]) || 0;
+                const minutes = parseInt(parts[1]) || 0;
+                
+                // 24時間を超える値の補正
+                const totalHours = (hours % 24) + minutes / 60;
+                return totalHours;
+            } else {
+                // 数字のみの場合
+                const numValue = parseFloat(timeStr) || 0;
+                return numValue % 24; // 24時間を超える場合は補正
+            }
+        }
+
+        function exportToExcel() {
+            if (!document.querySelector('.shift-table')) {
+                showStatus('エクスポートするデータがありません', 'error');
+                return;
+            }
+
+            try {
+                // 指定日付を取得してフォーマット
+                const targetDate = document.getElementById('targetDate').value;
+                const selectedSheet = document.getElementById('sheetSelect').value;
+                const dateObj = new Date(targetDate);
+                const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日 ${selectedSheet}シフト表`;
+
+                // テーブルデータを配列として取得（編集後の値を含む）
+                const table = document.querySelector('.shift-table');
+                const rows = table.querySelectorAll('tr');
+                const data = [];
+
+                // A1セルに日付を追加
+                data.push([formattedDate]);
+                
+                // 空白行を追加
+                data.push([]);
+
+                // ヘッダー行を追加（勤務LHを追加）
+                const headerCells = rows[0].querySelectorAll('th');
+                const headerRow = [];
+                headerCells.forEach(cell => {
+                    headerRow.push(cell.textContent.trim());
+                });
+                headerRow.push('勤務LH'); // 勤務LH列を追加
+                data.push(headerRow);
+
+                // データ行を追加（編集後の値を取得＋勤務LH計算）
+                for (let i = 1; i < rows.length; i++) {
+                    const row = rows[i];
+                    const cells = row.querySelectorAll('td');
+                    const rowData = [];
+                    
+                    // 既存のセルデータを取得
+                    cells.forEach(cell => {
+                        rowData.push(cell.textContent.trim());
+                    });
+                    
+                    // 勤務LHを計算して追加
+                    const statusCell = row.querySelector('[data-field="status"]');
+                    const status = statusCell ? statusCell.textContent.trim() : '';
+                    
+                    let workHours = 0;
+                    if (status === '◯' || status === '○') {
+                        const startTimeCell = row.querySelector('[data-field="startTime"]');
+                        const endTimeCell = row.querySelector('[data-field="endTime"]');
+                        const breakCell = row.querySelector('[data-field="break"]');
+                        
+                        const startTime = parseTime(startTimeCell ? startTimeCell.textContent.trim() : '');
+                        const endTime = parseTime(endTimeCell ? endTimeCell.textContent.trim() : '');
+                        const breakTime = parseTime(breakCell ? breakCell.textContent.trim() : '');
+                        
+                        workHours = calculateWorkHours(startTime, endTime, breakTime);
+                    }
+                    
+                    // 勤務LHを追加（小数点以下2桁まで表示、0の場合は空文字）
+                    rowData.push(workHours > 0 ? workHours.toFixed(2) : '');
+                    
+                    data.push(rowData);
+                }
+
+                // ワークシートを作成
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                
+                // A1セルのスタイルを設定（日付表示用）
+                if (ws['A1']) {
+                    ws['A1'].s = {
+                        font: {
+                            bold: true,
+                            size: 14,
+                            color: { rgb: '000000' }
+                        },
+                        alignment: {
+                            horizontal: 'left',
+                            vertical: 'center'
+                        }
+                    };
+                }
+                
+                // 列幅を設定（勤務LH列を追加）
+                ws['!cols'] = [
+                    { width: 15 }, // 会社名（日付表示のため少し広く）
+                    { width: 10 }, // 時間帯
+                    { width: 12 }, // メイン業務
+                    { width: 15 }, // 氏名
+                    { width: 8 },  // 性別
+                    { width: 10 }, // 時給
+                    { width: 12 }, // 交通費
+                    { width: 10 }, // 開始時間
+                    { width: 10 }, // 終了時間
+                    { width: 8 },  // 休憩
+                    { width: 10 }, // 勤務状況
+                    { width: 10 }  // 勤務LH（新規追加）
+                ];
+
+                // ワークブックを作成
+                const wb = XLSX.utils.book_new();
+                
+                const sheetName = '詳細データ';
+                
+                XLSX.utils.book_append_sheet(wb, ws, sheetName);
+                
+                const fileName = targetDate ? 
+                    `${targetDate}_${selectedSheet}_詳細データ.xlsx` : 
+                    `${selectedSheet}_詳細データ.xlsx`;
+                
+                XLSX.writeFile(wb, fileName);
+                
+                showStatus('詳細データをダウンロードしました', 'success');
+                
+            } catch (error) {
+                console.error('エクスポートエラー:', error);
+                showStatus('エクスポートに失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        // 会社別集計データを生成する関数
+        function generateCompanySummary() {
+            const table = document.querySelector('.shift-table');
+            if (!table) return null;
+            
+            const rows = table.querySelectorAll('tbody tr');
+            const companySummary = {};
+            
+            rows.forEach(row => {
+                const statusCell = row.querySelector('[data-field="status"]');
+                const status = statusCell ? statusCell.textContent.trim() : '';
+                
+                // 出勤者のみを集計
+                if (status === '◯' || status === '○') {
+                    const cells = row.querySelectorAll('td');
+                    const company = cells[0] ? cells[0].textContent.trim() : '';
+                    
+                    // 会社名が空欄の場合はスキップ
+                    if (!company || company === '') {
+                        return;
+                    }
+                    
+                    const hourlyWageText = cells[5] ? cells[5].textContent.trim() : '';
+                    const transportationText = cells[6] ? cells[6].textContent.trim() : '';
+                    
+                    // 時給を数値として取得
+                    const hourlyWage = parseFloat(hourlyWageText.replace(/[^\d.]/g, '')) || 0;
+                    const transportation = parseFloat(transportationText.replace(/[^\d.]/g, '')) || 0;
+                    
+                    if (!companySummary[company]) {
+                        companySummary[company] = {
+                            hc: 0,
+                            totalLH: 0,
+                            totalCost: 0
+                        };
+                    }
+                    
+                    // HC（人数）を追加
+                    companySummary[company].hc += 1;
+                    
+                    // 労働時間と費用を計算
+                    const startTimeCell = row.querySelector('[data-field="startTime"]');
+                    const endTimeCell = row.querySelector('[data-field="endTime"]');
+                    const breakCell = row.querySelector('[data-field="break"]');
+                    
+                    const startTime = parseTime(startTimeCell ? startTimeCell.textContent.trim() : '');
+                    const endTime = parseTime(endTimeCell ? endTimeCell.textContent.trim() : '');
+                    const breakTime = parseTime(breakCell ? breakCell.textContent.trim() : '');
+                    
+                    if (startTime !== null && endTime !== null) {
+                        const workHours = calculateWorkHours(startTime, endTime, breakTime);
+                        const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
+                        const regularHours = workHours - nightHours;
+                        
+                        // LH（労働時間）を追加
+                        companySummary[company].totalLH += workHours;
+                        
+                        // 費用計算（通常時給 + 夜勤手当25%増し + 交通費）
+                        const regularCost = regularHours * hourlyWage;
+                        const nightCost = nightHours * hourlyWage * 1.25; // 25%増し
+                        const totalCost = regularCost + nightCost + transportation;
+                        
+                        companySummary[company].totalCost += totalCost;
+                    } else {
+                        // 時間データが不完全でも交通費は計上
+                        companySummary[company].totalCost += transportation;
+                    }
+                }
+            });
+            
+            return companySummary;
+        }
+
+        // 会社別集計表をエクスポートする関数
+        function exportCompanySummary() {
+            if (!document.querySelector('.shift-table')) {
+                showStatus('エクスポートするデータがありません', 'error');
+                return;
+            }
+
+            try {
+                const companySummary = generateCompanySummary();
+                if (!companySummary || Object.keys(companySummary).length === 0) {
+                    showStatus('集計データがありません', 'error');
+                    return;
+                }
+
+                // 指定日付を取得してフォーマット
+                const targetDate = document.getElementById('targetDate').value;
+                const selectedSheet = document.getElementById('sheetSelect').value;
+                const dateObj = new Date(targetDate);
+                const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日 ${selectedSheet}`;
+
+                const data = [];
+                
+                // タイトル行
+                data.push([formattedDate + ' 会社別集計']);
+                data.push([]); // 空白行
+                
+                // 動的順序でソート（HC、経費、LHすべて同じ順序）
+                const sortedCompanies = sortCompaniesDynamically(Object.entries(companySummary));
+                
+                // HC集計セクション
+                data.push(['HC']);
+                sortedCompanies.forEach(([company, summary]) => {
+                    data.push([company, summary.hc]);
+                });
+                
+                // 合計HC
+                const totalHC = Object.values(companySummary).reduce((sum, s) => sum + s.hc, 0);
+                data.push(['', totalHC]);
+                data.push([]); // 空白行
+                
+                // 経費集計セクション（同じ順序）
+                data.push(['経費']);
+                sortedCompanies.forEach(([company, summary]) => {
+                    data.push([company, Math.round(summary.totalCost)]);
+                });
+                
+                // 合計経費
+                const totalCost = Object.values(companySummary).reduce((sum, s) => sum + s.totalCost, 0);
+                data.push(['', Math.round(totalCost)]);
+                data.push([]); // 空白行
+                
+                // LH集計セクション（同じ順序）
+                data.push(['LH']);
+                sortedCompanies.forEach(([company, summary]) => {
+                    data.push([company, Math.round(summary.totalLH)]);
+                });
+                
+                // 合計LH
+                const totalLH = Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0);
+                data.push(['', Math.round(totalLH)]);
+
+                // ワークシートを作成
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                
+                // 列幅を設定
+                ws['!cols'] = [
+                    { width: 15 }, // 会社名
+                    { width: 12 }  // 数値
+                ];
+
+                // ワークブックを作成
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, '会社別集計');
+                
+                const fileName = targetDate ? 
+                    `${targetDate}_${selectedSheet}_会社別集計.xlsx` : 
+                    `${selectedSheet}_会社別集計.xlsx`;
+                
+                XLSX.writeFile(wb, fileName);
+                
+                showStatus('会社別集計データをダウンロードしました', 'success');
+                
+            } catch (error) {
+                console.error('会社別集計エクスポートエラー:', error);
+                showStatus('会社別集計エクスポートに失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        // 指定されたシートから指定日付のシフトデータを取得する関数
+        function getShiftDataFromSheet(sheetName, targetDate) {
+            if (!workbook || !workbook.Sheets[sheetName]) {
+                return [];
+            }
+
+            try {
+                const worksheet = workbook.Sheets[sheetName];
+                const sheetData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                
+                if (!sheetData || sheetData.length < 2) {
+                    return [];
+                }
+
+                // 日付列を解析
+                const headerRow = sheetData[0];
+                const dateColumns = [];
+                
+                headerRow.forEach((cell, index) => {
+                    if (typeof cell === 'number' && cell >= 45000) {
+                        const excelDate = new Date((cell - 25569) * 86400 * 1000);
+                        dateColumns.push({
+                            index: index,
+                            date: excelDate
+                        });
+                    }
+                });
+
+                // 指定日付に最も近い日付列を見つける
+                let targetColumnIndex = -1;
+                let minDiff = Infinity;
+                
+                dateColumns.forEach(col => {
+                    const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                    if (diff < minDiff) {
+                        minDiff = diff;
+                        targetColumnIndex = col.index;
+                    }
+                });
+
+                if (targetColumnIndex === -1) {
+                    return [];
+                }
+
+                // シフトデータを抽出
+                const shiftData = [];
+                const isNight = sheetName === '夜勤';
+                
+                for (let i = 1; i < sheetData.length; i++) {
+                    const row = sheetData[i];
+                    if (!row || row.length === 0) continue;
+                    
+                    const employeeData = {
+                        company: row[0] || '',
+                        timeSlot: row[1] || '',
+                        mainJob: row[2] || '',
+                        name: row[3] || '',
+                        gender: row[4] || '',
+                        hourlyWage: row[5] || '',
+                        transportation: row[6] || '',
+                        startTime: row[7] || '',
+                        endTime: row[8] || '',
+                        break: row[9] || '',
+                        status: row[targetColumnIndex] || '',
+                        shiftType: sheetName,
+                        isNightShift: isNight
+                    };
+                    
+                    // 会社名が空欄の場合はスキップ
+                    if (!employeeData.company || employeeData.company.trim() === '') {
+                        continue;
+                    }
+                    
+                    // 出勤者のみを対象
+                    if (employeeData.status === '◯' || employeeData.status === '○') {
+                        shiftData.push(employeeData);
+                    }
+                }
+
+                return shiftData;
+            } catch (error) {
+                console.error(`${sheetName}シートの読み込みエラー:`, error);
+                return [];
+            }
+        }
+
+        // 日勤と夜勤を合算した会社別集計データを生成する関数
+        function generateCombinedCompanySummary() {
+            const targetDateStr = document.getElementById('targetDate').value;
+            if (!targetDateStr) {
+                return null;
+            }
+
+            const targetDate = new Date(targetDateStr);
+            const companySummary = {};
+
+            // 日勤データを取得
+            const dayShiftData = getShiftDataFromSheet('日勤', targetDate);
+            
+            // 夜勤データを取得
+            const nightShiftData = getShiftDataFromSheet('夜勤', targetDate);
+
+            // 両方のデータを処理
+            const allShiftData = [...dayShiftData, ...nightShiftData];
+
+            allShiftData.forEach(emp => {
+                const company = emp.company.trim();
+                
+                // 会社名が空欄の場合はスキップ
+                if (!company || company === '') {
+                    return;
+                }
+                
+                const hourlyWageText = emp.hourlyWage.toString();
+                const transportationText = emp.transportation.toString();
+                
+                // 時給を数値として取得
+                const hourlyWage = parseFloat(hourlyWageText.replace(/[^\d.]/g, '')) || 0;
+                const transportation = parseFloat(transportationText.replace(/[^\d.]/g, '')) || 0;
+                
+                if (!companySummary[company]) {
+                    companySummary[company] = {
+                        hc: 0,
+                        totalLH: 0,
+                        totalCost: 0,
+                        dayShiftHC: 0,
+                        nightShiftHC: 0
+                    };
+                }
+                
+                // HC（人数）を追加
+                companySummary[company].hc += 1;
+                
+                // シフト種別ごとのHCをカウント
+                if (emp.isNightShift) {
+                    companySummary[company].nightShiftHC += 1;
+                } else {
+                    companySummary[company].dayShiftHC += 1;
+                }
+                
+                // 労働時間と費用を計算
+                const startTime = parseTime(emp.startTime.toString());
+                const endTime = parseTime(emp.endTime.toString());
+                const breakTime = parseTime(emp.break.toString());
+                
+                if (startTime !== null && endTime !== null) {
+                    // 労働時間計算（夜勤の場合は日またぎを考慮）
+                    let workHours;
+                    if (emp.isNightShift) {
+                        if (endTime < startTime) {
+                            workHours = (24 + endTime) - startTime;
+                        } else {
+                            workHours = endTime - startTime;
+                        }
+                    } else {
+                        if (endTime < startTime) {
+                            workHours = endTime - startTime + 24;
+                        } else {
+                            workHours = endTime - startTime;
+                        }
+                    }
+                    
+                    // 休憩時間を引く
+                    if (breakTime !== null && breakTime > 0) {
+                        workHours -= breakTime;
+                    }
+                    
+                    if (workHours < 0) workHours = 0;
+                    
+                    // 夜勤手当対象時間の計算
+                    let nightHours = 0;
+                    if (emp.isNightShift) {
+                        const nightStart = 22.0;
+                        const nightEnd = 5.0;
+                        
+                        if (endTime < startTime) {
+                            // 22:00以降の勤務時間
+                            if (startTime >= nightStart) {
+                                nightHours += (24 - startTime);
+                            } else if (startTime < nightStart) {
+                                nightHours += (24 - nightStart);
+                            }
+                            
+                            // 翌日05:00までの勤務時間
+                            if (endTime <= nightEnd) {
+                                nightHours += endTime;
+                            } else {
+                                nightHours += nightEnd;
+                            }
+                        } else {
+                            if (startTime >= nightStart) {
+                                nightHours = Math.min(endTime, 24) - startTime;
+                            }
+                        }
+                        
+                        // 休憩時間が夜勤時間帯に含まれる場合は1時間差し引く
+                        if (nightHours > 0 && breakTime !== null && breakTime > 0) {
+                            nightHours = Math.max(0, nightHours - 1);
+                        }
+                    }
+                    
+                    const regularHours = workHours - nightHours;
+                    
+                    // LH（労働時間）を追加
+                    companySummary[company].totalLH += workHours;
+                    
+                    // 費用計算（通常時給 + 夜勤手当25%増し + 交通費）
+                    const regularCost = regularHours * hourlyWage;
+                    const nightCost = nightHours * hourlyWage * 1.25; // 25%増し
+                    const totalCost = regularCost + nightCost + transportation;
+                    
+                    companySummary[company].totalCost += totalCost;
+                } else {
+                    // 時間データが不完全でも交通費は計上
+                    companySummary[company].totalCost += transportation;
+                }
+            });
+            
+            return companySummary;
+        }
+
+        // 基本的な会社順序リスト（参考順序、実際のデータに存在する会社のみ使用）
+        const PREFERRED_COMPANY_ORDER = [
+            'Gworker',
+            'WW', 
+            'フルキャスト',
+            '新輸',
+            '千手',
+            'タイミー',
+            'メルカリ',
+            'トップスポット',
+            'IBS'
+        ];
+
+        // 会社名の動的ソート関数（実際のデータに基づいて順序を決定）
+        function sortCompaniesDynamically(entries) {
+            // 実際に存在する会社名を取得
+            const actualCompanies = entries.map(([company]) => company);
+            
+            // 最終的な順序を決定
+            const finalOrder = [];
+            
+            // 1. まず優先順序リストにある会社を順番に追加（実際に存在する場合のみ）
+            PREFERRED_COMPANY_ORDER.forEach(company => {
+                if (actualCompanies.includes(company)) {
+                    finalOrder.push(company);
+                }
+            });
+            
+            // 2. 優先順序リストにない会社を末尾に追加（アルファベット順）
+            const remainingCompanies = actualCompanies
+                .filter(company => !PREFERRED_COMPANY_ORDER.includes(company))
+                .sort((a, b) => a.localeCompare(b, 'ja'));
+            
+            finalOrder.push(...remainingCompanies);
+            
+            // 3. 最終順序に基づいてソート
+            return entries.sort(([companyA], [companyB]) => {
+                const indexA = finalOrder.indexOf(companyA);
+                const indexB = finalOrder.indexOf(companyB);
+                return indexA - indexB;
+            });
+        }
+
+        // 日勤+夜勤合算集計をエクスポートする関数
+        function exportCombinedSummary() {
+            if (!workbook) {
+                showStatus('Excelファイルが読み込まれていません', 'error');
+                return;
+            }
+
+            // 日勤と夜勤のシートが両方存在するかチェック
+            const hasDay = workbook.SheetNames.includes('日勤');
+            const hasNight = workbook.SheetNames.includes('夜勤');
+            
+            if (!hasDay && !hasNight) {
+                showStatus('日勤・夜勤シートが見つかりません', 'error');
+                return;
+            }
+
+            try {
+                const companySummary = generateCombinedCompanySummary();
+                if (!companySummary || Object.keys(companySummary).length === 0) {
+                    showStatus('合算集計データがありません', 'error');
+                    return;
+                }
+
+                // 指定日付を取得してフォーマット
+                const targetDate = document.getElementById('targetDate').value;
+                const dateObj = new Date(targetDate);
+                const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日`;
+
+                const data = [];
+                
+                // タイトル行
+                data.push([formattedDate + ' 日勤+夜勤合算集計']);
+                
+                // 概要行
+                const availableShifts = [];
+                if (hasDay) availableShifts.push('日勤');
+                if (hasNight) availableShifts.push('夜勤');
+                data.push([`対象シフト: ${availableShifts.join('・')}`]);
+                data.push([]); // 空白行
+                
+                // 動的順序でソート（HC、経費、LHすべて同じ順序）
+                const sortedCompanies = sortCompaniesDynamically(Object.entries(companySummary));
+                
+                // HC集計セクション
+                data.push(['HC', '', '日勤', '夜勤', '合計']);
+                sortedCompanies.forEach(([company, summary]) => {
+                    data.push([
+                        company, 
+                        '', 
+                        summary.dayShiftHC || 0, 
+                        summary.nightShiftHC || 0, 
+                        summary.hc
+                    ]);
+                });
+                
+                // 合計HC
+                const totalHC = Object.values(companySummary).reduce((sum, s) => sum + s.hc, 0);
+                const totalDayHC = Object.values(companySummary).reduce((sum, s) => sum + (s.dayShiftHC || 0), 0);
+                const totalNightHC = Object.values(companySummary).reduce((sum, s) => sum + (s.nightShiftHC || 0), 0);
+                data.push(['合計', '', totalDayHC, totalNightHC, totalHC]);
+                data.push([]); // 空白行
+                
+                // 経費集計セクション（同じ順序）
+                data.push(['経費']);
+                sortedCompanies.forEach(([company, summary]) => {
+                    data.push([company, Math.round(summary.totalCost)]);
+                });
+                
+                // 合計経費
+                const totalCost = Object.values(companySummary).reduce((sum, s) => sum + s.totalCost, 0);
+                data.push(['合計', Math.round(totalCost)]);
+                data.push([]); // 空白行
+                
+                // LH集計セクション（同じ順序）
+                data.push(['LH']);
+                sortedCompanies.forEach(([company, summary]) => {
+                    data.push([company, Math.round(summary.totalLH)]);
+                });
+                
+                // 合計LH
+                const totalLH = Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0);
+                data.push(['合計', Math.round(totalLH)]);
+
+                // ワークシートを作成
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                
+                // 列幅を設定
+                ws['!cols'] = [
+                    { width: 15 }, // 会社名
+                    { width: 8 },  // 空欄
+                    { width: 8 },  // 日勤
+                    { width: 8 },  // 夜勤
+                    { width: 10 }  // 合計
+                ];
+
+                // ワークブックを作成
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, '日勤夜勤合算集計');
+                
+                const fileName = targetDate ? 
+                    `${targetDate}_日勤夜勤合算集計.xlsx` : 
+                    `日勤夜勤合算集計.xlsx`;
+                
+                XLSX.writeFile(wb, fileName);
+                
+                showStatus('日勤+夜勤合算集計データをダウンロードしました', 'success');
+                
+            } catch (error) {
+                console.error('合算集計エクスポートエラー:', error);
+                showStatus('合算集計エクスポートに失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        // 今日の日付を初期値として設定
+        document.getElementById('targetDate').value = new Date().toISOString().split('T')[0];
+    </script>
+</body>
+</html>
