@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#2196F3">
-    <meta name="description" content="プロフェッショナルシフト管理アプリ - Excel連携対応">
-    <title>シフト管理プロ v4.0 - 完全版</title>
+    <meta name="description" content="プロフェッショナルシフト管理アプリ - Excel連携・基準UPH自動抽出対応">
+    <title>シフト管理プロ v4.1 - 完全版（基準UPH自動抽出）</title>
     
     <!-- PWA用のアイコンとメタデータ -->
     <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9IiMyMTk2RjMiIHJ4PSI0Ii8+PHBhdGggZD0iTTYgOWgxMnYySDE2em0wIDRoMTJ2MkgxNnptMC00aDEyVjlIMTZ6IiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==">
-    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFJklEQVR4nO3d0W4TMRRF0fH//5TyQKnUqI7tmdzeaxFVtO3c2bPGnknSdd33fQBHffrXCwBnCQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQ9hdNHBXz0j6qYwAAAABJRU5ErkJggg==">
+    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFJklEQVR4nO3d0W4TMRRF0fH//5TyQKnUqI7tmdzeaxFVtO3c2bPGnknSdd33fQBHffrXCwBnCQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQ9hdNHBXz0j6qYwAAAABJRU5ErkJggg==">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -42,6 +42,7 @@
             --glass: rgba(15, 23, 42, 0.7);
             --glass-border: rgba(51, 65, 85, 0.3);
         }
+
         .viewer-app-btn {
             background: linear-gradient(45deg, #FF9800, #FFB74D);
             color: white;
@@ -769,6 +770,27 @@
             display: none !important;
         }
 
+        /* 基準UPH自動抽出関連のスタイル */
+        .uph-auto-indicator {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 4px;
+            display: inline-block;
+        }
+
+        .uph-manual-indicator {
+            background: linear-gradient(45deg, #FF9800, #FFC107);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 4px;
+            display: inline-block;
+        }
+
         /* Animations */
         @keyframes slideDown {
             from {
@@ -807,6 +829,15 @@
         @keyframes spin {
             to {
                 transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
             }
         }
 
@@ -929,14 +960,14 @@
                     <div class="logo">📊</div>
                     <div>
                         <h1 class="title">シフト管理プロ</h1>
-                        <p class="subtitle">Professional Shift Management v4.0 完全版</p>
+                        <p class="subtitle">Professional Shift Management v4.1 完全版（基準UPH自動抽出）</p>
                     </div>
                 </div>
                 <div class="header-actions">
                     <button class="theme-toggle" onclick="toggleTheme()" title="ダークモード切替">
                         <span id="themeIcon">🌙</span>
                     </button>
-                    <a href="./viewer.html" target="_blank"  class="viewer-app-btn">
+                    <a href="./viewer.html" target="_blank" class="viewer-app-btn">
                         📊 データ復元ビューア
                     </a>
                     <button class="install-btn" id="installBtn" onclick="installApp()">
@@ -952,7 +983,9 @@
                 <div class="step-number">1</div>
                 <div>
                     <h2 class="step-title">Excelファイルをアップロード</h2>
-                    <p class="step-description">月間シフト表のExcelファイル（.xlsx/.xls）をドラッグ＆ドロップまたはクリックして選択</p>
+                    <p class="step-description">月間シフト表のExcelファイル（.xlsx/.xls）をドラッグ＆ドロップまたはクリックして選択<br>
+                    📈 基準UPHが自動的に検出され、日付に応じて反映されます<br>
+                    ⚠️ 会社名が空白の行は自動的に除外されます</p>
                 </div>
             </div>
             
@@ -981,7 +1014,8 @@
                 <div class="step-number">2</div>
                 <div>
                     <h2 class="step-title">シートを選択</h2>
-                    <p class="step-description">分析したい勤務シート（日勤・夜勤）を選択してください</p>
+                    <p class="step-description">分析したい勤務シート（日勤・夜勤）を選択してください<br>
+                    🎯 選択したシートから自動的に基準UPHが抽出されます</p>
                 </div>
             </div>
             
@@ -996,7 +1030,8 @@
                 <div class="step-number">3</div>
                 <div>
                     <h2 class="step-title">日付選択とシフト表生成</h2>
-                    <p class="step-description">表示したい日付を選択してシフト表を生成してください</p>
+                    <p class="step-description">表示したい日付を選択してシフト表を生成してください<br>
+                    📅 日付変更時に基準UPHが自動的に更新されます</p>
                 </div>
             </div>
             
@@ -1018,7 +1053,8 @@
                     <div class="step-number">📈</div>
                     <div>
                         <h3>LH計算・分析</h3>
-                        <p class="step-description">労働時間と生産性の詳細分析（夜勤手当・残業代込み）</p>
+                        <p class="step-description">労働時間と生産性の詳細分析（夜勤手当・残業代込み）<br>
+                        🔄 基準UPHは従業員リストから自動抽出されます</p>
                     </div>
                 </div>
                 <div class="calc-grid" id="calcGrid"></div>
@@ -1067,6 +1103,7 @@
         let baseUPH = 22;
         let isNightShift = false;
         let deferredPrompt = null;
+        let isUPHAutoExtracted = false; // 基準UPHが自動抽出されたかのフラグ
 
         // App initialization
         document.addEventListener('DOMContentLoaded', function() {
@@ -1084,6 +1121,7 @@
             
             // Setup event listeners
             document.getElementById('sheetSelect').addEventListener('change', handleSheetChange);
+            document.getElementById('targetDate').addEventListener('change', handleDateChange);
             
             // Load theme preference
             loadTheme();
@@ -1091,11 +1129,29 @@
             showStatus('アプリが準備完了しました', 'success');
         }
 
+        function handleDateChange() {
+            if (workbookData && dateColumns.length > 0) {
+                // 日付変更時に各値を再抽出
+                extractPlanValue();
+                extractFcstValue();
+                extractBaseUPH();
+                
+                // 現在表示されているデータがある場合は計算を更新
+                if (document.getElementById('resultsContainer').style.display !== 'none') {
+                    const currentData = getCurrentTableData();
+                    if (currentData && currentData.length > 0) {
+                        updateCalculations(currentData);
+                        showStatus(`日付変更に伴い基準UPH: ${baseUPH} に更新されました`, 'success');
+                    }
+                }
+            }
+        }
+
         // PWA Setup
         function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('data:application/javascript;base64,' + btoa(`
-                    const CACHE_NAME = 'shift-app-v4-0';
+                    const CACHE_NAME = 'shift-app-v4-1';
                     const urlsToCache = ['/'];
                     
                     self.addEventListener('install', event => {
@@ -1338,9 +1394,11 @@
                 analyzeDateColumns();
                 extractPlanValue();
                 extractFcstValue();
+                extractBaseUPH(); // 基準UPHを抽出
                 
                 document.getElementById('generateBtn').disabled = false;
-                showStatus(`「${selectedSheet}」シートが選択されました`, 'success');
+                const uphStatus = isUPHAutoExtracted ? '（自動抽出）' : '（デフォルト）';
+                showStatus(`「${selectedSheet}」シートが選択されました（基準UPH: ${baseUPH} ${uphStatus}）`, 'success');
             } catch (error) {
                 showStatus('シートの読み込みに失敗しました: ' + error.message, 'error');
                 document.getElementById('generateBtn').disabled = true;
@@ -1467,6 +1525,75 @@
             }
         }
 
+        function extractBaseUPH() {
+            if (!workbookData || workbookData.length < 2) return;
+            
+            const targetDateStr = document.getElementById('targetDate').value;
+            if (!targetDateStr) return;
+            
+            const targetDate = new Date(targetDateStr);
+            let targetColumnIndex = -1;
+            let minDiff = Infinity;
+            
+            dateColumns.forEach(col => {
+                const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    targetColumnIndex = col.index;
+                }
+            });
+            
+            if (targetColumnIndex === -1) return;
+            
+            // 基準UPHの検索パターン（複数の可能性を考慮）
+            const uphPatterns = ['基準UPH', 'UPH', '基準', 'BASE UPH', 'BASEUPH', '標準UPH'];
+            
+            for (let i = 0; i < workbookData.length; i++) {
+                const row = workbookData[i];
+                if (!row) continue;
+                
+                // 行の各セルで基準UPHの検索（E列以外も検索）
+                for (let j = 0; j < Math.min(row.length, 10); j++) {
+                    if (row[j] != null) {
+                        const cellValue = String(row[j]).toUpperCase().replace(/\s/g, '');
+                        
+                        const isUPHRow = uphPatterns.some(pattern => 
+                            cellValue.includes(pattern.toUpperCase().replace(/\s/g, ''))
+                        );
+                        
+                        if (isUPHRow) {
+                            const uphCell = row[targetColumnIndex];
+                            
+                            if (typeof uphCell === 'number' && uphCell > 0 && uphCell < 1000) {
+                                baseUPH = uphCell;
+                                isUPHAutoExtracted = true;
+                                console.log(`基準UPH ${baseUPH} を自動取得しました（行${i+1}, 列${targetColumnIndex+1}）`);
+                                return;
+                            }
+                            
+                            if (uphCell != null) {
+                                const numMatch = String(uphCell).match(/(\d+\.?\d*)/);
+                                if (numMatch) {
+                                    const extractedNum = parseFloat(numMatch[1]);
+                                    if (extractedNum > 0 && extractedNum < 1000) {
+                                        baseUPH = extractedNum;
+                                        isUPHAutoExtracted = true;
+                                        console.log(`基準UPH ${baseUPH} を自動取得しました（文字列から解析）`);
+                                        return;
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            // デフォルト値のログ出力
+            isUPHAutoExtracted = false;
+            console.log(`基準UPHが見つかりませんでした。デフォルト値 ${baseUPH} を使用します。`);
+        }
+
         function generateDailyShift() {
             if (!workbookData || dateColumns.length === 0) {
                 showStatus('データが読み込まれていません', 'error');
@@ -1511,6 +1638,7 @@
                     // Extract shift data
                     const shiftData = [];
                     let workingCount = 0;
+                    let excludedCompanyCount = 0; // 会社名が空白で除外された行数
                     
                     // 除外するキーワードリスト
                     const excludeKeywords = [
@@ -1551,6 +1679,12 @@
                         // 計算行や集計行を除外
                         if (shouldExclude) continue;
                         
+                        // 会社名が空白の行を除外
+                        if (!employeeData.company.trim()) {
+                            excludedCompanyCount++;
+                            continue;
+                        }
+                        
                         // 空白行や無効なデータを除外
                         if (!employeeData.name.trim() && !employeeData.company.trim()) continue;
                         
@@ -1574,6 +1708,7 @@
                     // Extract values for this date
                     extractPlanValue();
                     extractFcstValue();
+                    extractBaseUPH(); // 日付変更時に基準UPHも更新
 
                     // Display results
                     displayResults(shiftData, targetDate, workingCount);
@@ -1583,7 +1718,17 @@
                     loadingSpinner.style.display = 'none';
                     generateText.textContent = '🚀 シフト表を生成';
                     
-                    showStatus(`${targetDate.toLocaleDateString('ja-JP')}のシフト表を生成しました`, 'success');
+                    const uphStatus = isUPHAutoExtracted ? '（自動抽出）' : '（デフォルト）';
+                    const excludeMessage = excludedCompanyCount > 0 ? ` | ${excludedCompanyCount}行除外` : '';
+                    showStatus(`${targetDate.toLocaleDateString('ja-JP')}のシフト表を生成しました（基準UPH: ${baseUPH} ${uphStatus}）${excludeMessage}`, 'success');
+                    
+                    // ログ出力
+                    console.log(`シフト表生成完了:`, {
+                        総行数: workbookData.length - 1,
+                        有効行数: shiftData.length,
+                        出勤者数: workingCount,
+                        会社名空白除外: excludedCompanyCount
+                    });
                     
                 } catch (error) {
                     console.error('シフト表生成エラー詳細:', error);
@@ -1682,6 +1827,11 @@
             const hcConversion = shortage / 8;
             const averageHourlyCost = totalLH > 0 ? totalCost / totalLH : 0;
             
+            // 基準UPHの表示（自動抽出かデフォルトかを示すアイコン付き）
+            const uphIndicator = isUPHAutoExtracted ? 
+                '<span class="uph-auto-indicator">自動</span>' : 
+                '<span class="uph-manual-indicator">手動</span>';
+            
             calcGrid.innerHTML = `
                 <div class="calc-card">
                     <div class="calc-label">FCST数量</div>
@@ -1709,9 +1859,9 @@
                     <div class="calc-unit">個</div>
                 </div>
                 <div class="calc-card">
-                    <div class="calc-label">基準UPH</div>
-                    <input type="number" class="calc-input" value="${baseUPH}" onchange="updateUPH(this.value)">
-                    <div class="calc-unit">個/時</div>
+                    <div class="calc-label">基準UPH ${uphIndicator}</div>
+                    <input type="number" class="calc-input" value="${baseUPH}" onchange="updateUPH(this.value)" step="0.1">
+                    <div class="calc-unit">個/時 📊</div>
                 </div>
                 <div class="calc-card">
                     <div class="calc-label">必要LH</div>
@@ -2405,8 +2555,13 @@
         }
 
         function updateUPH(value) {
-            baseUPH = parseFloat(value) || 22;
-            updateCalculations(getCurrentTableData());
+            const newUPH = parseFloat(value) || 22;
+            if (newUPH !== baseUPH) {
+                baseUPH = newUPH;
+                isUPHAutoExtracted = false; // 手動変更されたのでフラグを更新
+                updateCalculations(getCurrentTableData());
+                showStatus(`基準UPHを ${baseUPH} に手動変更しました`, 'success');
+            }
         }
 
         function showStatus(message, type) {
@@ -2444,8 +2599,12 @@
                         const cells = row.querySelectorAll('td');
                         const getData = (index) => cells[index] ? cells[index].textContent.trim() : '';
                         
+                        const companyName = getData(0);
+                        // 会社名が空白の場合は除外
+                        if (!companyName.trim()) return;
+                        
                         attendanceData.push({
-                            company: getData(0),
+                            company: companyName,
                             timeSlot: '',
                             mainJob: getData(2),
                             name: getData(3),
@@ -2522,7 +2681,7 @@
     </div>
     <div class="header">
         <h1>${dateTitle}</h1>
-        <p style="margin: 8px 0 0 0; font-size: 13px;">出退勤確認表</p>
+        <p style="margin: 8px 0 0 0; font-size: 13px;">出退勤確認表（基準UPH: ${calculationData.baseUPH}）</p>
     </div>
     <table class="attendance-table">
         <thead>
@@ -2552,6 +2711,7 @@
 
                 const data = [];
                 data.push([formattedDate]);
+                data.push([`基準UPH: ${baseUPH} ${isUPHAutoExtracted ? '(自動抽出)' : '(手動設定)'}`]);
                 data.push([]);
 
                 // ヘッダー行
@@ -2620,6 +2780,7 @@
 
                 const data = [];
                 data.push([formattedDate + ' 会社別集計']);
+                data.push([`基準UPH: ${baseUPH} ${isUPHAutoExtracted ? '(自動抽出)' : '(手動設定)'}`]);
                 data.push([]);
                 
                 // HC集計
@@ -2671,7 +2832,7 @@
             const companySummary = {};
             
             tableData.forEach(emp => {
-                if (emp.isWorking) {
+                if (emp.isWorking && emp.company.trim()) { // 会社名が空白でない場合のみ処理
                     const company = emp.company.trim();
                     const hourlyWageStr = emp.hourlyWage || '0';
                     const transportationStr = emp.transportation || '0';
@@ -2752,6 +2913,7 @@
                 if (hasDay) availableShifts.push('日勤');
                 if (hasNight) availableShifts.push('夜勤');
                 data.push([`対象シフト: ${availableShifts.join('・')}`]);
+                data.push([`基準UPH: ${baseUPH} ${isUPHAutoExtracted ? '(自動抽出)' : '(手動設定)'}`]);
                 data.push([]);
                 
                 // HC集計セクション
@@ -2885,6 +3047,10 @@
                         });
                         
                         if (shouldExclude) continue;
+                        
+                        // 会社名が空白の行を除外
+                        if (!employeeData.company.trim()) continue;
+                        
                         if (!employeeData.name.trim() && !employeeData.company.trim()) continue;
                         if (employeeData.name.trim() && /^\d+$/.test(employeeData.name.trim())) continue;
                         
