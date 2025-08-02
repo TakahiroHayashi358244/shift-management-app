@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#2196F3">
-    <title>詳細データ復元ビューア v1.0</title>
+    <meta name="theme-color" content="#667eea">
+    <title>シフトデータビューア v1.0 - 編集・分析対応</title>
     
-    <!-- Excel読み込み用ライブラリ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
     <style>
         :root {
-            --primary-color: #2196F3;
-            --primary-dark: #1976D2;
-            --secondary-color: #4CAF50;
-            --accent-color: #FF9800;
+            --primary-color: #667eea;
+            --primary-dark: #5a6fd8;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
             --background: #f8fafc;
             --surface: #ffffff;
             --text-primary: #1e293b;
@@ -26,18 +25,14 @@
         }
 
         [data-theme="dark"] {
-            --background: #3E2723;
-            --surface: #5D4037;
+            --background: #0f172a;
+            --surface: #1e293b;
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
-            --border: #795548;
+            --border: #334155;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            --glass: rgba(62, 39, 35, 0.7);
-            --glass-border: rgba(121, 85, 72, 0.3);
-        }
-
-        [data-theme="dark"] body {
-            background: linear-gradient(135deg, #8D6E63 0%, #A1887F 50%, #BCAAA4 100%);
+            --glass: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(51, 65, 85, 0.3);
         }
 
         * {
@@ -48,14 +43,14 @@
 
         body {
             font-family: 'Segoe UI', 'Noto Sans JP', system-ui, sans-serif;
-            background: linear-gradient(135deg, #FFB74D 0%, #FFC107 50%, #FF9800 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             min-height: 100vh;
             color: var(--text-primary);
             transition: all 0.3s ease;
         }
 
         .app-container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 20px;
             min-height: 100vh;
@@ -88,7 +83,7 @@
 
         .logo {
             font-size: 2.5rem;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -131,27 +126,9 @@
             background: var(--surface);
         }
 
-        .main-app-btn {
-            background: linear-gradient(45deg, var(--accent-color), #FF6F00);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
 
-        .main-app-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 152, 0, 0.3);
-        }
 
-        .step-container {
+        .main-content {
             background: var(--glass);
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
@@ -159,117 +136,10 @@
             padding: 32px;
             margin-bottom: 24px;
             box-shadow: var(--shadow);
-            animation: slideUp 0.6s ease-out;
-            animation-fill-mode: both;
+            animation: slideUp 0.8s ease-out;
         }
 
-        .step-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .step-number {
-            background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
-            color: white;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .step-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .step-description {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-top: 4px;
-        }
-
-        .upload-zone {
-            border: 3px dashed var(--border);
-            border-radius: 16px;
-            padding: 48px 24px;
-            text-align: center;
-            background: var(--surface);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .upload-zone:hover,
-        .upload-zone.drag-over {
-            border-color: var(--primary-color);
-            background: linear-gradient(45deg, rgba(33, 150, 243, 0.05), rgba(76, 175, 80, 0.05));
-            transform: translateY(-2px);
-        }
-
-        .upload-icon {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 16px;
-            animation: bounce 2s infinite;
-        }
-
-        .upload-text {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-        }
-
-        .upload-hint {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .file-input {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .progress-container {
-            margin-top: 16px;
-            display: none;
-        }
-
-        .progress-bar {
-            background: var(--border);
-            border-radius: 8px;
-            height: 8px;
-            overflow: hidden;
-            margin-bottom: 8px;
-        }
-
-        .progress-fill {
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            height: 100%;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .file-info {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
-            margin-top: 16px;
-            display: none;
-        }
-
-        .data-summary {
+        .calculation-panel {
             background: var(--surface);
             border-radius: 16px;
             padding: 24px;
@@ -278,15 +148,21 @@
             border: 1px solid var(--border);
         }
 
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
+        .calc-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
-        .summary-card {
-            background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(76, 175, 80, 0.1));
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .calc-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 16px;
@@ -294,28 +170,41 @@
             transition: all 0.3s ease;
         }
 
-        .summary-card:hover {
+        .calc-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
-        .summary-label {
+        .calc-label {
             font-size: 0.85rem;
             color: var(--text-secondary);
             margin-bottom: 8px;
             font-weight: 600;
         }
 
-        .summary-value {
+        .calc-value {
             font-size: 1.6rem;
             font-weight: 700;
             color: var(--primary-color);
             margin-bottom: 4px;
         }
 
-        .summary-unit {
+        .calc-unit {
             font-size: 0.8rem;
             color: var(--text-secondary);
+        }
+
+        .calc-input {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            width: 100%;
+            max-width: 120px;
+            margin: 4px auto;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
         }
 
         .table-container {
@@ -328,8 +217,16 @@
             overflow: auto;
         }
 
+        .table-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
         .add-row-btn {
-            background: linear-gradient(135deg, var(--secondary-color) 0%, #43A047 100%);
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
             color: white;
             border: none;
             border-radius: 12px;
@@ -341,24 +238,62 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
+            box-shadow: 0 4px 16px rgba(240, 147, 251, 0.3);
+            white-space: nowrap;
         }
 
         .add-row-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
-            background: linear-gradient(135deg, #43A047 0%, #388E3C 100%);
+            box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4);
         }
 
-        .employee-table {
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .action-btn {
+            background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(240, 147, 251, 0.3);
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .action-btn.success {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+        }
+
+        .action-btn.danger {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+
+        .shift-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.9rem;
         }
 
-        .employee-table th {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        .shift-table th {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             padding: 12px 8px;
             text-align: left;
@@ -369,22 +304,22 @@
             z-index: 10;
         }
 
-        .employee-table th:first-child {
+        .shift-table th:first-child {
             border-radius: 8px 0 0 8px;
         }
 
-        .employee-table th:last-child {
+        .shift-table th:last-child {
             border-radius: 0 8px 8px 0;
         }
 
-        .employee-table td {
+        .shift-table td {
             padding: 10px 8px;
             border-bottom: 1px solid var(--border);
             transition: all 0.2s ease;
         }
 
-        .employee-table tr:hover {
-            background: rgba(33, 150, 243, 0.05);
+        .shift-table tr:hover {
+            background: rgba(102, 126, 234, 0.05);
         }
 
         .working {
@@ -392,23 +327,13 @@
         }
 
         .confirmed {
-            background: linear-gradient(135deg, rgba(33, 150, 243, 0.15), rgba(63, 81, 181, 0.15)) !important;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15)) !important;
             border-left: 4px solid var(--primary-color);
-            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
-        }
-
-        .confirmed .row-confirm-btn {
-            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
-            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
-        }
-
-        .confirmed .row-confirm-btn:hover {
-            background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
-            box-shadow: 0 4px 16px rgba(33, 150, 243, 0.4);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
         }
 
         .editable-cell {
-            background: rgba(255, 193, 7, 0.1) !important;
+            background: rgba(240, 147, 251, 0.1) !important;
             cursor: text;
             border-radius: 4px;
             transition: all 0.2s ease;
@@ -417,12 +342,12 @@
         }
 
         .editable-cell:hover {
-            background: rgba(255, 193, 7, 0.2) !important;
+            background: rgba(240, 147, 251, 0.2) !important;
         }
 
         .editable-cell:focus {
             background: var(--surface) !important;
-            outline: 2px solid var(--primary-color);
+            outline: 2px solid var(--accent-color);
             outline-offset: -2px;
         }
 
@@ -451,13 +376,8 @@
 
         .status-select:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
-        }
-
-        .status-select option {
-            background: var(--surface);
-            color: var(--text-primary);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(240, 147, 251, 0.2);
         }
 
         .action-cell {
@@ -485,25 +405,10 @@
             margin-right: 4px;
         }
 
-        .row-reset-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
         .row-reset-btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
             background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
-        }
-
-        .row-reset-btn:hover::before {
-            left: 100%;
         }
 
         .row-confirm-btn {
@@ -524,64 +429,47 @@
             box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
         }
 
-        .row-confirm-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
         .row-confirm-btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 16px rgba(76, 175, 80, 0.4);
             background: linear-gradient(135deg, #43A047 0%, #2E7D32 100%);
         }
 
-        .row-confirm-btn:hover::before {
-            left: 100%;
-        }
-
-        .action-buttons {
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .action-btn {
-            background: linear-gradient(45deg, var(--accent-color), #F57C00);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 16px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            z-index: 9999;
+            color: white;
+            transition: opacity 0.5s ease;
         }
 
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.3);
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
         }
 
-        .action-btn.primary {
-            background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+        .loading-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
-        .action-btn.success {
-            background: linear-gradient(45deg, var(--secondary-color), #388E3C);
-        }
-
-        .action-btn.danger {
-            background: linear-gradient(45deg, #f44336, #d32f2f);
+        .loading-detail {
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
 
         .status-message {
@@ -600,14 +488,6 @@
 
         .status-message.show {
             transform: translateX(0);
-        }
-
-        .status-message.success {
-            background: linear-gradient(45deg, var(--secondary-color), #43A047);
-        }
-
-        .status-message.error {
-            background: linear-gradient(45deg, #f44336, #d32f2f);
         }
 
         .hidden {
@@ -637,15 +517,18 @@
             }
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
             }
-            40% {
-                transform: translateY(-10px);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
             }
-            60% {
-                transform: translateY(-5px);
+            50% {
+                opacity: 0.7;
             }
         }
 
@@ -655,7 +538,7 @@
                 padding: 12px;
             }
 
-            .header {
+            .header, .main-content {
                 padding: 20px;
                 border-radius: 16px;
             }
@@ -673,48 +556,28 @@
                 font-size: 1.5rem;
             }
 
-            .step-container {
-                padding: 20px;
-                border-radius: 16px;
+            .calc-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 12px;
             }
 
-            .upload-zone {
-                padding: 32px 16px;
-            }
-
-            .summary-grid {
-                grid-template-columns: 1fr;
+            .table-header-actions {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
             }
 
             .action-buttons {
                 flex-direction: column;
             }
 
-            .employee-table {
+            .shift-table {
                 font-size: 0.8rem;
             }
 
-            .employee-table th,
-            .employee-table td {
+            .shift-table th,
+            .shift-table td {
                 padding: 8px 6px;
-            }
-
-            .status-select {
-                max-width: 60px;
-                font-size: 0.8rem;
-                padding: 2px 4px;
-            }
-
-            .row-reset-btn,
-            .row-confirm-btn {
-                width: 32px;
-                height: 24px;
-                font-size: 0.7rem;
-                border-radius: 6px;
-            }
-
-            .action-cell {
-                width: 80px;
             }
         }
 
@@ -724,17 +587,17 @@
                 background: white;
             }
 
-            .header,
+            .header-actions,
             .action-buttons,
-            .main-app-btn,
             .theme-toggle,
             .row-reset-btn,
             .row-confirm-btn,
-            .add-row-btn {
+            .add-row-btn,
+            .table-header-actions {
                 display: none;
             }
 
-            .step-container {
+            .main-content {
                 background: white;
                 box-shadow: none;
                 border: 1px solid #ddd;
@@ -743,6 +606,13 @@
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">シフトデータビューア</div>
+        <div class="loading-detail">データを読み込み中...</div>
+    </div>
+
     <div class="app-container">
         <!-- Header -->
         <header class="header">
@@ -750,88 +620,81 @@
                 <div class="logo-section">
                     <div class="logo">📊</div>
                     <div>
-                        <h1 class="title">詳細データ復元ビューア</h1>
-                        <p class="subtitle">エクスポートされたExcelファイルを読み込んで編集・管理</p>
+                        <h1 class="title">シフトデータビューア</h1>
+                        <p class="subtitle">Professional Shift Viewer v1.0 - 編集・分析対応</p>
                     </div>
                 </div>
                 <div class="header-actions">
                     <button class="theme-toggle" onclick="toggleTheme()" title="ダークモード切替">
                         <span id="themeIcon">🌙</span>
                     </button>
-                    <a href="./index.html" class="main-app-btn">
-                        🚀 メインアプリへ
-                    </a>
                 </div>
             </div>
         </header>
 
-        <!-- File Upload Section -->
-        <section class="step-container">
-            <div class="step-header">
-                <div class="step-number">📁</div>
-                <div>
-                    <h2 class="step-title">エクスポートされたExcelファイルを読み込み</h2>
-                    <p class="step-description">シフト管理アプリからエクスポートされた詳細データファイル（.xlsx/.xls）をアップロード</p>
-                </div>
-            </div>
-            
-            <div class="upload-zone" id="uploadZone">
-                <div class="upload-icon">📁</div>
-                <div class="upload-text">Excelファイルをドラッグ＆ドロップ</div>
-                <div class="upload-hint">または、クリックしてファイルを選択してください</div>
-                <input type="file" class="file-input" id="fileInput" accept=".xlsx,.xls">
-            </div>
-            
-            <div class="progress-container" id="progressContainer">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <div id="progressText">ファイルを読み込み中...</div>
-            </div>
-            
-            <div class="file-info" id="fileInfo">
-                <div id="fileName"></div>
-            </div>
-        </section>
 
-        <!-- Data Summary Section -->
-        <div class="data-summary hidden" id="dataSummary">
-            <div class="step-header">
-                <div class="step-number">📈</div>
-                <div>
-                    <h3>データサマリー</h3>
-                    <p class="step-description">読み込まれたシフトデータの概要（リアルタイム更新）</p>
-                </div>
-            </div>
-            <div class="summary-grid" id="summaryGrid"></div>
-        </div>
 
-        <!-- Employee Table Section -->
-        <div class="table-container hidden" id="tableContainer">
-            <div class="step-header">
-                <div class="step-number">👥</div>
-                <div>
-                    <h3>従業員リスト（編集可能）</h3>
-                    <p class="step-description">クリックして編集、リアルタイムで計算更新。行の追加・削除も可能</p>
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <div class="calculation-panel hidden" id="calculationPanel">
+                <div class="calc-header">
+                    <div style="font-size: 2rem;">📈</div>
+                    <div>
+                        <h3>LH計算・分析</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px;" id="shiftTitle">
+                            労働時間と生産性の詳細分析（夜勤手当・残業代込み）
+                        </p>
+                    </div>
                 </div>
+                <div class="calc-grid" id="calcGrid"></div>
             </div>
-            
-            <button class="add-row-btn" onclick="addNewRow()">
-                ➕ 新しい従業員を追加
-            </button>
-            
-            <table class="employee-table" id="employeeTable"></table>
-            
-            <div class="action-buttons">
-                <button class="action-btn" onclick="exportToExcel()">
-                    📊 編集データをエクスポート
-                </button>
-                <button class="action-btn success" onclick="exportCompanySummary()">
-                    📈 会社別集計
-                </button>
-                <button class="action-btn danger" onclick="clearData()">
-                    🔄 データクリア
-                </button>
+
+            <div class="table-container hidden" id="tableContainer">
+                <div class="table-header-actions">
+                    <button class="add-row-btn" onclick="addNewRow()">
+                        ➕ 行を追加
+                    </button>
+                    
+                    <div class="action-buttons">
+                        <button class="action-btn primary" onclick="generateAttendanceCheck()">
+                            📋 出退勤確認表
+                        </button>
+                        <button class="action-btn" onclick="exportToExcel()">
+                            📊 詳細データ
+                        </button>
+                        <button class="action-btn" onclick="exportCompanySummary()">
+                            📈 会社別集計
+                        </button>
+                        <button class="action-btn success" onclick="backupData()">
+                            💾 データバックアップ
+                        </button>
+                        <button class="action-btn danger" onclick="clearData()">
+                            🗑️ データクリア
+                        </button>
+                    </div>
+                </div>
+                
+                <table class="shift-table" id="shiftTable"></table>
+            </div>
+
+            <!-- 初期状態のメッセージ -->
+            <div class="welcome-message" id="welcomeMessage">
+                <div style="text-align: center; padding: 60px 20px; color: var(--text-secondary);">
+                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.7;">📊</div>
+                    <h3 style="color: var(--text-primary); margin-bottom: 12px;">シフトデータビューアへようこそ</h3>
+                    <p style="line-height: 1.6; max-width: 500px; margin: 0 auto;">
+                        メインアプリから「🚀 ビューアで編集」ボタンでデータを送信すると、<br>
+                        ここにシフト表が表示され、編集・分析ができます。
+                    </p>
+                    <div style="margin-top: 30px; padding: 20px; background: var(--surface); border-radius: 12px; border: 1px solid var(--border);">
+                        <h4 style="color: var(--text-primary); margin-bottom: 12px;">📡 データ受信方式</h4>
+                        <div style="font-size: 0.9rem; line-height: 1.5;">
+                            • <strong>PostMessage</strong>: リアルタイム転送（推奨）<br>
+                            • <strong>localStorage</strong>: ブラウザローカル保存<br>
+                            • 両方対応で確実なデータ転送を実現
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -841,21 +704,141 @@
 
     <script>
         // Global variables
-        let workbook = null;
-        let employeeData = [];
-        let originalEmployeeData = [];
-        let shiftTitle = '';
+        let shiftData = null;
+        let baseUPH = 22;
+        let planValue = 12200;
+        let fcstValue = 16273;
         let isNightShift = false;
+        let originalShiftData = [];
 
         // App initialization
         document.addEventListener('DOMContentLoaded', function() {
-            initializeApp();
+            console.log('=== シフトビューア初期化開始 ===');
+            
+            setTimeout(() => {
+                initializeViewer();
+            }, 1000);
+            
+            loadTheme();
+            setupPostMessageListener();
+            checkForStoredData();
         });
 
-        function initializeApp() {
-            setupFileUpload();
-            loadTheme();
-            showStatus('アプリが準備完了しました', 'success');
+        function initializeViewer() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            loadingScreen.style.opacity = '0';
+            
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
+            
+            updateStatusIndicator('初期化完了 - データ待機中', 'success');
+            
+            // 定期的にデータをチェック
+            setInterval(checkForStoredData, 2000);
+        }
+
+        // PostMessage listener setup
+        function setupPostMessageListener() {
+            window.addEventListener('message', function(event) {
+                console.log('PostMessage受信:', event);
+                
+                if (event.data && event.data.type === 'SHIFT_DATA_TRANSFER') {
+                    console.log('シフトデータ受信:', event.data.data);
+                    processReceivedData(event.data.data);
+                    updateStatusIndicator('PostMessageでデータ受信成功', 'success');
+                    
+                    // 送信元に確認を返す
+                    if (event.source) {
+                        try {
+                            event.source.postMessage({
+                                type: 'DATA_RECEIVED_CONFIRMATION',
+                                success: true
+                            }, '*');
+                        } catch (error) {
+                            console.error('確認メッセージ送信エラー:', error);
+                        }
+                    }
+                }
+            });
+            
+            console.log('PostMessageリスナー設定完了');
+        }
+
+        // Check for stored data in localStorage
+        function checkForStoredData() {
+            try {
+                const storedData = localStorage.getItem('shiftDataTransfer');
+                if (storedData) {
+                    console.log('localStorageからデータ発見');
+                    const data = JSON.parse(storedData);
+                    processReceivedData(data);
+                    updateStatusIndicator('localStorageからデータ読み込み成功', 'success');
+                    
+                    // データを使用後削除
+                    localStorage.removeItem('shiftDataTransfer');
+                    localStorage.removeItem('shiftDataTransfer_timestamp');
+                }
+            } catch (error) {
+                console.error('localStorage読み込みエラー:', error);
+                updateStatusIndicator('localStorage読み込みエラー', 'error');
+            }
+        }
+
+        // Process received shift data
+        function processReceivedData(data) {
+            if (!data || !data.employeeData) {
+                console.error('無効なデータ形式:', data);
+                updateStatusIndicator('無効なデータ形式', 'error');
+                return;
+            }
+
+            shiftData = data;
+            baseUPH = data.baseUPH || 22;
+            planValue = data.planValue || 12200;
+            fcstValue = data.fcstValue || 16273;
+            isNightShift = data.isNightShift || false;
+
+            // Convert data format to internal structure
+            const convertedData = data.employeeData.map(emp => ({
+                company: emp['会社名'] || '',
+                timeSlot: emp['時間帯'] || '',
+                mainJob: emp['メイン業務'] || '',
+                name: emp['氏名'] || '',
+                gender: emp['性別'] || '',
+                hourlyWage: emp['時給'] || '',
+                transportation: emp['交通費'] || '',
+                startTime: emp['開始時間'] || '',
+                endTime: emp['終了時間'] || '',
+                break: emp['休憩'] || '',
+                status: emp['勤務状況'] || '',
+                isWorking: emp['勤務状況'] === '◯'
+            }));
+
+            originalShiftData = JSON.parse(JSON.stringify(convertedData));
+
+            // Hide welcome message and show data
+            document.getElementById('welcomeMessage').style.display = 'none';
+            document.getElementById('calculationPanel').classList.remove('hidden');
+            document.getElementById('tableContainer').classList.remove('hidden');
+
+            // Update shift title
+            const titleElement = document.getElementById('shiftTitle');
+            if (titleElement && data.shiftTitle) {
+                titleElement.textContent = data.shiftTitle;
+            }
+
+            // Display data
+            updateCalculations(convertedData);
+            updateTable(convertedData);
+
+            updateStatusIndicator(`データ表示完了 (${convertedData.length}件)`, 'success');
+            showStatus('シフトデータが正常に読み込まれました', 'success');
+        }
+
+        // Update status indicator (now just console logging)
+        function updateStatusIndicator(message, type) {
+            console.log(`[${type.toUpperCase()}] ${new Date().toLocaleTimeString()}: ${message}`);
         }
 
         // Theme management
@@ -884,284 +867,131 @@
             }
         }
 
-        // File upload setup
-        function setupFileUpload() {
-            const uploadZone = document.getElementById('uploadZone');
-            const fileInput = document.getElementById('fileInput');
-
-            // Drag & drop events
-            uploadZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadZone.classList.add('drag-over');
-            });
-
-            uploadZone.addEventListener('dragleave', (e) => {
-                e.preventDefault();
-                uploadZone.classList.remove('drag-over');
-            });
-
-            uploadZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadZone.classList.remove('drag-over');
-                
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    handleFileSelect(files[0]);
-                }
-            });
-
-            // Click to select
-            uploadZone.addEventListener('click', () => {
-                fileInput.click();
-            });
-
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files.length > 0) {
-                    handleFileSelect(e.target.files[0]);
-                }
-            });
-        }
-
-        function handleFileSelect(file) {
-            if (!file.name.match(/\.(xlsx|xls)$/i)) {
-                showStatus('Excelファイル（.xlsx/.xls）を選択してください', 'error');
-                return;
-            }
-
-            showProgress(true);
+        // Calculation functions (similar to main app)
+        function updateCalculations(data) {
+            const calcGrid = document.getElementById('calcGrid');
             
-            setTimeout(() => {
-                processFile(file);
-            }, 100);
-        }
-
-        function showProgress(show, progress = 0) {
-            const container = document.getElementById('progressContainer');
-            const fill = document.getElementById('progressFill');
-            const text = document.getElementById('progressText');
+            let totalLH = 0;
+            let totalCost = 0;
+            let totalNightAllowance = 0;
+            let totalOvertimeAllowance = 0;
+            let workingCount = 0;
             
-            if (show) {
-                container.style.display = 'block';
-                fill.style.width = progress + '%';
-                
-                if (progress === 0) {
-                    text.textContent = 'ファイルを読み込み中...';
-                } else if (progress < 50) {
-                    text.textContent = 'データを解析中...';
-                } else if (progress < 90) {
-                    text.textContent = '従業員データを抽出中...';
-                } else {
-                    text.textContent = '処理完了';
-                }
-            } else {
-                container.style.display = 'none';
-            }
-        }
-
-        function processFile(file) {
-            const reader = new FileReader();
-            
-            reader.onprogress = (e) => {
-                if (e.lengthComputable) {
-                    const progress = (e.loaded / e.total) * 100;
-                    showProgress(true, progress);
-                }
-            };
-            
-            reader.onload = function(e) {
-                try {
-                    showProgress(true, 90);
+            data.forEach(emp => {
+                if (emp.isWorking) {
+                    workingCount++;
                     
-                    const data = new Uint8Array(e.target.result);
-                    workbook = XLSX.read(data, { type: 'array' });
+                    const startTime = parseTime(emp.startTime);
+                    const endTime = parseTime(emp.endTime);
+                    const breakTime = parseTime(emp.break);
                     
-                    // Show file info
-                    document.getElementById('fileName').textContent = `✅ ${file.name} (${formatFileSize(file.size)})`;
-                    document.getElementById('fileInfo').style.display = 'block';
+                    const hourlyWageStr = emp.hourlyWage != null ? String(emp.hourlyWage) : '0';
+                    const transportationStr = emp.transportation != null ? String(emp.transportation) : '0';
                     
-                    // Process Excel data
-                    processExcelData();
+                    const hourlyWage = parseFloat(hourlyWageStr.replace(/[^\d.]/g, '')) || 0;
+                    const transportation = parseFloat(transportationStr.replace(/[^\d.]/g, '')) || 0;
                     
-                    showProgress(false);
-                    showStatus('ファイルが正常に読み込まれました', 'success');
-                    
-                } catch (error) {
-                    showProgress(false);
-                    showStatus('ファイルの読み込みに失敗しました: ' + error.message, 'error');
-                    console.error('Excel processing error:', error);
-                }
-            };
-            
-            reader.readAsArrayBuffer(file);
-        }
-
-        function processExcelData() {
-            if (!workbook || !workbook.SheetNames.length) {
-                throw new Error('有効なExcelファイルではありません');
-            }
-
-            // 最初のシートを読み込み
-            const firstSheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[firstSheetName];
-            const sheetData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-            
-            if (!sheetData || sheetData.length < 3) {
-                throw new Error('データが不十分です');
-            }
-
-            // タイトル行を取得（最初の行）
-            shiftTitle = sheetData[0][0] || 'シフトデータ';
-            
-            // 夜勤かどうかを判定
-            isNightShift = shiftTitle.includes('夜勤');
-
-            // ヘッダー行を見つける（通常は3行目）
-            let headerRowIndex = -1;
-            for (let i = 0; i < Math.min(5, sheetData.length); i++) {
-                const row = sheetData[i];
-                if (row && row.includes('会社名') && row.includes('氏名')) {
-                    headerRowIndex = i;
-                    break;
-                }
-            }
-
-            if (headerRowIndex === -1) {
-                throw new Error('ヘッダー行が見つかりません。正しいフォーマットのファイルを選択してください。');
-            }
-
-            const headers = sheetData[headerRowIndex];
-            employeeData = [];
-
-            // データ行を処理
-            for (let i = headerRowIndex + 1; i < sheetData.length; i++) {
-                const row = sheetData[i];
-                if (!row || row.length === 0) continue;
-
-                // 空白行をスキップ
-                const hasData = row.some(cell => cell && String(cell).trim() !== '');
-                if (!hasData) continue;
-
-                const employee = {};
-                headers.forEach((header, index) => {
-                    if (header && row[index] !== undefined) {
-                        employee[header] = row[index];
+                    if (startTime !== null && endTime !== null) {
+                        const workHours = calculateWorkHours(startTime, endTime, breakTime);
+                        const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
+                        const overtimeHours = Math.max(0, workHours - 8);
+                        
+                        totalLH += workHours;
+                        
+                        const regularHours = Math.max(0, workHours - overtimeHours);
+                        const baseCost = regularHours * hourlyWage;
+                        const overtimeBaseCost = overtimeHours * hourlyWage;
+                        const nightAllowance = nightHours * hourlyWage * 0.25;
+                        totalNightAllowance += nightAllowance;
+                        const overtimeAllowance = overtimeHours * hourlyWage * 0.25;
+                        totalOvertimeAllowance += overtimeAllowance;
+                        
+                        totalCost += baseCost + overtimeBaseCost + nightAllowance + overtimeAllowance + transportation;
+                    } else {
+                        totalCost += transportation;
                     }
-                });
-
-                // 最低限必要なデータがある場合のみ追加
-                if (employee['氏名'] || employee['会社名']) {
-                    employeeData.push(employee);
-                }
-            }
-
-            if (employeeData.length === 0) {
-                throw new Error('従業員データが見つかりません');
-            }
-
-            // オリジナルデータのバックアップを作成
-            originalEmployeeData = JSON.parse(JSON.stringify(employeeData));
-
-            // UI更新
-            displayData();
-        }
-
-        function displayData() {
-            displaySummary();
-            displayEmployeeTable();
-            
-            // Show result sections
-            document.getElementById('dataSummary').classList.remove('hidden');
-            document.getElementById('tableContainer').classList.remove('hidden');
-            
-            // Scroll to results
-            document.getElementById('dataSummary').scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-
-        function displaySummary() {
-            const summaryGrid = document.getElementById('summaryGrid');
-            
-            // Calculate summary data
-            const totalEmployees = employeeData.length;
-            const workingEmployees = employeeData.filter(emp => emp['勤務状況'] === '◯').length;
-            const absentEmployees = employeeData.filter(emp => emp['勤務状況'] === '欠勤').length;
-            const vacationEmployees = employeeData.filter(emp => emp['勤務状況'] === '有休').length;
-            
-            // Count companies
-            const companies = new Set();
-            employeeData.forEach(emp => {
-                if (emp['会社名'] && emp['会社名'].trim()) {
-                    companies.add(emp['会社名'].trim());
                 }
             });
-
-            // Calculate total working hours
-            let totalWorkingHours = 0;
-            employeeData.forEach(emp => {
-                if (emp['勤務状況'] === '◯') {
-                    const workHours = parseFloat(emp['勤務LH']) || 0;
-                    totalWorkingHours += workHours;
-                }
-            });
-
-            summaryGrid.innerHTML = `
-                <div class="summary-card">
-                    <div class="summary-label">総従業員数</div>
-                    <div class="summary-value">${totalEmployees}</div>
-                    <div class="summary-unit">人</div>
+            
+            const requiredLH = planValue / baseUPH;
+            const shortage = totalLH - requiredLH;
+            const currentUPH = totalLH > 0 ? planValue / totalLH : 0;
+            const hcConversion = shortage / 8;
+            const averageHourlyCost = totalLH > 0 ? totalCost / totalLH : 0;
+            
+            calcGrid.innerHTML = `
+                <div class="calc-card">
+                    <div class="calc-label">FCST数量</div>
+                    <div class="calc-value">${fcstValue.toLocaleString()}</div>
+                    <div class="calc-unit">個</div>
                 </div>
-                <div class="summary-card">
-                    <div class="summary-label">出勤者</div>
-                    <div class="summary-value" style="color: var(--secondary-color)">${workingEmployees}</div>
-                    <div class="summary-unit">人</div>
+                <div class="calc-card">
+                    <div class="calc-label">出勤HC</div>
+                    <div class="calc-value">${workingCount}</div>
+                    <div class="calc-unit">人</div>
                 </div>
-                <div class="summary-card">
-                    <div class="summary-label">欠勤者</div>
-                    <div class="summary-value" style="color: #f44336">${absentEmployees}</div>
-                    <div class="summary-unit">人</div>
+                <div class="calc-card">
+                    <div class="calc-label">出勤LH</div>
+                    <div class="calc-value">${totalLH.toFixed(1)}</div>
+                    <div class="calc-unit">時間</div>
                 </div>
-                <div class="summary-card">
-                    <div class="summary-label">有休者</div>
-                    <div class="summary-value" style="color: var(--accent-color)">${vacationEmployees}</div>
-                    <div class="summary-unit">人</div>
+                <div class="calc-card">
+                    <div class="calc-label">平均単価</div>
+                    <div class="calc-value">¥${Math.round(averageHourlyCost).toLocaleString()}</div>
+                    <div class="calc-unit">円/時</div>
                 </div>
-                <div class="summary-card">
-                    <div class="summary-label">登録会社数</div>
-                    <div class="summary-value">${companies.size}</div>
-                    <div class="summary-unit">社</div>
+                <div class="calc-card">
+                    <div class="calc-label">PLAN数量</div>
+                    <input type="number" class="calc-input" value="${planValue}" onchange="updatePlan(this.value)">
+                    <div class="calc-unit">個</div>
                 </div>
-                <div class="summary-card">
-                    <div class="summary-label">総労働時間</div>
-                    <div class="summary-value">${totalWorkingHours.toFixed(1)}</div>
-                    <div class="summary-unit">時間</div>
+                <div class="calc-card">
+                    <div class="calc-label">基準UPH</div>
+                    <input type="number" class="calc-input" value="${baseUPH}" onchange="updateUPH(this.value)" step="0.1">
+                    <div class="calc-unit">個/時</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">必要LH</div>
+                    <div class="calc-value">${requiredLH.toFixed(1)}</div>
+                    <div class="calc-unit">時間</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">実績UPH</div>
+                    <div class="calc-value" style="color: ${currentUPH >= baseUPH ? '#4CAF50' : '#f44336'}">${Math.round(currentUPH)}</div>
+                    <div class="calc-unit">個/時</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">過不足</div>
+                    <div class="calc-value" style="color: ${shortage >= 0 ? '#4CAF50' : '#f44336'}">${shortage.toFixed(1)}</div>
+                    <div class="calc-unit">時間</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">HC換算</div>
+                    <div class="calc-value">${hcConversion.toFixed(1)}</div>
+                    <div class="calc-unit">人</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">夜勤手当</div>
+                    <div class="calc-value">¥${Math.round(totalNightAllowance).toLocaleString()}</div>
+                    <div class="calc-unit">円 (22-5時)</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">残業手当</div>
+                    <div class="calc-value">¥${Math.round(totalOvertimeAllowance).toLocaleString()}</div>
+                    <div class="calc-unit">円 (8h超)</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">総費用</div>
+                    <div class="calc-value">¥${Math.round(totalCost).toLocaleString()}</div>
+                    <div class="calc-unit">円 (手当込)</div>
                 </div>
             `;
         }
 
-        function displayEmployeeTable() {
-            const table = document.getElementById('employeeTable');
+        function updateTable(data) {
+            const table = document.getElementById('shiftTable');
             
-            if (employeeData.length === 0) {
-                table.innerHTML = '<tr><td colspan="100%">データがありません</td></tr>';
-                return;
-            }
-
-            // ヘッダーを作成（編集操作列を追加）
-            const firstEmployee = employeeData[0];
-            let headers = Object.keys(firstEmployee);
-            
-            // 必要なヘッダーが存在しない場合は追加
-            const requiredHeaders = ['会社名', '時間帯', 'メイン業務', '氏名', '性別', '時給', '交通費', '開始時間', '終了時間', '休憩', '勤務状況'];
-            requiredHeaders.forEach(header => {
-                if (!headers.includes(header)) {
-                    headers.push(header);
-                }
-            });
-            
-            // 操作列を追加
-            headers.push('操作');
+            const headers = ['会社名', '時間帯', 'メイン業務', '氏名', '性別', '時給', '交通費', '開始時間', '終了時間', '休憩', '勤務状況', '勤務LH', '夜勤H', '残業H', '操作'];
             
             let tableHTML = '<thead><tr>';
             headers.forEach(header => {
@@ -1169,280 +999,56 @@
             });
             tableHTML += '</tr></thead><tbody>';
             
-            // データ行を作成
-            employeeData.forEach((employee, index) => {
-                const isWorking = employee['勤務状況'] === '◯';
-                const rowClass = isWorking ? 'working' : '';
+            data.forEach((emp, index) => {
+                const startTime = parseTime(emp.startTime);
+                const endTime = parseTime(emp.endTime);
+                const breakTime = parseTime(emp.break);
                 
-                tableHTML += `<tr class="${rowClass}" data-row-index="${index}">`;
+                const workHours = emp.isWorking && startTime !== null && endTime !== null ? 
+                    calculateWorkHours(startTime, endTime, breakTime) : 0;
+                const nightHours = emp.isWorking && startTime !== null && endTime !== null ? 
+                    calculateNightShiftHours(startTime, endTime, breakTime) : 0;
+                const overtimeHours = emp.isWorking ? Math.max(0, workHours - 8) : 0;
                 
-                headers.forEach(header => {
-                    if (header === '操作') {
-                        tableHTML += `
-                            <td class="action-cell">
-                                <button class="row-reset-btn" onclick="resetRow(${index})" title="この行をリセット">↺</button>
-                                <button class="row-confirm-btn" onclick="confirmRow(${index})" title="この行を確定">✓</button>
-                            </td>
-                        `;
-                    } else {
-                        let cellValue = employee[header] || '';
-                        let cellClass = '';
-                        let cellContent = '';
-                        
-                        // 勤務状況のセルは選択ボックスに
-                        if (header === '勤務状況') {
-                            const statusOptions = ['◯', '欠勤', '有休'];
-                            let statusSelect = `<select class="status-select" data-row-index="${index}" data-field="${header}">`;
-                            statusSelect += '<option value="">選択</option>';
-                            statusOptions.forEach(option => {
-                                const selected = cellValue === option ? ' selected' : '';
-                                statusSelect += `<option value="${option}"${selected}>${option}</option>`;
-                            });
-                            statusSelect += '</select>';
-                            cellContent = statusSelect;
-                            cellClass = 'status-cell';
-                        } else {
-                            // 編集可能セル
-                            cellClass = 'editable-cell';
-                            if (['開始時間', '終了時間', '休憩'].includes(header)) {
-                                cellClass += ' time-cell';
-                            }
-                            cellContent = `<div contenteditable="true" data-field="${header}">${cellValue}</div>`;
-                        }
-                        
-                        tableHTML += `<td class="${cellClass}">${cellContent}</td>`;
-                    }
+                const statusOptions = ['◯', '欠勤', '有休'];
+                let statusSelect = '<select class="status-select" data-row-index="' + index + '" data-field="status">';
+                statusOptions.forEach(option => {
+                    const selected = emp.status === option ? ' selected' : '';
+                    statusSelect += `<option value="${option}"${selected}>${option}</option>`;
                 });
-                tableHTML += '</tr>';
+                statusSelect += '</select>';
+                
+                tableHTML += `
+                    <tr class="${emp.isWorking ? 'working' : ''}" data-row-index="${index}">
+                        <td class="editable-cell" contenteditable="true" data-field="company">${emp.company}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="timeSlot">${emp.timeSlot}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="mainJob">${emp.mainJob}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="name">${emp.name}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="gender">${emp.gender}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="hourlyWage">${emp.hourlyWage}</td>
+                        <td class="editable-cell" contenteditable="true" data-field="transportation">${emp.transportation}</td>
+                        <td class="editable-cell time-cell" contenteditable="true" data-field="startTime">${emp.startTime}</td>
+                        <td class="editable-cell time-cell" contenteditable="true" data-field="endTime">${emp.endTime}</td>
+                        <td class="editable-cell time-cell" contenteditable="true" data-field="break">${emp.break}</td>
+                        <td class="status-cell">${statusSelect}</td>
+                        <td>${workHours > 0 ? workHours.toFixed(2) : ''}</td>
+                        <td>${nightHours > 0 ? nightHours.toFixed(2) : ''}</td>
+                        <td>${overtimeHours > 0 ? overtimeHours.toFixed(2) : ''}</td>
+                        <td class="action-cell">
+                            <button class="row-reset-btn" onclick="resetRow(${index})" title="この行をリセット">↺</button>
+                            <button class="row-confirm-btn" onclick="confirmRow(${index})" title="この行を確定">✓</button>
+                        </td>
+                    </tr>
+                `;
             });
             
             tableHTML += '</tbody>';
             table.innerHTML = tableHTML;
             
-            // Add edit listeners
             addEditListeners();
         }
 
-        function addEditListeners() {
-            const editableCells = document.querySelectorAll('.editable-cell div[contenteditable]');
-            const statusSelects = document.querySelectorAll('.status-select');
-            
-            // 編集可能セルのリスナー
-            editableCells.forEach(cell => {
-                cell.addEventListener('blur', function() {
-                    const row = this.closest('tr');
-                    const rowIndex = parseInt(row.getAttribute('data-row-index'));
-                    const field = this.getAttribute('data-field');
-                    const newValue = this.textContent.trim();
-                    
-                    // データを更新
-                    if (!employeeData[rowIndex]) {
-                        employeeData[rowIndex] = {};
-                    }
-                    employeeData[rowIndex][field] = newValue;
-                    
-                    // 時間関連の計算を更新
-                    if (['開始時間', '終了時間', '休憩'].includes(field)) {
-                        updateRowCalculations(rowIndex);
-                    }
-                    
-                    // サマリーを更新
-                    displaySummary();
-                    
-                    // Visual feedback
-                    this.style.background = 'rgba(76, 175, 80, 0.2)';
-                    setTimeout(() => {
-                        this.style.background = '';
-                    }, 1000);
-                    
-                    showStatus('変更が保存されました', 'success');
-                });
-                
-                cell.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        this.blur();
-                    }
-                });
-            });
-            
-            // 勤務状況セレクトボックスのリスナー
-            statusSelects.forEach(select => {
-                select.addEventListener('change', function() {
-                    const rowIndex = parseInt(this.getAttribute('data-row-index'));
-                    const field = this.getAttribute('data-field');
-                    const newStatus = this.value;
-                    const row = this.closest('tr');
-                    
-                    // データを更新
-                    if (!employeeData[rowIndex]) {
-                        employeeData[rowIndex] = {};
-                    }
-                    employeeData[rowIndex][field] = newStatus;
-                    
-                    // 行のスタイルを更新
-                    if (newStatus === '◯') {
-                        row.classList.add('working');
-                        
-                        // 時間が空白の場合はデフォルト値を設定
-                        const startTimeDiv = row.querySelector('[data-field="開始時間"]');
-                        const endTimeDiv = row.querySelector('[data-field="終了時間"]');
-                        const breakDiv = row.querySelector('[data-field="休憩"]');
-                        
-                        if (startTimeDiv && !startTimeDiv.textContent.trim()) {
-                            startTimeDiv.textContent = isNightShift ? '22:00' : '8:00';
-                            employeeData[rowIndex]['開始時間'] = startTimeDiv.textContent;
-                        }
-                        if (endTimeDiv && !endTimeDiv.textContent.trim()) {
-                            endTimeDiv.textContent = isNightShift ? '7:00' : '17:00';
-                            employeeData[rowIndex]['終了時間'] = endTimeDiv.textContent;
-                        }
-                        if (breakDiv && !breakDiv.textContent.trim()) {
-                            breakDiv.textContent = '1:00';
-                            employeeData[rowIndex]['休憩'] = breakDiv.textContent;
-                        }
-                        
-                        updateRowCalculations(rowIndex);
-                    } else {
-                        row.classList.remove('working');
-                        
-                        // 欠勤・有休の場合は時間をクリア
-                        if (['欠勤', '有休'].includes(newStatus)) {
-                            ['開始時間', '終了時間', '休憩'].forEach(timeField => {
-                                const timeDiv = row.querySelector(`[data-field="${timeField}"]`);
-                                if (timeDiv) {
-                                    timeDiv.textContent = '';
-                                    employeeData[rowIndex][timeField] = '';
-                                }
-                            });
-                        }
-                    }
-                    
-                    // サマリーを更新
-                    displaySummary();
-                    
-                    showStatus(`勤務状況を「${newStatus}」に変更しました`, 'success');
-                });
-            });
-        }
-
-        function updateRowCalculations(rowIndex) {
-            const employee = employeeData[rowIndex];
-            if (!employee || employee['勤務状況'] !== '◯') return;
-            
-            const startTime = parseTime(employee['開始時間']);
-            const endTime = parseTime(employee['終了時間']);
-            const breakTime = parseTime(employee['休憩']);
-            
-            if (startTime !== null && endTime !== null) {
-                const workHours = calculateWorkHours(startTime, endTime, breakTime);
-                const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
-                const overtimeHours = Math.max(0, workHours - 8);
-                
-                // データを更新
-                employee['勤務LH'] = workHours.toFixed(2);
-                employee['夜勤時間'] = nightHours.toFixed(2);
-                employee['残業時間'] = overtimeHours.toFixed(2);
-                
-                // テーブル内の計算列も更新
-                const row = document.querySelector(`tr[data-row-index="${rowIndex}"]`);
-                if (row) {
-                    const lhCell = row.querySelector('[data-field="勤務LH"]');
-                    const nightCell = row.querySelector('[data-field="夜勤時間"]');
-                    const overtimeCell = row.querySelector('[data-field="残業時間"]');
-                    
-                    if (lhCell) lhCell.textContent = workHours.toFixed(2);
-                    if (nightCell) nightCell.textContent = nightHours.toFixed(2);
-                    if (overtimeCell) overtimeCell.textContent = overtimeHours.toFixed(2);
-                }
-            }
-        }
-
-        function addNewRow() {
-            const newEmployee = {
-                '会社名': '',
-                '時間帯': '',
-                'メイン業務': '',
-                '氏名': '',
-                '性別': '',
-                '時給': '',
-                '交通費': '',
-                '開始時間': '',
-                '終了時間': '',
-                '休憩': '',
-                '勤務状況': '',
-                '勤務LH': '',
-                '夜勤時間': '',
-                '残業時間': ''
-            };
-            
-            employeeData.push(newEmployee);
-            displayEmployeeTable();
-            displaySummary();
-            
-            // 新しい行の最初のセルにフォーカス
-            const newRowIndex = employeeData.length - 1;
-            const newRow = document.querySelector(`tr[data-row-index="${newRowIndex}"]`);
-            if (newRow) {
-                const firstEditableCell = newRow.querySelector('.editable-cell div[contenteditable]');
-                if (firstEditableCell) {
-                    firstEditableCell.focus();
-                }
-            }
-            
-            showStatus('新しい従業員を追加しました', 'success');
-        }
-
-        function resetRow(rowIndex) {
-            if (originalEmployeeData[rowIndex]) {
-                if (!confirm('この行を元の状態に戻しますか？')) return;
-                
-                // 元データで上書き
-                employeeData[rowIndex] = JSON.parse(JSON.stringify(originalEmployeeData[rowIndex]));
-            } else {
-                if (!confirm('この行をクリアしますか？')) return;
-                
-                // 新規追加行の場合は空にリセット
-                Object.keys(employeeData[rowIndex]).forEach(key => {
-                    employeeData[rowIndex][key] = '';
-                });
-            }
-            
-            displayEmployeeTable();
-            displaySummary();
-            showStatus('行をリセットしました', 'success');
-        }
-
-        function confirmRow(rowIndex) {
-            const row = document.querySelector(`tr[data-row-index="${rowIndex}"]`);
-            if (!row) return;
-            
-            const nameField = employeeData[rowIndex]['氏名'] || '';
-            
-            if (row.classList.contains('confirmed')) {
-                // 確定解除
-                row.classList.remove('confirmed');
-                showStatus(`${nameField || '行'}の確定を解除しました`, 'success');
-            } else {
-                // 必須項目のチェック
-                if (!nameField.trim()) {
-                    showStatus('氏名は必須項目です', 'error');
-                    return;
-                }
-                
-                // 行を確定状態にする
-                row.classList.add('confirmed');
-                showStatus(`${nameField}を確定しました`, 'success');
-                
-                // 確定時のアニメーション効果
-                row.style.transform = 'scale(1.02)';
-                setTimeout(() => {
-                    row.style.transform = '';
-                }, 200);
-            }
-        }
-
-        // Time calculation functions
+        // Copy utility functions from main app
         function parseTime(timeStr) {
             if (!timeStr || timeStr === '' || timeStr === '：' || timeStr === '　：　') {
                 return null;
@@ -1510,13 +1116,11 @@
                 return 0;
             }
             
-            const nightStart = 22.0; // 22:00
-            const nightEnd = 5.0;    // 5:00
+            const nightStart = 22.0;
+            const nightEnd = 5.0;
             let nightHours = 0;
             
-            // 夜勤時間帯（22:00-5:00）の重複を計算
             if (endTime < startTime) {
-                // 日をまたぐ場合
                 if (startTime <= nightStart) {
                     nightHours += (24 - nightStart);
                 } else if (startTime < 24) {
@@ -1529,7 +1133,6 @@
                     nightHours += endTime;
                 }
             } else {
-                // 日をまたがない場合
                 const shiftStart = Math.max(startTime, nightStart);
                 const shiftEnd = Math.min(endTime, 24);
                 
@@ -1546,7 +1149,6 @@
                 }
             }
             
-            // 休憩時間の調整
             if (nightHours > 0 && breakTime !== null && breakTime > 0) {
                 const breakAdjustment = Math.min(breakTime, nightHours);
                 nightHours = Math.max(0, nightHours - breakAdjustment);
@@ -1555,64 +1157,583 @@
             return Math.max(0, nightHours);
         }
 
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        // Add edit listeners and other functions (similar to main app)
+        function addEditListeners() {
+            const editableCells = document.querySelectorAll('.editable-cell');
+            const statusSelects = document.querySelectorAll('.status-select');
+            
+            editableCells.forEach(cell => {
+                cell.addEventListener('blur', function() {
+                    const field = this.getAttribute('data-field');
+                    const newValue = this.textContent.trim();
+                    
+                    if (['hourlyWage', 'transportation'].includes(field)) {
+                        const numValue = parseFloat(newValue.replace(/[^\d.]/g, ''));
+                        if (!isNaN(numValue) && numValue >= 0) {
+                            this.textContent = Math.round(numValue).toString();
+                        } else if (newValue === '') {
+                            this.textContent = '';
+                        } else {
+                            showStatus('数値を入力してください', 'error');
+                            return;
+                        }
+                    }
+                    
+                    if (['startTime', 'endTime', 'break', 'hourlyWage', 'transportation'].includes(field)) {
+                        updateRowCalculations();
+                    }
+                    
+                    this.style.background = 'rgba(240, 147, 251, 0.2)';
+                    setTimeout(() => {
+                        this.style.background = '';
+                    }, 1000);
+                    
+                    showStatus('変更が保存されました', 'success');
+                });
+                
+                cell.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.blur();
+                    }
+                    
+                    const field = this.getAttribute('data-field');
+                    if (['hourlyWage', 'transportation'].includes(field)) {
+                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+                        if (!allowedKeys.includes(e.key) && !e.ctrlKey && !e.metaKey) {
+                            if (!/[0-9.]/.test(e.key)) {
+                                e.preventDefault();
+                                return false;
+                            }
+                            if (e.key === '.' && this.textContent.includes('.')) {
+                                e.preventDefault();
+                                return false;
+                            }
+                        }
+                    }
+                });
+                
+                cell.addEventListener('focus', function() {
+                    const field = this.getAttribute('data-field');
+                    if (['hourlyWage', 'transportation'].includes(field)) {
+                        const range = document.createRange();
+                        range.selectNodeContents(this);
+                        const selection = window.getSelection();
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    }
+                });
+            });
+            
+            statusSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    const rowIndex = this.getAttribute('data-row-index');
+                    const newStatus = this.value;
+                    const row = this.closest('tr');
+                    
+                    if (['欠勤', '有休'].includes(newStatus)) {
+                        const startTimeCell = row.querySelector('[data-field="startTime"]');
+                        const endTimeCell = row.querySelector('[data-field="endTime"]');
+                        const breakCell = row.querySelector('[data-field="break"]');
+                        
+                        if (startTimeCell) startTimeCell.textContent = '';
+                        if (endTimeCell) endTimeCell.textContent = '';
+                        if (breakCell) breakCell.textContent = '';
+                        
+                        row.classList.remove('working');
+                        showStatus(`${newStatus}に設定し、時間をクリアしました`, 'success');
+                    } else if (newStatus === '◯') {
+                        row.classList.add('working');
+                        
+                        const startTimeCell = row.querySelector('[data-field="startTime"]');
+                        const endTimeCell = row.querySelector('[data-field="endTime"]');
+                        const breakCell = row.querySelector('[data-field="break"]');
+                        
+                        if (startTimeCell && !startTimeCell.textContent.trim()) {
+                            startTimeCell.textContent = isNightShift ? '22:00' : '8:00';
+                        }
+                        if (endTimeCell && !endTimeCell.textContent.trim()) {
+                            endTimeCell.textContent = isNightShift ? '7:00' : '17:00';
+                        }
+                        if (breakCell && !breakCell.textContent.trim()) {
+                            breakCell.textContent = '1:00';
+                        }
+                        
+                        showStatus('出勤に設定しました', 'success');
+                    } else {
+                        row.classList.remove('working');
+                    }
+                    
+                    updateRowCalculations();
+                    
+                    this.style.background = 'rgba(240, 147, 251, 0.2)';
+                    setTimeout(() => {
+                        this.style.background = '';
+                    }, 1000);
+                });
+            });
+        }
+
+        function getCurrentTableData() {
+            const rows = document.querySelectorAll('#shiftTable tbody tr');
+            const data = [];
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const statusSelect = row.querySelector('.status-select');
+                const status = statusSelect ? statusSelect.value : '';
+                
+                const getData = (index) => {
+                    return cells[index] ? cells[index].textContent.trim() : '';
+                };
+                
+                data.push({
+                    company: getData(0),
+                    timeSlot: getData(1),
+                    mainJob: getData(2),
+                    name: getData(3),
+                    gender: getData(4),
+                    hourlyWage: getData(5),
+                    transportation: getData(6),
+                    startTime: getData(7),
+                    endTime: getData(8),
+                    break: getData(9),
+                    status: status,
+                    isWorking: status === '◯'
+                });
+            });
+            
+            return data;
+        }
+
+        function updateRowCalculations() {
+            const currentData = getCurrentTableData();
+            updateCalculations(currentData);
+            
+            const rows = document.querySelectorAll('#shiftTable tbody tr');
+            rows.forEach((row, index) => {
+                const emp = currentData[index];
+                if (!emp) return;
+                
+                const startTime = parseTime(emp.startTime);
+                const endTime = parseTime(emp.endTime);
+                const breakTime = parseTime(emp.break);
+                
+                const workHours = emp.isWorking && startTime !== null && endTime !== null ? 
+                    calculateWorkHours(startTime, endTime, breakTime) : 0;
+                const nightHours = emp.isWorking && startTime !== null && endTime !== null ? 
+                    calculateNightShiftHours(startTime, endTime, breakTime) : 0;
+                const overtimeHours = emp.isWorking ? Math.max(0, workHours - 8) : 0;
+                
+                const cells = row.querySelectorAll('td');
+                if (cells[11]) cells[11].textContent = workHours > 0 ? workHours.toFixed(2) : '';
+                if (cells[12]) cells[12].textContent = nightHours > 0 ? nightHours.toFixed(2) : '';
+                if (cells[13]) cells[13].textContent = overtimeHours > 0 ? overtimeHours.toFixed(2) : '';
+            });
+        }
+
+        function addNewRow() {
+            const newEmployee = {
+                company: '',
+                timeSlot: '',
+                mainJob: '',
+                name: '',
+                gender: '',
+                hourlyWage: '',
+                transportation: '',
+                startTime: '',
+                endTime: '',
+                break: '',
+                status: '',
+                isWorking: false
+            };
+            
+            const table = document.getElementById('shiftTable');
+            const tbody = table.querySelector('tbody');
+            const currentRows = tbody.querySelectorAll('tr');
+            const newIndex = currentRows.length;
+            
+            const statusOptions = ['◯', '欠勤', '有休'];
+            let statusSelect = '<select class="status-select" data-row-index="' + newIndex + '" data-field="status">';
+            statusSelect += '<option value="">選択してください</option>';
+            statusOptions.forEach(option => {
+                statusSelect += `<option value="${option}">${option}</option>`;
+            });
+            statusSelect += '</select>';
+            
+            const newRowHTML = `
+                <tr class="" data-row-index="${newIndex}">
+                    <td class="editable-cell" contenteditable="true" data-field="company">${newEmployee.company}</td>
+                    <td class="editable-cell" contenteditable="true" data-field="timeSlot">${newEmployee.timeSlot}</td>
+                    <td class="editable-cell" contenteditable="true" data-field="mainJob">${newEmployee.mainJob}</td>
+                    <td class="editable-cell" contenteditable="true" data-field="name">${newEmployee.name}</td>
+                    <td class="editable-cell" contenteditable="true" data-field="gender">${newEmployee.gender}</td>
+                    <td class="editable-cell" contenteditable="true" data-field="hourlyWage">${newEmployee.hourlyWage}</td>
+                    <td class="editable-cell" contenteditable="true" data-field="transportation">${newEmployee.transportation}</td>
+                    <td class="editable-cell time-cell" contenteditable="true" data-field="startTime">${newEmployee.startTime}</td>
+                    <td class="editable-cell time-cell" contenteditable="true" data-field="endTime">${newEmployee.endTime}</td>
+                    <td class="editable-cell time-cell" contenteditable="true" data-field="break">${newEmployee.break}</td>
+                    <td class="status-cell">${statusSelect}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="action-cell">
+                        <button class="row-reset-btn" onclick="resetRow(${newIndex})" title="この行をリセット">↺</button>
+                        <button class="row-confirm-btn" onclick="confirmRow(${newIndex})" title="この行を確定">✓</button>
+                    </td>
+                </tr>
+            `;
+            
+            tbody.insertAdjacentHTML('beforeend', newRowHTML);
+            addEditListeners();
+            
+            const newRow = tbody.querySelector(`tr[data-row-index="${newIndex}"]`);
+            const firstEditableCell = newRow.querySelector('.editable-cell');
+            if (firstEditableCell) {
+                firstEditableCell.focus();
+            }
+            
+            showStatus('新しい行を追加しました', 'success');
+        }
+
+        function confirmRow(rowIndex) {
+            const row = document.querySelector(`tr[data-row-index="${rowIndex}"]`);
+            if (!row) {
+                showStatus('確定する行が見つかりません', 'error');
+                return;
+            }
+            
+            const nameCell = row.querySelector('[data-field="name"]');
+            const employeeName = nameCell ? nameCell.textContent.trim() : '';
+            
+            if (row.classList.contains('confirmed')) {
+                row.classList.remove('confirmed');
+                const confirmBtn = row.querySelector('.row-confirm-btn');
+                if (confirmBtn) {
+                    confirmBtn.innerHTML = '✓';
+                    confirmBtn.title = 'この行を確定';
+                    confirmBtn.style.background = '';
+                }
+                
+                const name = employeeName || '行';
+                showStatus(`${name}の確定を解除しました`, 'success');
+            } else {
+                if (!employeeName.trim()) {
+                    showStatus('氏名は必須項目です', 'error');
+                    return;
+                }
+                
+                row.classList.add('confirmed');
+                const confirmBtn = row.querySelector('.row-confirm-btn');
+                if (confirmBtn) {
+                    confirmBtn.innerHTML = '✓';
+                    confirmBtn.title = '確定済み（クリックで解除）';
+                }
+                
+                const name = employeeName || '行';
+                showStatus(`${name}を確定しました`, 'success');
+                
+                row.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    row.style.transform = '';
+                }, 200);
+            }
+        }
+
+        function resetRow(rowIndex) {
+            if (!originalShiftData || !originalShiftData[rowIndex]) {
+                const row = document.querySelector(`tr[data-row-index="${rowIndex}"]`);
+                if (!row) return;
+                
+                if (!confirm('この行をクリアしますか？')) {
+                    return;
+                }
+                
+                const editableCells = row.querySelectorAll('.editable-cell');
+                editableCells.forEach(cell => {
+                    cell.textContent = '';
+                });
+                
+                const statusSelect = row.querySelector('.status-select');
+                if (statusSelect) statusSelect.value = '';
+                
+                row.classList.remove('working', 'confirmed');
+                
+                const confirmBtn = row.querySelector('.row-confirm-btn');
+                if (confirmBtn) {
+                    confirmBtn.innerHTML = '✓';
+                    confirmBtn.title = 'この行を確定';
+                    confirmBtn.style.background = '';
+                }
+                
+                updateRowCalculations();
+                showStatus('行をクリアしました', 'success');
+                return;
+            }
+            
+            if (!confirm('この行を元の状態に戻しますか？')) {
+                return;
+            }
+            
+            const row = document.querySelector(`tr[data-row-index="${rowIndex}"]`);
+            if (!row) return;
+            
+            const originalData = originalShiftData[rowIndex];
+            
+            const companyCell = row.querySelector('[data-field="company"]');
+            if (companyCell) companyCell.textContent = originalData.company;
+            
+            const timeSlotCell = row.querySelector('[data-field="timeSlot"]');
+            if (timeSlotCell) timeSlotCell.textContent = originalData.timeSlot;
+            
+            const mainJobCell = row.querySelector('[data-field="mainJob"]');
+            if (mainJobCell) mainJobCell.textContent = originalData.mainJob;
+            
+            const nameCell = row.querySelector('[data-field="name"]');
+            if (nameCell) nameCell.textContent = originalData.name;
+            
+            const genderCell = row.querySelector('[data-field="gender"]');
+            if (genderCell) genderCell.textContent = originalData.gender;
+            
+            const hourlyWageCell = row.querySelector('[data-field="hourlyWage"]');
+            if (hourlyWageCell) hourlyWageCell.textContent = originalData.hourlyWage;
+            
+            const transportationCell = row.querySelector('[data-field="transportation"]');
+            if (transportationCell) transportationCell.textContent = originalData.transportation;
+            
+            const startTimeCell = row.querySelector('[data-field="startTime"]');
+            if (startTimeCell) startTimeCell.textContent = originalData.startTime;
+            
+            const endTimeCell = row.querySelector('[data-field="endTime"]');
+            if (endTimeCell) endTimeCell.textContent = originalData.endTime;
+            
+            const breakCell = row.querySelector('[data-field="break"]');
+            if (breakCell) breakCell.textContent = originalData.break;
+            
+            const statusSelect = row.querySelector('.status-select');
+            if (statusSelect) statusSelect.value = originalData.status;
+            
+            if (originalData.isWorking) {
+                row.classList.add('working');
+            } else {
+                row.classList.remove('working');
+            }
+            
+            row.classList.remove('confirmed');
+            
+            const confirmBtn = row.querySelector('.row-confirm-btn');
+            if (confirmBtn) {
+                confirmBtn.innerHTML = '✓';
+                confirmBtn.title = 'この行を確定';
+                confirmBtn.style.background = '';
+            }
+            
+            updateRowCalculations();
+            
+            row.style.background = 'rgba(102, 126, 234, 0.1)';
+            setTimeout(() => {
+                row.style.background = '';
+            }, 1500);
+            
+            showStatus('行をリセットしました', 'success');
+        }
+
+        function updatePlan(value) {
+            planValue = parseFloat(value) || 12200;
+            updateCalculations(getCurrentTableData());
+        }
+
+        function updateUPH(value) {
+            baseUPH = parseFloat(value) || 22;
+            updateCalculations(getCurrentTableData());
+            showStatus(`基準UPHを ${baseUPH} に更新しました`, 'success');
+        }
+
+        function showStatus(message, type) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message status-${type} show`;
+            
+            setTimeout(() => {
+                statusMessage.classList.remove('show');
+            }, 3000);
         }
 
         // Export functions
+        function generateAttendanceCheck() {
+            if (!document.querySelector('.shift-table')) {
+                showStatus('シフト表が生成されていません', 'error');
+                return;
+            }
+
+            try {
+                const shiftTitle = document.getElementById('shiftTitle').textContent || 'シフト表';
+
+                const attendanceData = [];
+                const rows = document.querySelectorAll('#shiftTable tbody tr');
+                
+                rows.forEach(row => {
+                    const statusSelect = row.querySelector('.status-select');
+                    const status = statusSelect ? statusSelect.value : '';
+                    
+                    if (status === '◯') {
+                        const cells = row.querySelectorAll('td');
+                        const getData = (index) => cells[index] ? cells[index].textContent.trim() : '';
+                        
+                        const companyName = getData(0);
+                        if (!companyName.trim()) return;
+                        
+                        attendanceData.push({
+                            company: companyName,
+                            timeSlot: '',
+                            mainJob: getData(2),
+                            name: getData(3),
+                            startTime: ':',
+                            endTime: ':',
+                            break: ':',
+                            healthCheck: '',
+                            heatstrokeCheck: '',
+                            memo: ''
+                        });
+                    }
+                });
+
+                const calculationData = {
+                    totalHC: attendanceData.length,
+                    totalLH: parseFloat(document.querySelector('.calc-value')?.textContent) || 0,
+                    forecast: fcstValue,
+                    planValue: planValue,
+                    baseUPH: baseUPH
+                };
+
+                const attendanceHTML = createAttendanceHTML(shiftTitle, attendanceData, calculationData);
+                
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(attendanceHTML);
+                printWindow.document.close();
+                
+                showStatus('出退勤確認表を生成しました', 'success');
+                
+            } catch (error) {
+                console.error('出退勤確認表生成エラー:', error);
+                showStatus('出退勤確認表の生成に失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        function createAttendanceHTML(dateTitle, data, calculationData) {
+            return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>出退勤確認表</title>
+    <style>
+        @media print { body { margin: 0; } .no-print { display: none; } }
+        body { font-family: 'Yu Gothic', 'Meiryo', sans-serif; margin: 15px; background-color: white; font-size: 12px; line-height: 1.2; }
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+        .header h1 { margin: 0; font-size: 20px; font-weight: bold; line-height: 1.3; }
+        .attendance-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 11px; line-height: 1.1; }
+        .attendance-table th, .attendance-table td { border: 1px solid #333; padding: 4px 6px; text-align: center; vertical-align: middle; line-height: 1.1; }
+        .attendance-table th { background-color: #f0f0f0; font-weight: bold; font-size: 11px; padding: 5px 6px; }
+        .attendance-table td { height: 20px; padding: 3px 6px; }
+        .name-cell { text-align: left; padding-left: 8px; min-width: 100px; }
+        .company-cell { text-align: left; padding-left: 8px; min-width: 70px; }
+        .job-cell { text-align: left; padding-left: 8px; min-width: 85px; }
+        .time-cell { width: 55px; font-size: 14px; font-weight: bold; padding: 3px 4px; }
+        .memo-cell { width: 100px; padding: 3px 4px; }
+        .layer-cell { width: 45px; padding: 3px 4px; }
+        .health-cell { width: 60px; padding: 3px 4px; font-size: 10px; }
+        .heatstroke-cell { width: 65px; padding: 3px 4px; font-size: 10px; }
+        .print-buttons { margin: 15px 0; text-align: center; }
+        .print-btn { background-color: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; margin: 0 8px; }
+        .print-btn:hover { background-color: #5a6fd8; }
+        .pdf-btn { background-color: #764ba2; } .pdf-btn:hover { background-color: #6b46c1; }
+    </style>
+</head>
+<body>
+    <div class="print-buttons no-print">
+        <button class="print-btn" onclick="window.print()">🖨️ 印刷</button>
+        <button class="print-btn pdf-btn" onclick="window.print()">📄 PDF保存</button>
+        <button class="print-btn" onclick="window.close()" style="background-color: #FF5722;">❌ 閉じる</button>
+    </div>
+    <div class="header">
+        <h1>${dateTitle}</h1>
+        <p style="margin: 8px 0 0 0; font-size: 13px;">出退勤確認表（基準UPH: ${calculationData.baseUPH}）</p>
+    </div>
+    <table class="attendance-table">
+        <thead>
+            <tr><th>会社名</th><th>階層</th><th>メイン業務</th><th>氏名</th><th>開始時間</th><th>終了時間</th><th>休憩</th><th>自己申告<br>体調</th><th>熱中症<br>対策確認</th><th>備考</th></tr>
+        </thead>
+        <tbody>
+            ${data.map(emp => `<tr><td class="company-cell">${emp.company}</td><td class="layer-cell">${emp.timeSlot}</td><td class="job-cell">${emp.mainJob}</td><td class="name-cell">${emp.name}</td><td class="time-cell">${emp.startTime}</td><td class="time-cell">${emp.endTime}</td><td class="time-cell">${emp.break}</td><td class="health-cell">&nbsp;</td><td class="heatstroke-cell">&nbsp;</td><td class="memo-cell">${emp.memo}</td></tr>`).join('')}
+            ${Array.from({length: Math.max(0, 20 - data.length)}, () => `<tr><td class="company-cell">&nbsp;</td><td class="layer-cell">&nbsp;</td><td class="job-cell">&nbsp;</td><td class="name-cell">&nbsp;</td><td class="time-cell">:</td><td class="time-cell">:</td><td class="time-cell">:</td><td class="health-cell">&nbsp;</td><td class="heatstroke-cell">&nbsp;</td><td class="memo-cell">&nbsp;</td></tr>`).join('')}
+        </tbody>
+    </table>
+    <div style="margin-top: 20px; text-align: right; font-size: 11px; line-height: 1.3;"><p>責任者確認：_________________　　日付：_______________</p></div>
+</body>
+</html>`;
+        }
+
         function exportToExcel() {
-            if (!employeeData.length) {
+            if (!document.querySelector('.shift-table')) {
                 showStatus('エクスポートするデータがありません', 'error');
                 return;
             }
 
             try {
-                // タイトル行とデータを含むシートデータを作成
-                const exportData = [];
-                exportData.push([shiftTitle]); // タイトル行
-                exportData.push([]); // 空行
-                
-                // ヘッダー行
-                const headers = Object.keys(employeeData[0]);
-                exportData.push(headers);
-                
-                // データ行
-                employeeData.forEach(employee => {
-                    const row = headers.map(header => employee[header] || '');
-                    exportData.push(row);
+                const shiftTitle = document.getElementById('shiftTitle').textContent || 'シフト表';
+
+                const data = [];
+                data.push([shiftTitle]);
+                data.push([`基準UPH: ${baseUPH}`]);
+                data.push([]);
+
+                const headers = ['会社名', '時間帯', 'メイン業務', '氏名', '性別', '時給', '交通費', '開始時間', '終了時間', '休憩', '勤務状況', '勤務LH', '夜勤時間', '残業時間'];
+                data.push(headers);
+
+                const tableData = getCurrentTableData();
+                tableData.forEach(emp => {
+                    const startTime = parseTime(emp.startTime);
+                    const endTime = parseTime(emp.endTime);
+                    const breakTime = parseTime(emp.break);
+                    
+                    const workHours = emp.isWorking && startTime !== null && endTime !== null ? 
+                        calculateWorkHours(startTime, endTime, breakTime) : 0;
+                    const nightHours = emp.isWorking && startTime !== null && endTime !== null ? 
+                        calculateNightShiftHours(startTime, endTime, breakTime) : 0;
+                    const overtimeHours = emp.isWorking ? Math.max(0, workHours - 8) : 0;
+                    
+                    data.push([
+                        emp.company, emp.timeSlot, emp.mainJob, emp.name, emp.gender,
+                        emp.hourlyWage, emp.transportation, emp.startTime, emp.endTime,
+                        emp.break, emp.status, 
+                        workHours > 0 ? workHours.toFixed(2) : '',
+                        nightHours > 0 ? nightHours.toFixed(2) : '',
+                        overtimeHours > 0 ? overtimeHours.toFixed(2) : ''
+                    ]);
                 });
 
-                const ws = XLSX.utils.aoa_to_sheet(exportData);
-                
-                // Set column widths
-                const columnWidths = [];
-                headers.forEach(header => {
-                    const maxLength = Math.max(
-                        header.length,
-                        ...employeeData.map(row => String(row[header] || '').length)
-                    );
-                    columnWidths.push({ width: Math.min(Math.max(maxLength + 2, 10), 30) });
-                });
-                ws['!cols'] = columnWidths;
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                ws['!cols'] = [
+                    { width: 15 }, { width: 10 }, { width: 12 }, { width: 15 }, { width: 8 }, { width: 10 },
+                    { width: 12 }, { width: 10 }, { width: 10 }, { width: 8 }, { width: 10 }, { width: 10 }, { width: 10 }, { width: 10 }
+                ];
 
                 const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, '編集済みデータ');
+                XLSX.utils.book_append_sheet(wb, ws, '詳細データ');
                 
-                const fileName = `${shiftTitle.replace(/[^\w\d]/g, '_')}_編集済み.xlsx`;
+                const fileName = `ビューア編集_詳細データ_${new Date().toISOString().split('T')[0]}.xlsx`;
                 XLSX.writeFile(wb, fileName);
+                showStatus('詳細データをダウンロードしました', 'success');
                 
-                showStatus('編集データをエクスポートしました', 'success');
             } catch (error) {
+                console.error('エクスポートエラー:', error);
                 showStatus('エクスポートに失敗しました: ' + error.message, 'error');
             }
         }
 
         function exportCompanySummary() {
-            if (!employeeData.length) {
+            if (!document.querySelector('.shift-table')) {
                 showStatus('エクスポートするデータがありません', 'error');
                 return;
             }
@@ -1624,74 +1745,48 @@
                     return;
                 }
 
+                const shiftTitle = document.getElementById('shiftTitle').textContent || 'シフト表';
+
                 const data = [];
                 data.push([shiftTitle + ' 会社別集計']);
+                data.push([`基準UPH: ${baseUPH}`]);
                 data.push([]);
                 
-                // HC集計
-                data.push(['HC（人数）集計']);
+                data.push(['HC']);
                 const sortedByHC = Object.entries(companySummary).sort((a, b) => {
                     if (a[0] === 'Gworker') return -1;
                     if (b[0] === 'Gworker') return 1;
                     return b[1].hc - a[1].hc;
                 });
-                
-                data.push(['会社名', 'HC']);
                 sortedByHC.forEach(([company, summary]) => {
                     data.push([company, summary.hc]);
                 });
                 
                 const totalHC = Object.values(companySummary).reduce((sum, s) => sum + s.hc, 0);
-                data.push(['合計', totalHC]);
+                data.push(['', totalHC]);
                 data.push([]);
                 
-                // LH集計
-                data.push(['LH（労働時間）集計']);
-                data.push(['会社名', 'LH']);
-                sortedByHC.forEach(([company, summary]) => {
-                    data.push([company, Math.round(summary.totalLH * 10) / 10]); // 小数点1位まで
-                });
-                
-                const totalLH = Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0);
-                data.push(['合計', Math.round(totalLH * 10) / 10]);
-                data.push([]);
-                
-                // 経費集計
-                data.push(['経費集計（手当込み）']);
-                data.push(['会社名', '総費用（円）']);
+                data.push(['経費']);
                 sortedByHC.forEach(([company, summary]) => {
                     data.push([company, Math.round(summary.totalCost)]);
                 });
-                
-                const totalCost = Object.values(companySummary).reduce((sum, s) => sum + s.totalCost, 0);
-                data.push(['合計', Math.round(totalCost)]);
+                data.push(['', Math.round(Object.values(companySummary).reduce((sum, s) => sum + s.totalCost, 0))]);
                 data.push([]);
                 
-                // 平均時給集計
-                data.push(['平均時給集計']);
-                data.push(['会社名', '平均時給（円/時）']);
+                data.push(['LH']);
                 sortedByHC.forEach(([company, summary]) => {
-                    const avgHourlyRate = summary.totalLH > 0 ? Math.round(summary.totalCost / summary.totalLH) : 0;
-                    data.push([company, avgHourlyRate]);
+                    data.push([company, Math.round(summary.totalLH)]);
                 });
-                
-                const overallAvgRate = totalLH > 0 ? Math.round(totalCost / totalLH) : 0;
-                data.push(['全体平均', overallAvgRate]);
+                data.push(['', Math.round(Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0))]);
 
                 const ws = XLSX.utils.aoa_to_sheet(data);
-                
-                // 列幅の設定
-                ws['!cols'] = [
-                    { width: 20 }, // 会社名列
-                    { width: 15 }  // 数値列
-                ];
-
+                ws['!cols'] = [{ width: 15 }, { width: 12 }];
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, '会社別集計');
                 
-                const fileName = `${shiftTitle.replace(/[^\w\d]/g, '_')}_会社別集計.xlsx`;
+                const fileName = `ビューア編集_会社別集計_${new Date().toISOString().split('T')[0]}.xlsx`;
                 XLSX.writeFile(wb, fileName);
-                showStatus('会社別集計データをエクスポートしました', 'success');
+                showStatus('会社別集計データをダウンロードしました', 'success');
                 
             } catch (error) {
                 console.error('会社別集計エラー:', error);
@@ -1700,62 +1795,43 @@
         }
 
         function generateCompanySummary() {
+            const tableData = getCurrentTableData();
             const companySummary = {};
             
-            employeeData.forEach(emp => {
-                // 出勤者のみを対象
-                if (emp['勤務状況'] === '◯') {
-                    const company = (emp['会社名'] || '').trim();
-                    if (!company) return; // 会社名が空の場合はスキップ
-                    
-                    // 時給と交通費の安全な取得
-                    const hourlyWageStr = emp['時給'] || '0';
-                    const transportationStr = emp['交通費'] || '0';
+            tableData.forEach(emp => {
+                if (emp.isWorking && emp.company.trim()) {
+                    const company = emp.company.trim();
+                    const hourlyWageStr = emp.hourlyWage || '0';
+                    const transportationStr = emp.transportation || '0';
                     
                     const hourlyWage = parseFloat(String(hourlyWageStr).replace(/[^\d.]/g, '')) || 0;
                     const transportation = parseFloat(String(transportationStr).replace(/[^\d.]/g, '')) || 0;
                     
-                    // 初期化
                     if (!companySummary[company]) {
-                        companySummary[company] = { 
-                            hc: 0, 
-                            totalLH: 0, 
-                            totalCost: 0 
-                        };
+                        companySummary[company] = { hc: 0, totalLH: 0, totalCost: 0 };
                     }
                     
                     companySummary[company].hc += 1;
                     
-                    // 時間の計算
-                    const startTime = parseTime(emp['開始時間']);
-                    const endTime = parseTime(emp['終了時間']);
-                    const breakTime = parseTime(emp['休憩']);
+                    const startTime = parseTime(emp.startTime);
+                    const endTime = parseTime(emp.endTime);
+                    const breakTime = parseTime(emp.break);
                     
                     if (startTime !== null && endTime !== null) {
                         const workHours = calculateWorkHours(startTime, endTime, breakTime);
                         const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
-                        const overtimeHours = Math.max(0, workHours - 8); // 8時間超過分
+                        const overtimeHours = Math.max(0, workHours - 8);
                         
                         companySummary[company].totalLH += workHours;
                         
-                        // 費用計算
-                        // 基本給（通常時間分）
                         const regularHours = Math.max(0, workHours - overtimeHours);
                         const baseCost = regularHours * hourlyWage;
-                        
-                        // 残業時間の基本時給
                         const overtimeBaseCost = overtimeHours * hourlyWage;
-                        
-                        // 夜勤手当（22:00-5:00の0.25倍増し）
                         const nightAllowance = nightHours * hourlyWage * 0.25;
-                        
-                        // 残業代（8時間超過分の0.25倍増し）
                         const overtimeAllowance = overtimeHours * hourlyWage * 0.25;
                         
-                        // 総費用
                         companySummary[company].totalCost += baseCost + overtimeBaseCost + nightAllowance + overtimeAllowance + transportation;
                     } else {
-                        // 時間が設定されていない場合は交通費のみ
                         companySummary[company].totalCost += transportation;
                     }
                 }
@@ -1764,31 +1840,70 @@
             return companySummary;
         }
 
-        function clearData() {
-            if (confirm('読み込まれたデータをクリアしますか？')) {
-                employeeData = [];
-                originalEmployeeData = [];
-                workbook = null;
-                shiftTitle = '';
+        function backupData() {
+            if (!shiftData) {
+                showStatus('バックアップするデータがありません', 'error');
+                return;
+            }
+
+            try {
+                const currentData = getCurrentTableData();
+                const backupData = {
+                    originalData: shiftData,
+                    currentData: currentData,
+                    calculations: {
+                        baseUPH: baseUPH,
+                        planValue: planValue,
+                        fcstValue: fcstValue,
+                        isNightShift: isNightShift
+                    },
+                    timestamp: new Date().toISOString(),
+                    version: '1.0'
+                };
+
+                const jsonString = JSON.stringify(backupData, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
                 
-                document.getElementById('dataSummary').classList.add('hidden');
-                document.getElementById('tableContainer').classList.add('hidden');
-                document.getElementById('fileInfo').style.display = 'none';
-                document.getElementById('fileInput').value = '';
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `シフトデータバックアップ_${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
                 
-                showStatus('データをクリアしました', 'success');
+                showStatus('データをバックアップしました', 'success');
+            } catch (error) {
+                console.error('バックアップエラー:', error);
+                showStatus('バックアップに失敗しました: ' + error.message, 'error');
             }
         }
 
-        function showStatus(message, type) {
-            const statusMessage = document.getElementById('statusMessage');
-            statusMessage.textContent = message;
-            statusMessage.className = `status-message ${type} show`;
-            
-            setTimeout(() => {
-                statusMessage.classList.remove('show');
-            }, 3000);
+        function clearData() {
+            if (confirm('すべてのデータをクリアしますか？\nこの操作は元に戻せません。')) {
+                shiftData = null;
+                originalShiftData = [];
+                
+                document.getElementById('calculationPanel').classList.add('hidden');
+                document.getElementById('tableContainer').classList.add('hidden');
+                document.getElementById('welcomeMessage').style.display = 'block';
+                
+                localStorage.removeItem('shiftDataTransfer');
+                localStorage.removeItem('shiftDataTransfer_timestamp');
+                
+                updateStatusIndicator('データをクリアしました', 'warning');
+                showStatus('すべてのデータがクリアされました', 'success');
+            }
         }
+
+        // Error handling
+        window.addEventListener('error', function(e) {
+            console.error('グローバルエラー:', e);
+            updateStatusIndicator('エラー: ' + e.message, 'error');
+        });
+
+        console.log('=== シフトビューア読み込み完了 ===');
     </script>
 </body>
 </html>
