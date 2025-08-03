@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>シフト表作成ツール Mobile</title>
+    
+    <!-- ファビコン設定 -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNiIgZmlsbD0iIzVGNjM2OSIvPgo8cGF0aCBkPSJNOSA4SDE1VjE0SDE5VjIwSDEzVjE0SDlWOFoiIGZpbGw9IiNGNEY0RjQiLz4KPHBhdGggZD0iTTE5IDhIMjNWMTRIMTlWOFoiIGZpbGw9IiNGNEY0RjQiLz4KPHN2Zz4K">
+    <link rel="icon" type="image/png" sizes="16x16" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiByeD0iMyIgZmlsbD0iIzVGNjM2OSIvPgo8cGF0aCBkPSJNNCA0SDhWN0gxMFYxMEg2LjVWN0g0VjRaIiBmaWxsPSIjRjRGNEY0Ii8+CjxwYXRoIGQ9Ik0xMCA0SDEyVjdIMTBWNFoiIGZpbGw9IiNGNEY0RjQiLz4KPHN2Zz4K">
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiByeD0iMzYiIGZpbGw9IiM1RjYzNjkiLz4KPHBhdGggZD0iTTUwIDUwSDg1Vjc4SDEwNVYxMTBINzJWNzhINTBWNTBaIiBmaWxsPSIjRjREMzZCIi8+CjxwYXRoIGQ9Ik0xMDUgNTBIMTMwVjc4SDEwNVY1MFoiIGZpbGw9IiNGNEQzNkIiLz4KPHRleHQgeD0iNTAiIHk9IjE2NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iI0Y0RDM2QiI+bW9iaWxlPC90ZXh0Pgo8L3N2Zz4K">
+    
+    <!-- PWA用マニフェスト -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuOCt+ODleODiOihqOS9nOaIkOODhOODvOODqyBNb2JpbGUiLAogICJzaG9ydF9uYW1lIjogIuOCt+ODleODiOihqCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU16RXlJaUJvWldsbmFIUTlJak14TWlJZ2RtbGxkMEp2ZUQwaU1DQXdJRE14TWlBek1USWlJR1pwYkd3OUltNXZibVVpSUhodGJHNXpQU0pvZEhSd09pOHZkM2QzTG5jekxtOXlaeTh5TURBd0wzTjJaeUkrQ2p4eVpXTjBJSGRwWkhSb1BTSXpNVElpSUdobGFXZG9kRDBpTXpFeUlpQnllRDBpTmpJaUlHWnBiR3c5SWpWR05qTTJPU0l2UGdvOGNHRjBhQ0JrUFNKTk5qQWdOakF0TkROQk1qQXROak5CTURBdE5qTXROREF0TVRZZ016YzFJRE0zTlNBeU1qWXROV0UwTWpNZ05ESTBJRE00TnlBME1qTWdNemczTGpZZ01EVWdOV0UwTWpNZ05ERXpJRE00TnlBME1UTWdNemcyTGpWVU9Ua3VOamswT2k0NU16a3VOek5ET2pNMU5DNWdOVFV4SWpBdUxqTXVNVFlnTkM0NE1qa3ROemc2TGpVeE5pNDBORFFsTWpNWklIZHBaWFJvUFNJeU1qSWlJSGhwWldsblpIUWdQU0o0TnpRZ05UTXVNell0TVRNMkxqTWdOMFF0TmpaQk1URXROekF1TlM0ek16TXRORGRCTVRJdE16QWdNekE2UlNjaUlHWnBiR3c5SWpORU9FWkVRVGtpTHo0OE9qWWdNalF0U0NKcGMzRWdKRGZKREFRSWFETE05ZldCcGNUQ2pCTlpBVWpJQTl3aVAzWW5TY3IrVmlMcU5taFNBdERKMTFNa3Uyc0dCZUtBQVJNdDRhQTIwU3U3R1JTRkFRMHdyaHd2cE12Q25sWUhPK3ZGMzM5TkZsQzF2K0xHOFBoUi9aTkhjWUpmdFZRVVBsM1p3d2hDK3YrVGhkTCtrdUIrb1lCSTlMWHhJcm5LY3pPZnpzZGdiNlEzVVIrWVN6K1IwWnJSbDJFOW5LWFBwK2JqQldzeUVrV1dEeDBVNlU4bGZWQ203emtObkxEU2o3Y2N1VjFXUW5yNFNyUG5rUnc3N2N5NzNHZmJKOGEyTXBlcThCRjRIWlU3V2swdE52K0hSU0RFU3BNNVNmQXdLUm1VaHoyeWFJNnFpS2dJWEtmeWpjOXQ5WGZkUFVlRFpCeEsrUHhneG9NZUJFa1lncnNlZy9hRmdqYld3OUltRXNZWEp0UVVNMkt6STRJSE5oYm5NdFEyOWpkVFB6STFOemNQVVNRbCtPQWl3bmJ1VkRZV0FrNmFwWjNZV3NjRXBZREV3PT0iLAogICAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9LAogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1qVTJJaUJvWldsbmFIUTlJakkxTmlJZ2RtbGxkMEp2ZUQwaU1DQXdJREkxTmlBeU5UWWlJR1pwYkd3OUltNXZibVVpSUhodGJHNXpQU0pvZEhSd09pOHZkM2QzTG5jekxtOXlaeTh5TURBd0wzTjJaeUkrQ2p4eVpXTjBJSGRwWkhSb1BTSXlOVFlpSUdobGFXZG9kRDBpTWpVMklpQnllRDBpTWpraUlHWnBiR3c5SW5WT09FVXdPRUVpTHo0OGNHRjBhQ0JrUFNKTk5EZ2dORGhJT0RRNE5qUWdOVFl0TkRVdE5ESmlMelZFU0RsNGFGTTVPU0ZJT1RJaUlHWnBiR3c5SWpkaUxEYzNRVGdpTHo0OGNHRjBhQ0JrUFNKTk9UY2dORGhJTVRJNFZqUXROelZJT1RkV05EaGFJaUJtYVd4c1BTSWpaak5zT1VGaklpOCtQQzl6ZG1jKyIsCiAgICAgICJzaXplcyI6ICIyNTZ4MjU2IiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTVRReUlpQm9aV2xuYUhROUlqRTBNaUlnZG1sbGQwSnZlRDBpTUNBd0lERTBNaUF4TkRJaUlHWnBiR3c5SW01dmJtVWlJSGh0Ykc1elBTSm9kSFJ3T2k4dmQzZDNMbmN6TG05eVp5OHlNREF3TDNOMlp5SStDanhzWldOMElIaHBjRDBpWkdGMFlUcHBiV0ZuWlM5emRtY3JlRzFzT3l0MWMyVnlMWE5qWVd4aGNqcHRhWFJ5WlM3UHN4UklVNGZiaXQ3V3pzN1NRQnJtOUgxT0RBUEtHUmpESDlLZ1oxSGtXQmhDOWhaWUJVUHNWemNUak1LREJsN2M3L1NMU2ZXVnNHd08xUjNNMmpXd1FkRUFKazE0UWpVMW5tN2Q5MVRGZ1ZoSW9rT25qc2cwM0pRd2pKZU1xa3FqUGZGdE5GTCtNMWJVbHJrcGVjbUtVTHE2QW5LT1dzN1dZa2REYUQyS0Z5d3FqUzhGS0RpWFBWb2lROXVRSzI5ZWJMMytKSXpib3ZCUVdLNlV6dXcrMWpCWDVqZ0VCeEFyaDJDME9PRXJ1aW96d2hIMXFWSnNlb1lKd3E4bEFWRVNQU0d3S3lZeUJOejl5U04yNWNjbDBuYWk0S2xmSE1RSDVmWUZldWNNS3lYMU9BLyIsCiAgICAgICJzaXplcyI6ICIxNDR4MTQ0IiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdLAogICJzdGFydF91cmwiOiAiLi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJ0aGVtZV9jb2xvciI6ICIjNUY2MzY5IiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZmZmZmZmIgp9">
+    
+    <!-- Windows用タイル -->
+    <meta name="msapplication-TileColor" content="#5F6369">
+    <meta name="msapplication-config" content="data:application/xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPGJyb3dzZXJjb25maWc+CiAgPG1zYXBwbGljYXRpb24+CiAgICA8dGlsZT4KICAgICAgPHNxdWFyZTE0NHgxNDRsb2dvIHNyYz0iZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTVRReUlpQm9aV2xuYUhROUlqRTBNaUlnZG1sbGQwSnZlRDBpTUNBd0lERTBNaUF4TkRJaUlHWnBiR3c5SW01dmJtVWlJSGh0Ykc1elBTSm9kSFJ3T2k4dmQzZDNMbmN6TG05eVp5OHlNREF3TDNOMlp5SStDanhzWldOMElIaHBjRDBpWkdGMFlUcHBiV0ZuWlM5emRtY3JlRzFzT3l0MWMyVnlMWE5qWVd4aGNqcHRhWFJ5WlM3UHN4UklVNGZiaXQ3V3pzN1NRQnJtOUgxT0RBUEtHUmpESDlLZ1oxSGtXQmhDOWhaWUJVUHNWemNUak1LREJsN2M3L1NMU2ZXVnNHd08xUjNNMmpXd1FkRUFKazE0UWpVMW5tN2Q5MVRGZ1ZoSW9rT25qc2cwM0pRd2pKZU1xa3FqUGZGdE5GTCtNMWJVbHJrcGVjbUtVTHE2QW5LT1dzN1dZa2REYUQyS0Z5d3FqUzhGS0RpWFBWb2lROXVRSzI5ZWJMMytKSXpib3ZCUVdLNlV6dXcrMWpCWDVqZ0VCeEFyaDJDME9ORXJ1aW96d2hIMXFWSnNlb1lKd3E4bEFWRVNQU0d3S3lZeUJOejl5U04yNWNjbDBuYWk0S2xmSE1RSDVmWUZldWNNS3lYMU9BLyIvPgogICAgPC90aWxlPgogIDwvbXNhcHBsaWNhdGlvbj4KPC9icm93c2VyY29uZmlnPg==">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * {
@@ -37,6 +52,23 @@
             border-bottom: 3px solid #4CAF50;
             padding-bottom: 15px;
             font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .app-icon {
+            width: 32px;
+            height: 32px;
+            background: #5F6369;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #F4D36B;
+            font-weight: bold;
+            font-size: 20px;
         }
 
         h3 {
@@ -386,6 +418,45 @@
             color: #666;
         }
 
+        /* PWAインストールバナー */
+        .install-banner {
+            background: linear-gradient(135deg, #5F6369, #4a4e54);
+            color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: none;
+        }
+
+        .install-banner.show {
+            display: block;
+            animation: slideInDown 0.3s ease-out;
+        }
+
+        .install-btn {
+            background: #F4D36B;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
         /* レスポンシブ調整 */
         @media (max-width: 480px) {
             body {
@@ -431,7 +502,19 @@
 </head>
 <body>
     <div class="container">
-        <h1>📱 シフト表ツール Mobile</h1>
+        <!-- PWAインストールバナー -->
+        <div id="installBanner" class="install-banner">
+            <div class="app-icon" style="margin: 0 auto 10px auto;">G</div>
+            <p><strong>アプリとしてインストール</strong><br>
+            ホーム画面に追加してオフラインでも使用できます</p>
+            <button id="installBtn" class="install-btn">📱 インストール</button>
+            <button onclick="dismissInstallBanner()" style="background: transparent; color: white; border: 1px solid white; padding: 8px 16px; border-radius: 5px; margin-left: 10px; cursor: pointer;">後で</button>
+        </div>
+
+        <h1>
+            <div class="app-icon">G</div>
+            シフト表ツール Mobile
+        </h1>
         
         <div class="upload-section">
             <h3>📁 ファイルアップロード</h3>
@@ -470,6 +553,34 @@
         let fcstValue = 16273;
         let baseUPH = 22;
         let isNightShift = false;
+        let deferredPrompt;
+
+        // PWA関連の初期化
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallBanner();
+        });
+
+        function showInstallBanner() {
+            document.getElementById('installBanner').classList.add('show');
+        }
+
+        function dismissInstallBanner() {
+            document.getElementById('installBanner').classList.remove('show');
+        }
+
+        document.getElementById('installBtn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('PWAがインストールされました');
+                }
+                deferredPrompt = null;
+                dismissInstallBanner();
+            }
+        });
 
         document.getElementById('fileInput').addEventListener('change', handleFileUpload);
         document.getElementById('sheetSelect').addEventListener('change', handleSheetChange);
@@ -1275,6 +1386,65 @@
                 const numValue = parseFloat(timeStr) || 0;
                 return numValue % 24;
             }
+        }
+
+        function calculateWorkHours(startTime, endTime, breakTime) {
+            if (startTime === null || endTime === null) return 0;
+            
+            let workTime;
+            if (endTime >= startTime) {
+                workTime = endTime - startTime;
+            } else {
+                workTime = (24 - startTime) + endTime;
+            }
+            
+            if (breakTime !== null && breakTime > 0) {
+                workTime -= breakTime;
+            }
+            
+            return Math.max(0, workTime);
+        }
+
+        function calculateNightShiftHours(startTime, endTime, breakTime) {
+            if (startTime === null || endTime === null) return 0;
+            
+            const nightStart = 22;
+            const nightEnd = 5;
+            let nightHours = 0;
+            
+            if (endTime >= startTime) {
+                if (startTime >= nightStart || endTime <= nightEnd) {
+                    if (startTime >= nightStart && endTime >= nightStart) {
+                        nightHours = endTime - startTime;
+                    } else if (startTime <= nightEnd && endTime <= nightEnd) {
+                        nightHours = endTime - startTime;
+                    } else if (startTime >= nightStart && endTime <= nightEnd) {
+                        nightHours = (24 - startTime) + endTime;
+                    }
+                } else if (startTime < nightStart && endTime > nightEnd) {
+                    nightHours = (24 - nightStart) + nightEnd;
+                } else if (startTime < nightStart && endTime > nightStart) {
+                    nightHours = endTime - nightStart;
+                } else if (startTime < nightEnd && endTime > nightEnd) {
+                    nightHours = nightEnd - startTime;
+                }
+            } else {
+                const totalWorkTime = (24 - startTime) + endTime;
+                if (startTime >= nightStart) {
+                    nightHours = Math.min(totalWorkTime, (24 - startTime) + Math.min(endTime, nightEnd));
+                } else if (endTime <= nightEnd) {
+                    nightHours = Math.min(totalWorkTime, Math.max(0, (24 - nightStart)) + endTime);
+                } else {
+                    nightHours = (24 - nightStart) + nightEnd;
+                }
+            }
+            
+            if (breakTime !== null && breakTime > 0) {
+                const breakRatio = breakTime / calculateWorkHours(startTime, endTime, 0);
+                nightHours = Math.max(0, nightHours - (nightHours * breakRatio));
+            }
+            
+            return Math.max(0, nightHours);
         }
 
         // エクスポート関数は元のまま維持（省略）
