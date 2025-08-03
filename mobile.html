@@ -131,32 +131,6 @@
             margin-top: 20px;
         }
 
-        .filter-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            flex: 1;
-            padding: 12px 16px;
-            background-color: #f8f9fa;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            min-width: 120px;
-        }
-
-        .filter-btn.active {
-            background-color: #4CAF50;
-            color: white;
-            border-color: #4CAF50;
-        }
-
         .employee-item {
             background-color: #fff;
             border-radius: 12px;
@@ -964,11 +938,6 @@
 
             const listHtml = `
                 <div class="employee-list fade-in">
-                    <div class="filter-controls">
-                        <button class="filter-btn active" onclick="filterEmployees('all')">全員 (${data.length})</button>
-                        <button class="filter-btn" onclick="filterEmployees('working')">出勤 (${workingCount})</button>
-                    </div>
-                    
                     <div class="employee-items" id="employeeItems">
                         ${data.map((emp, index) => `
                             <div class="employee-item ${emp.isWorking ? 'working' : 'not-working'}" data-row-index="${index}">
@@ -1040,26 +1009,6 @@
         }
 
         // 新しいUI用の関数群
-        function filterEmployees(type) {
-            const buttons = document.querySelectorAll('.filter-btn');
-            const items = document.querySelectorAll('.employee-item');
-            
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            items.forEach(item => {
-                if (type === 'all') {
-                    item.style.display = 'block';
-                } else if (type === 'working') {
-                    if (item.classList.contains('working')) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                }
-            });
-        }
-
         function toggleDetails(index) {
             const details = document.getElementById(`details-${index}`);
             if (details.classList.contains('expanded')) {
@@ -1094,9 +1043,6 @@
             // 時間をリセットまたは復元
             handleStatusChangeSimple(index, newStatus, currentStatus);
             updateCalculations();
-            
-            // フィルターボタンの数を更新
-            updateFilterCounts();
         }
 
         function updateField(index, field, value) {
@@ -1128,7 +1074,6 @@
                     item.classList.remove('not-working');
                     item.classList.add('working');
                     showStatus('⚡ 時間が入力されたため、勤務状況を出勤（◯）に変更しました', 'success');
-                    updateFilterCounts();
                 }
             }
             
@@ -1390,7 +1335,6 @@
             
             showStatus('🔄 編集内容をリセットしました', 'success');
             updateCalculations();
-            updateFilterCounts();
         }
 
         // 今日の日付を初期値として設定
