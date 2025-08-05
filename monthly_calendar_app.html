@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>希望シフト表作成・印刷アプリ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Hiragino Sans', 'Meiryo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #FF6B6B, #FF8E8E);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .controls {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .controls-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        select, input {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #FF6B6B;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #FF6B6B, #FF8E8E);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-print {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            color: white;
+        }
+
+        .btn-print:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        .calendar-container {
+            padding: 30px;
+        }
+
+        .shift-header {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #FF6B6B;
+        }
+
+        .shift-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .submission-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .submission-info .info-item {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .handwrite-space {
+            display: inline-block;
+            min-width: 150px;
+            border-bottom: 2px solid #333;
+            margin-left: 10px;
+            height: 1.2em;
+        }
+
+        .calendar {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .calendar th {
+            background: linear-gradient(45deg, #FF6B6B, #FF8E8E);
+            color: white;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        .calendar td {
+            border: 1px solid #ddd;
+            padding: 4px;
+            height: 80px;
+            vertical-align: top;
+            position: relative;
+            background: white;
+            transition: background-color 0.3s;
+        }
+
+        .calendar td:hover:not(.other-month) {
+            background: #ffe0e0;
+        }
+
+        .day-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .day-number {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .handwrite-box {
+            flex: 1;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background: white;
+            min-height: 40px;
+        }
+
+        .other-month {
+            background: #f9f9f9;
+        }
+
+        .other-month .day-number {
+            color: #ccc;
+        }
+
+        .other-month:hover {
+            background: #f9f9f9 !important;
+        }
+
+        .today {
+            background: linear-gradient(135deg, #FFE082, #FFC107);
+        }
+
+        .today .day-number {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .weekend {
+            background: #fff5f5;
+        }
+
+        .sunday .day-number {
+            color: #e74c3c;
+        }
+
+        .saturday .day-number {
+            color: #3498db;
+        }
+
+        /* 印刷用スタイル */
+        @media print {
+            @page {
+                margin: 8mm;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+                font-size: 12px;
+            }
+
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+                max-width: none;
+                width: 100%;
+            }
+
+            .header, .controls {
+                display: none;
+            }
+
+            .calendar-container {
+                padding: 0;
+            }
+
+            .shift-header {
+                margin-bottom: 8px;
+                padding: 6px;
+                background: white !important;
+                border: 2px solid #333;
+                border-radius: 0;
+            }
+
+            .shift-title {
+                font-size: 2.4em;
+                margin-bottom: 8px;
+                text-shadow: none;
+                color: #333 !important;
+                font-weight: bold;
+            }
+
+            .submission-info {
+                font-size: 14px;
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                flex-direction: row !important;
+                width: 100%;
+            }
+
+            .submission-info .info-item {
+                font-size: 14px;
+                display: inline-block !important;
+                flex: none !important;
+            }
+
+            .submission-info .info-item:first-child {
+                text-align: left;
+            }
+
+            .submission-info .info-item:last-child {
+                text-align: right;
+            }
+
+            .handwrite-space {
+                border-bottom: 1px solid #333;
+                min-width: 120px;
+            }
+
+            .calendar {
+                font-size: 10px;
+                border: 2px solid #333;
+                box-shadow: none;
+            }
+
+            .calendar th {
+                background: #f0f0f0 !important;
+                color: #333 !important;
+                padding: 4px 2px;
+                border: 1px solid #333;
+                font-size: 10px;
+            }
+
+            .calendar td {
+                height: 38px;
+                border: 1px solid #333;
+                background: white !important;
+                padding: 2px;
+            }
+
+            .calendar td.other-month {
+                background: #f8f8f8 !important;
+                opacity: 0.6;
+            }
+
+            .handwrite-box {
+                border: 1px solid #666;
+                min-height: 22px;
+                background: white !important;
+            }
+
+            .day-number {
+                font-size: 0.9em;
+                margin-bottom: 1px;
+            }
+
+            .today {
+                background: #f0f0f0 !important;
+            }
+
+            .today .day-number {
+                font-weight: bold !important;
+            }
+
+            .weekend {
+                background: white !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .controls-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .control-group {
+                justify-content: center;
+            }
+
+            .shift-header {
+                padding: 10px;
+            }
+
+            .shift-title {
+                font-size: 1.5em;
+                margin-bottom: 10px;
+            }
+
+            .submission-info {
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .submission-info .info-item {
+                justify-content: center;
+                font-size: 14px;
+            }
+
+            .handwrite-space {
+                min-width: 120px;
+            }
+
+            .calendar {
+                font-size: 12px;
+            }
+
+            .calendar td {
+                height: 60px;
+            }
+
+            .handwrite-box {
+                min-height: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 希望シフト表</h1>
+            <p>作成・印刷アプリ</p>
+        </div>
+
+        <div class="controls">
+            <div class="controls-row">
+                <div class="control-group">
+                    <label for="year">年:</label>
+                    <select id="year"></select>
+                </div>
+                <div class="control-group">
+                    <label for="month">月:</label>
+                    <select id="month">
+                        <option value="0">1月</option>
+                        <option value="1">2月</option>
+                        <option value="2">3月</option>
+                        <option value="3">4月</option>
+                        <option value="4">5月</option>
+                        <option value="5">6月</option>
+                        <option value="6">7月</option>
+                        <option value="7">8月</option>
+                        <option value="8">9月</option>
+                        <option value="9">10月</option>
+                        <option value="10">11月</option>
+                        <option value="11">12月</option>
+                    </select>
+                </div>
+            </div>
+            <div class="controls-row">
+                <div class="control-group">
+                    <label for="submissionDate">提出日:</label>
+                    <input type="date" id="submissionDate">
+                </div>
+            </div>
+            <div class="controls-row">
+                <button class="btn btn-primary" onclick="generateCalendar()">希望シフト表生成</button>
+                <button class="btn btn-print" onclick="printCalendar()">印刷</button>
+            </div>
+        </div>
+
+        <div class="calendar-container">
+            <div class="shift-header">
+                <div class="shift-title" id="calendarTitle">希望シフト表</div>
+                <div class="submission-info">
+                    <div class="info-item">
+                        氏名: <span class="handwrite-space"></span>
+                    </div>
+                    <div class="info-item">
+                        提出日: <span id="displaySubmissionDate">___________________</span>
+                    </div>
+                </div>
+            </div>
+            <table class="calendar" id="calendar">
+                <thead>
+                    <tr>
+                        <th class="sunday">日</th>
+                        <th>月</th>
+                        <th>火</th>
+                        <th>水</th>
+                        <th>木</th>
+                        <th>金</th>
+                        <th class="saturday">土</th>
+                    </tr>
+                </thead>
+                <tbody id="calendarBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // 年の選択肢を生成
+        function populateYears() {
+            const yearSelect = document.getElementById('year');
+            const currentYear = new Date().getFullYear();
+            
+            for (let year = currentYear - 2; year <= currentYear + 5; year++) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year + '年';
+                if (year === currentYear) {
+                    option.selected = true;
+                }
+                yearSelect.appendChild(option);
+            }
+        }
+
+        // 提出日を選択した月の10日に設定
+        function setDefaultSubmissionDate() {
+            const year = parseInt(document.getElementById('year').value);
+            const month = parseInt(document.getElementById('month').value);
+            const dateString = year + '-' + 
+                             String(month + 1).padStart(2, '0') + '-' + 
+                             '10';
+            document.getElementById('submissionDate').value = dateString;
+        }
+
+        // 日付のフォーマット関数
+        function formatDate(dateString) {
+            if (!dateString) return '___________________';
+            
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            
+            return `${year}年${month}月${day}日`;
+        }
+
+        // カレンダー生成
+        function generateCalendar() {
+            const year = parseInt(document.getElementById('year').value);
+            const month = parseInt(document.getElementById('month').value);
+            const submissionDate = document.getElementById('submissionDate').value;
+            
+            // タイトル設定
+            const title = `希望シフト表 - ${year}年 ${month + 1}月`;
+            document.getElementById('calendarTitle').textContent = title;
+            
+            // 提出日を日本語形式で表示
+            document.getElementById('displaySubmissionDate').textContent = formatDate(submissionDate);
+            
+            // カレンダー本体を生成
+            const calendarBody = document.getElementById('calendarBody');
+            calendarBody.innerHTML = '';
+            
+            // 月の最初の日と最後の日を取得
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay(); // 0=日曜日
+            
+            // 前月の日数
+            const prevMonth = new Date(year, month, 0);
+            const daysInPrevMonth = prevMonth.getDate();
+            
+            // 今日の日付
+            const today = new Date();
+            const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
+            const todayDate = today.getDate();
+            
+            let currentDate = 1;
+            let nextMonthDate = 1;
+            
+            // 必要な週数を計算（最低5週、最大6週）
+            const totalCells = startingDayOfWeek + daysInMonth;
+            const weeksNeeded = Math.ceil(totalCells / 7);
+            
+            // カレンダーを生成
+            for (let week = 0; week < weeksNeeded; week++) {
+                const row = document.createElement('tr');
+                
+                for (let day = 0; day < 7; day++) {
+                    const cell = document.createElement('td');
+                    const dayContent = document.createElement('div');
+                    dayContent.className = 'day-content';
+                    
+                    const dayNumber = document.createElement('div');
+                    dayNumber.className = 'day-number';
+                    
+                    const handwriteBox = document.createElement('div');
+                    handwriteBox.className = 'handwrite-box';
+                    
+                    // 日付の配置を決定
+                    if (week === 0 && day < startingDayOfWeek) {
+                        // 前月の日付
+                        const prevMonthDay = daysInPrevMonth - startingDayOfWeek + day + 1;
+                        dayNumber.textContent = prevMonthDay;
+                        cell.classList.add('other-month');
+                    } else if (currentDate > daysInMonth) {
+                        // 次月の日付
+                        dayNumber.textContent = nextMonthDate++;
+                        cell.classList.add('other-month');
+                    } else {
+                        // 当月の日付
+                        dayNumber.textContent = currentDate;
+                        
+                        // 今日をハイライト
+                        if (isCurrentMonth && currentDate === todayDate) {
+                            cell.classList.add('today');
+                        }
+                        
+                        currentDate++;
+                    }
+                    
+                    // 週末のスタイル
+                    if (day === 0) { // 日曜日
+                        dayNumber.classList.add('sunday');
+                        if (!cell.classList.contains('other-month')) {
+                            cell.classList.add('weekend');
+                        }
+                    } else if (day === 6) { // 土曜日
+                        dayNumber.classList.add('saturday');
+                        if (!cell.classList.contains('other-month')) {
+                            cell.classList.add('weekend');
+                        }
+                    }
+                    
+                    dayContent.appendChild(dayNumber);
+                    dayContent.appendChild(handwriteBox);
+                    cell.appendChild(dayContent);
+                    row.appendChild(cell);
+                }
+                
+                calendarBody.appendChild(row);
+            }
+        }
+
+        // 印刷機能
+        function printCalendar() {
+            // 印刷前に少し待機してレンダリングを確実にする
+            setTimeout(() => {
+                window.print();
+            }, 100);
+        }
+
+        // 初期化
+        function init() {
+            populateYears();
+            
+            // 現在の月を選択
+            const currentMonth = new Date().getMonth();
+            document.getElementById('month').value = currentMonth;
+            
+            // 提出日を設定
+            setDefaultSubmissionDate();
+            
+            // 年月変更時に提出日も更新
+            document.getElementById('year').addEventListener('change', setDefaultSubmissionDate);
+            document.getElementById('month').addEventListener('change', setDefaultSubmissionDate);
+            
+            // 初期カレンダーを生成
+            generateCalendar();
+        }
+
+        // ページ読み込み時に初期化
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
