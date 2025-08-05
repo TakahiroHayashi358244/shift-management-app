@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#2196F3">
-    <title>詳細データ復元ビューア v1.0</title>
+    <title>詳細データ復元ビューア v1.1</title>
     
     <!-- Excel読み込み用ライブラリ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -835,7 +835,7 @@
                     <div class="logo">📊</div>
                     <div>
                         <h1 class="title">詳細データ復元ビューア</h1>
-                        <p class="subtitle">エクスポートされたExcelファイルを読み込んで編集・管理</p>
+                        <p class="subtitle">エクスポートされたExcelファイルを読み込んで編集・管理（v1.1会社別集計改良版）</p>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -908,7 +908,7 @@
                     📊 編集データをエクスポート
                 </button>
                 <button class="action-btn success" onclick="exportCompanySummary()">
-                    📈 会社別集計
+                    📈 会社別集計（v1.1改良版）
                 </button>
                 <button class="action-btn danger" onclick="clearData()">
                     🔄 データクリア
@@ -931,6 +931,7 @@
         let originalEmployeeData = [];
         let shiftTitle = '';
         let isNightShift = false;
+        let allCompanies = []; // 全会社リスト
 
         // App initialization
         document.addEventListener('DOMContentLoaded', function() {
@@ -962,6 +963,9 @@
                         originalEmployeeData = JSON.parse(JSON.stringify(employeeData));
                         shiftTitle = transferData.shiftTitle || 'シフトデータ';
                         isNightShift = transferData.isNightShift || false;
+                        
+                        // 全会社リストを抽出
+                        extractAllCompanies(employeeData);
                         
                         // ファイルアップロードセクションを非表示
                         const uploadContainer = document.querySelector('.step-container');
@@ -1034,6 +1038,42 @@
                     container.scrollIntoView({ behavior: 'smooth' });
                 }
             });
+        }
+
+        // 全会社リストを抽出する関数
+        function extractAllCompanies(data) {
+            const companiesSet = new Set();
+            
+            const excludeKeywords = [
+                'PLAN', 'FCST', 'UPH', 'HC', 'LH', 
+                '出勤HC', '出勤LH', '必要LH', '過不足', 'HC換算',
+                '夜勤手当', '残業手当', '総費用', '平均単価',
+                '実績UPH', '基準UPH', 'FCST数量', 'PLAN数量'
+            ];
+            
+            data.forEach(emp => {
+                const companyName = emp['会社名'] ? emp['会社名'].trim() : '';
+                
+                // 除外キーワードをチェック
+                const shouldExclude = excludeKeywords.some(keyword => 
+                    companyName.includes(keyword)
+                );
+                
+                if (shouldExclude) return;
+                if (!companyName) return;
+                if (/^\d+$/.test(companyName)) return; // 数字のみは除外
+                
+                companiesSet.add(companyName);
+            });
+            
+            // Gworkerを最初に、その後はアルファベット順・あいうえお順でソート
+            allCompanies = Array.from(companiesSet).sort((a, b) => {
+                if (a === 'Gworker') return -1;
+                if (b === 'Gworker') return 1;
+                return a.localeCompare(b, 'ja');
+            });
+            
+            console.log('抽出された全会社リスト:', allCompanies);
         }
 
         // Theme management
@@ -1238,6 +1278,9 @@
 
             // オリジナルデータのバックアップを作成
             originalEmployeeData = JSON.parse(JSON.stringify(employeeData));
+
+            // 全会社リストを抽出
+            extractAllCompanies(employeeData);
 
             // UI更新
             displayData();
@@ -1780,7 +1823,7 @@
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, '編集済みデータ');
                 
-                const fileName = `${shiftTitle.replace(/[^\w\d]/g, '_')}_編集済み.xlsx`;
+                const fileName = `${shiftTitle.replace(/[^\w\d]/g, '_')}_編集済み_v1.1.xlsx`;
                 XLSX.writeFile(wb, fileName);
                 
                 showStatus('編集データをエクスポートしました', 'success');
@@ -1795,28 +1838,26 @@
                 return;
             }
 
+            if (!allCompanies || allCompanies.length === 0) {
+                showStatus('会社リストが抽出されていません', 'error');
+                return;
+            }
+
             try {
                 const companySummary = generateCompanySummary();
-                if (!companySummary || Object.keys(companySummary).length === 0) {
-                    showStatus('集計データがありません', 'error');
-                    return;
-                }
-
+                
                 const data = [];
                 data.push([shiftTitle + ' 会社別集計']);
                 data.push([]);
                 
                 // HC集計
                 data.push(['HC（人数）集計']);
-                const sortedByHC = Object.entries(companySummary).sort((a, b) => {
-                    if (a[0] === 'Gworker') return -1;
-                    if (b[0] === 'Gworker') return 1;
-                    return b[1].hc - a[1].hc;
-                });
-                
                 data.push(['会社名', 'HC']);
-                sortedByHC.forEach(([company, summary]) => {
-                    data.push([company, summary.hc]);
+                
+                // 全会社を固定順序で出力
+                allCompanies.forEach(company => {
+                    const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
+                    data.push([company, summary.hc || '']);
                 });
                 
                 const totalHC = Object.values(companySummary).reduce((sum, s) => sum + s.hc, 0);
@@ -1826,8 +1867,10 @@
                 // LH集計
                 data.push(['LH（労働時間）集計']);
                 data.push(['会社名', 'LH']);
-                sortedByHC.forEach(([company, summary]) => {
-                    data.push([company, Math.round(summary.totalLH * 10) / 10]); // 小数点1位まで
+                allCompanies.forEach(company => {
+                    const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
+                    const lh = summary.totalLH || 0;
+                    data.push([company, lh > 0 ? Math.round(lh * 10) / 10 : '']); // 小数点1位まで
                 });
                 
                 const totalLH = Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0);
@@ -1837,8 +1880,10 @@
                 // 経費集計
                 data.push(['経費集計（手当込み）']);
                 data.push(['会社名', '総費用（円）']);
-                sortedByHC.forEach(([company, summary]) => {
-                    data.push([company, Math.round(summary.totalCost)]);
+                allCompanies.forEach(company => {
+                    const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
+                    const cost = summary.totalCost || 0;
+                    data.push([company, cost > 0 ? Math.round(cost) : '']);
                 });
                 
                 const totalCost = Object.values(companySummary).reduce((sum, s) => sum + s.totalCost, 0);
@@ -1848,8 +1893,9 @@
                 // 平均時給集計
                 data.push(['平均時給集計']);
                 data.push(['会社名', '平均時給（円/時）']);
-                sortedByHC.forEach(([company, summary]) => {
-                    const avgHourlyRate = summary.totalLH > 0 ? Math.round(summary.totalCost / summary.totalLH) : 0;
+                allCompanies.forEach(company => {
+                    const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
+                    const avgHourlyRate = summary.totalLH > 0 ? Math.round(summary.totalCost / summary.totalLH) : '';
                     data.push([company, avgHourlyRate]);
                 });
                 
@@ -1867,9 +1913,9 @@
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, '会社別集計');
                 
-                const fileName = `${shiftTitle.replace(/[^\w\d]/g, '_')}_会社別集計.xlsx`;
+                const fileName = `${shiftTitle.replace(/[^\w\d]/g, '_')}_会社別集計_v1.1.xlsx`;
                 XLSX.writeFile(wb, fileName);
-                showStatus('会社別集計データをエクスポートしました', 'success');
+                showStatus('会社別集計データ（v1.1改良版）をエクスポートしました', 'success');
                 
             } catch (error) {
                 console.error('会社別集計エラー:', error);
@@ -1946,6 +1992,7 @@
             if (confirm('読み込まれたデータをクリアしますか？')) {
                 employeeData = [];
                 originalEmployeeData = [];
+                allCompanies = [];
                 workbook = null;
                 shiftTitle = '';
                 
