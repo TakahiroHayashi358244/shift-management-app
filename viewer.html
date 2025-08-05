@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#667eea">
-    <title>シフトデータビューア v1.0 - 編集・分析対応</title>
+    <title>シフトデータビューア v1.1 - 編集・分析対応</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
@@ -126,8 +126,6 @@
             transform: scale(1.05);
             background: var(--surface);
         }
-
-
 
         .main-content {
             background: var(--glass);
@@ -491,6 +489,18 @@
             transform: translateX(0);
         }
 
+        .status-message.status-success {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+        }
+
+        .status-message.status-error {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+
+        .status-message.status-warning {
+            background: linear-gradient(45deg, #FF9800, #FFC107);
+        }
+
         .hidden {
             display: none !important;
         }
@@ -622,7 +632,7 @@
                     <div class="logo">📊</div>
                     <div>
                         <h1 class="title">シフトデータビューア</h1>
-                        <p class="subtitle">Professional Shift Viewer v1.0 - 編集・分析対応</p>
+                        <p class="subtitle">Professional Shift Viewer v1.1 - 編集・分析対応（会社別集計改良版）</p>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -632,8 +642,6 @@
                 </div>
             </div>
         </header>
-
-
 
         <!-- Main Content -->
         <div class="main-content" id="mainContent">
@@ -695,6 +703,15 @@
                             • 両方対応で確実なデータ転送を実現
                         </div>
                     </div>
+                    <div style="margin-top: 20px; padding: 16px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1)); border-radius: 12px; border: 1px solid var(--border);">
+                        <h4 style="color: var(--text-primary); margin-bottom: 8px;">🎯 v1.1 新機能</h4>
+                        <div style="font-size: 0.9rem; line-height: 1.4;">
+                            <strong>会社別集計の改良</strong><br>
+                            • 全会社を固定順序で表示<br>
+                            • 出勤していない会社は空白で表示<br>
+                            • 日別比較が容易に
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -711,6 +728,7 @@
         let fcstValue = 16273;
         let isNightShift = false;
         let originalShiftData = [];
+        let allCompanies = []; // 全会社リスト
 
         // App initialization
         document.addEventListener('DOMContentLoaded', function() {
@@ -818,6 +836,9 @@
 
             originalShiftData = JSON.parse(JSON.stringify(convertedData));
 
+            // 全会社リストを抽出
+            extractAllCompanies(convertedData);
+
             // Hide welcome message and show data
             document.getElementById('welcomeMessage').style.display = 'none';
             document.getElementById('calculationPanel').classList.remove('hidden');
@@ -835,6 +856,42 @@
 
             updateStatusIndicator(`データ表示完了 (${convertedData.length}件)`, 'success');
             showStatus('シフトデータが正常に読み込まれました', 'success');
+        }
+
+        // 全会社リストを抽出する関数
+        function extractAllCompanies(data) {
+            const companiesSet = new Set();
+            
+            const excludeKeywords = [
+                'PLAN', 'FCST', 'UPH', 'HC', 'LH', 
+                '出勤HC', '出勤LH', '必要LH', '過不足', 'HC換算',
+                '夜勤手当', '残業手当', '総費用', '平均単価',
+                '実績UPH', '基準UPH', 'FCST数量', 'PLAN数量'
+            ];
+            
+            data.forEach(emp => {
+                const companyName = emp.company ? emp.company.trim() : '';
+                
+                // 除外キーワードをチェック
+                const shouldExclude = excludeKeywords.some(keyword => 
+                    companyName.includes(keyword)
+                );
+                
+                if (shouldExclude) return;
+                if (!companyName) return;
+                if (/^\d+$/.test(companyName)) return; // 数字のみは除外
+                
+                companiesSet.add(companyName);
+            });
+            
+            // Gworkerを最初に、その後はアルファベット順・あいうえお順でソート
+            allCompanies = Array.from(companiesSet).sort((a, b) => {
+                if (a === 'Gworker') return -1;
+                if (b === 'Gworker') return 1;
+                return a.localeCompare(b, 'ja');
+            });
+            
+            console.log('抽出された全会社リスト:', allCompanies);
         }
 
         // Update status indicator (now just console logging)
@@ -1739,13 +1796,13 @@
                 return;
             }
 
+            if (!allCompanies || allCompanies.length === 0) {
+                showStatus('会社リストが抽出されていません', 'error');
+                return;
+            }
+
             try {
                 const companySummary = generateCompanySummary();
-                if (!companySummary || Object.keys(companySummary).length === 0) {
-                    showStatus('集計データがありません', 'error');
-                    return;
-                }
-
                 const shiftTitle = document.getElementById('shiftTitle').textContent || 'シフト表';
 
                 const data = [];
@@ -1754,13 +1811,10 @@
                 data.push([]);
                 
                 data.push(['HC']);
-                const sortedByHC = Object.entries(companySummary).sort((a, b) => {
-                    if (a[0] === 'Gworker') return -1;
-                    if (b[0] === 'Gworker') return 1;
-                    return b[1].hc - a[1].hc;
-                });
-                sortedByHC.forEach(([company, summary]) => {
-                    data.push([company, summary.hc]);
+                // 全会社を固定順序で出力
+                allCompanies.forEach(company => {
+                    const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
+                    data.push([company, summary.hc || '']);
                 });
                 
                 const totalHC = Object.values(companySummary).reduce((sum, s) => sum + s.hc, 0);
@@ -1768,15 +1822,19 @@
                 data.push([]);
                 
                 data.push(['経費']);
-                sortedByHC.forEach(([company, summary]) => {
-                    data.push([company, Math.round(summary.totalCost)]);
+                allCompanies.forEach(company => {
+                    const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
+                    const cost = summary.totalCost || 0;
+                    data.push([company, cost > 0 ? Math.round(cost) : '']);
                 });
                 data.push(['', Math.round(Object.values(companySummary).reduce((sum, s) => sum + s.totalCost, 0))]);
                 data.push([]);
                 
                 data.push(['LH']);
-                sortedByHC.forEach(([company, summary]) => {
-                    data.push([company, Math.round(summary.totalLH)]);
+                allCompanies.forEach(company => {
+                    const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
+                    const lh = summary.totalLH || 0;
+                    data.push([company, lh > 0 ? Math.round(lh) : '']);
                 });
                 data.push(['', Math.round(Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0))]);
 
@@ -1858,8 +1916,9 @@
                         fcstValue: fcstValue,
                         isNightShift: isNightShift
                     },
+                    allCompanies: allCompanies,
                     timestamp: new Date().toISOString(),
-                    version: '1.0'
+                    version: '1.1'
                 };
 
                 const jsonString = JSON.stringify(backupData, null, 2);
@@ -1868,7 +1927,7 @@
                 
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `シフトデータバックアップ_${new Date().toISOString().split('T')[0]}.json`;
+                a.download = `シフトデータバックアップ_v1.1_${new Date().toISOString().split('T')[0]}.json`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -1885,6 +1944,7 @@
             if (confirm('すべてのデータをクリアしますか？\nこの操作は元に戻せません。')) {
                 shiftData = null;
                 originalShiftData = [];
+                allCompanies = [];
                 
                 document.getElementById('calculationPanel').classList.add('hidden');
                 document.getElementById('tableContainer').classList.add('hidden');
@@ -1904,7 +1964,7 @@
             updateStatusIndicator('エラー: ' + e.message, 'error');
         });
 
-        console.log('=== シフトビューア読み込み完了 ===');
+        console.log('=== シフトビューア v1.1 読み込み完了 ===');
     </script>
 </body>
 </html>
