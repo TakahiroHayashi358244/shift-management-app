@@ -632,7 +632,7 @@
                     <div class="logo">📊</div>
                     <div>
                         <h1 class="title">シフトデータビューア</h1>
-                        <p class="subtitle">Professional Shift Viewer v1.1 - 編集・分析対応（会社別集計改良版）</p>
+                        <p class="subtitle">Professional Shift Viewer v1.1 - 編集・分析対応（時給・交通費非表示版）</p>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -704,12 +704,12 @@
                         </div>
                     </div>
                     <div style="margin-top: 20px; padding: 16px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1)); border-radius: 12px; border: 1px solid var(--border);">
-                        <h4 style="color: var(--text-primary); margin-bottom: 8px;">🎯 v1.1 新機能</h4>
+                        <h4 style="color: var(--text-primary); margin-bottom: 8px;">🔒 セキュリティ対応</h4>
                         <div style="font-size: 0.9rem; line-height: 1.4;">
-                            <strong>会社別集計の改良</strong><br>
-                            • 全会社を固定順序で表示<br>
-                            • 出勤していない会社は空白で表示<br>
-                            • 日別比較が容易に
+                            <strong>時給・交通費の非表示化</strong><br>
+                            • 一覧表示では給与情報を非表示<br>
+                            • データは内部的に完全保持<br>
+                            • エクスポート時は全データ含む
                         </div>
                     </div>
                 </div>
@@ -1049,7 +1049,8 @@
         function updateTable(data) {
             const table = document.getElementById('shiftTable');
             
-            const headers = ['会社名', '時間帯', 'メイン業務', '氏名', '性別', '時給', '交通費', '開始時間', '終了時間', '休憩', '勤務状況', '勤務LH', '夜勤H', '残業H', '操作'];
+            // 時給と交通費を一覧表示では非表示に（データは保持）
+            const headers = ['会社名', '時間帯', 'メイン業務', '氏名', '性別', '開始時間', '終了時間', '休憩', '勤務状況', '勤務LH', '夜勤H', '残業H', '操作'];
             
             let tableHTML = '<thead><tr>';
             headers.forEach(header => {
@@ -1083,8 +1084,6 @@
                         <td class="editable-cell" contenteditable="true" data-field="mainJob">${emp.mainJob}</td>
                         <td class="editable-cell" contenteditable="true" data-field="name">${emp.name}</td>
                         <td class="editable-cell" contenteditable="true" data-field="gender">${emp.gender}</td>
-                        <td class="editable-cell" contenteditable="true" data-field="hourlyWage">${emp.hourlyWage}</td>
-                        <td class="editable-cell" contenteditable="true" data-field="transportation">${emp.transportation}</td>
                         <td class="editable-cell time-cell" contenteditable="true" data-field="startTime">${emp.startTime}</td>
                         <td class="editable-cell time-cell" contenteditable="true" data-field="endTime">${emp.endTime}</td>
                         <td class="editable-cell time-cell" contenteditable="true" data-field="break">${emp.break}</td>
@@ -1096,6 +1095,9 @@
                             <button class="row-reset-btn" onclick="resetRow(${index})" title="この行をリセット">↺</button>
                             <button class="row-confirm-btn" onclick="confirmRow(${index})" title="この行を確定">✓</button>
                         </td>
+                        <!-- 時給と交通費は非表示だが、データとして保持 -->
+                        <td style="display: none;" class="editable-cell" contenteditable="true" data-field="hourlyWage">${emp.hourlyWage}</td>
+                        <td style="display: none;" class="editable-cell" contenteditable="true" data-field="transportation">${emp.transportation}</td>
                     </tr>
                 `;
             });
@@ -1351,12 +1353,12 @@
                     mainJob: getData(2),
                     name: getData(3),
                     gender: getData(4),
-                    hourlyWage: getData(5),
-                    transportation: getData(6),
-                    startTime: getData(7),
-                    endTime: getData(8),
-                    break: getData(9),
+                    startTime: getData(5),      // 列位置変更: 7 → 5
+                    endTime: getData(6),        // 列位置変更: 8 → 6
+                    break: getData(7),          // 列位置変更: 9 → 7
                     status: status,
+                    hourlyWage: getData(13),    // 非表示列: 5 → 13
+                    transportation: getData(14), // 非表示列: 6 → 14
                     isWorking: status === '◯'
                 });
             });
@@ -1384,9 +1386,9 @@
                 const overtimeHours = emp.isWorking ? Math.max(0, workHours - 8) : 0;
                 
                 const cells = row.querySelectorAll('td');
-                if (cells[11]) cells[11].textContent = workHours > 0 ? workHours.toFixed(2) : '';
-                if (cells[12]) cells[12].textContent = nightHours > 0 ? nightHours.toFixed(2) : '';
-                if (cells[13]) cells[13].textContent = overtimeHours > 0 ? overtimeHours.toFixed(2) : '';
+                if (cells[9]) cells[9].textContent = workHours > 0 ? workHours.toFixed(2) : '';     // 勤務LH: 11 → 9
+                if (cells[10]) cells[10].textContent = nightHours > 0 ? nightHours.toFixed(2) : ''; // 夜勤H: 12 → 10
+                if (cells[11]) cells[11].textContent = overtimeHours > 0 ? overtimeHours.toFixed(2) : ''; // 残業H: 13 → 11
             });
         }
 
@@ -1426,8 +1428,6 @@
                     <td class="editable-cell" contenteditable="true" data-field="mainJob">${newEmployee.mainJob}</td>
                     <td class="editable-cell" contenteditable="true" data-field="name">${newEmployee.name}</td>
                     <td class="editable-cell" contenteditable="true" data-field="gender">${newEmployee.gender}</td>
-                    <td class="editable-cell" contenteditable="true" data-field="hourlyWage">${newEmployee.hourlyWage}</td>
-                    <td class="editable-cell" contenteditable="true" data-field="transportation">${newEmployee.transportation}</td>
                     <td class="editable-cell time-cell" contenteditable="true" data-field="startTime">${newEmployee.startTime}</td>
                     <td class="editable-cell time-cell" contenteditable="true" data-field="endTime">${newEmployee.endTime}</td>
                     <td class="editable-cell time-cell" contenteditable="true" data-field="break">${newEmployee.break}</td>
@@ -1439,6 +1439,9 @@
                         <button class="row-reset-btn" onclick="resetRow(${newIndex})" title="この行をリセット">↺</button>
                         <button class="row-confirm-btn" onclick="confirmRow(${newIndex})" title="この行を確定">✓</button>
                     </td>
+                    <!-- 時給と交通費は非表示だが、データとして保持 -->
+                    <td style="display: none;" class="editable-cell" contenteditable="true" data-field="hourlyWage">${newEmployee.hourlyWage}</td>
+                    <td style="display: none;" class="editable-cell" contenteditable="true" data-field="transportation">${newEmployee.transportation}</td>
                 </tr>
             `;
             
@@ -1964,7 +1967,7 @@
             updateStatusIndicator('エラー: ' + e.message, 'error');
         });
 
-        console.log('=== シフトビューア v1.1 読み込み完了 ===');
+        console.log('=== シフトビューア v1.1 読み込み完了（時給・交通費非表示対応）===');
     </script>
 </body>
 </html>
