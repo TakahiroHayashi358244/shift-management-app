@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#2196F3">
-    <meta name="description" content="プロフェッショナルシフト管理アプリ - Excel連携・基準UPH自動抽出対応">
-    <title>シフト管理プロ v4.1 - 完全版（基準UPH自動抽出）</title>
+    <meta name="description" content="プロフェッショナルシフト管理アプリ - Excel連携・基準UPH自動抽出・キャッシュ機能対応">
+    <title>シフト管理プロ v4.2 - 完全版（キャッシュ機能・基準UPH自動抽出）</title>
     
     <!-- PWA用のアイコンとメタデータ -->
     <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9IiMyMTk2RjMiIHJ4PSI0Ii8+PHBhdGggZD0iTTYgOWgxMnYySDE2em0wIDRoMTJ2MkgxNnptMC00aDEyVjlIMTZ6IiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==">
-    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFJklEQVR4nO3d0W4TMRRF0fH//5TyQKnUqI7tmdzeaxFVtO3c2bPGnknSdd33fQBHffrXCwBnCQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQ9hdNHBXz0j6qYwAAAABJRU5ErkJggg==">
+    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFJklEQVR4nO3d0W4TMRRF0fH//5TyQKnUqI7tmdzeaxFVtO3c2bPGnknSdd33fQBHffrXCwBnCQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQJgCECQBhAkCYABAmAIQJAGECQJgAECYAhAkAYQJAmAAQ9hdNHBXz0j6qYwAAAABJRU5ErkJggg==">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -30,6 +30,9 @@
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             --glass: rgba(255, 255, 255, 0.25);
             --glass-border: rgba(255, 255, 255, 0.18);
+            --cache-success: #4CAF50;
+            --cache-warning: #FF9800;
+            --cache-error: #f44336;
         }
 
         [data-theme="dark"] {
@@ -48,15 +51,15 @@
             color: white;
             border: none;
             border-radius: 12px;
-            padding: 12px 20px;
+            padding: 10px 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-left: 8px;
+            gap: 6px;
+            font-size: 0.85rem;
         }
 
         .viewer-app-btn:hover {
@@ -135,6 +138,35 @@
             display: flex;
             gap: 12px;
             align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .cache-status {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 8px 12px;
+        }
+
+        .cache-clear-btn {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #f44336;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+        }
+
+        .cache-clear-btn:hover {
+            background: rgba(244, 67, 54, 0.2);
+            transform: scale(1.05);
         }
 
         .theme-toggle {
@@ -219,6 +251,7 @@
             color: var(--text-secondary);
             font-size: 0.95rem;
             margin-top: 4px;
+            line-height: 1.5;
         }
 
         .upload-zone {
@@ -240,6 +273,11 @@
             transform: translateY(-2px);
         }
 
+        .upload-zone.cached {
+            border-color: var(--cache-success);
+            background: linear-gradient(45deg, rgba(76, 175, 80, 0.05), rgba(139, 195, 74, 0.05));
+        }
+
         .upload-icon {
             font-size: 3rem;
             color: var(--primary-color);
@@ -257,6 +295,7 @@
         .upload-hint {
             color: var(--text-secondary);
             font-size: 0.9rem;
+            line-height: 1.4;
         }
 
         .file-input {
@@ -762,6 +801,7 @@
             transform: translateX(100%);
             transition: all 0.3s ease;
             box-shadow: var(--shadow);
+            max-width: 300px;
         }
 
         .status-message.show {
@@ -774,6 +814,10 @@
 
         .status-message.error {
             background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+
+        .status-message.warning {
+            background: linear-gradient(45deg, var(--accent-color), #F57C00);
         }
 
         .hidden {
@@ -867,6 +911,10 @@
                 text-align: center;
             }
 
+            .header-actions {
+                justify-content: center;
+            }
+
             .logo {
                 font-size: 2rem;
             }
@@ -930,6 +978,16 @@
             .action-cell {
                 width: 80px;
             }
+
+            .viewer-app-btn {
+                font-size: 0.8rem;
+                padding: 8px 12px;
+            }
+
+            .cache-status {
+                font-size: 0.75rem;
+                padding: 6px 10px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -940,6 +998,16 @@
 
             .calc-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .header-actions {
+                flex-direction: column;
+                width: 100%;
+                align-items: stretch;
+            }
+
+            .viewer-app-btn {
+                justify-content: center;
             }
         }
 
@@ -954,7 +1022,8 @@
             .install-btn,
             .theme-toggle,
             .row-reset-btn,
-            .row-confirm-btn {
+            .row-confirm-btn,
+            .cache-status {
                 display: none;
             }
 
@@ -975,17 +1044,19 @@
                     <div class="logo">📊</div>
                     <div>
                         <h1 class="title">シフト管理プロ</h1>
-                        <p class="subtitle">Professional Shift Management v4.1 完全版（基準UPH自動抽出）</p>
+                        <p class="subtitle">Professional Shift Management v4.2 完全版（キャッシュ機能・基準UPH自動抽出）</p>
                     </div>
                 </div>
                 <div class="header-actions">
+                    <div class="cache-status" id="cacheStatus">
+                        <span style="color: var(--text-secondary);">📁 キャッシュなし</span>
+                    </div>
                     <button class="theme-toggle" onclick="toggleTheme()" title="ダークモード切替">
                         <span id="themeIcon">🌙</span>
                     </button>
-                        <a href="./monthly_calendar_app.html" target="_blank" class="viewer-app-btn" style="background: linear-gradient(45deg, #4CAF50, #8BC34A);">
-                            📅 希望シフト表
-                        </a>    
-                    </button>
+                    <a href="./monthly_calendar_app.html" target="_blank" class="viewer-app-btn" style="background: linear-gradient(45deg, #4CAF50, #8BC34A);">
+                        📅 希望シフト表
+                    </a>    
                     <a href="./fukugen.html" target="_blank" class="viewer-app-btn">
                         📊 詳細データ復元
                     </a>
@@ -1004,9 +1075,10 @@
             <div class="step-header">
                 <div class="step-number">1</div>
                 <div>
-                    <h2 class="step-title">Excelファイルをアップロード</h2>
+                    <h2 class="step-title">Excelファイルをアップロード / キャッシュから復元</h2>
                     <p class="step-description">月間シフト表のExcelファイル（.xlsx/.xls）をドラッグ＆ドロップまたはクリックして選択<br>
                     📈 基準UPHが自動的に検出され、日付に応じて反映されます<br>
+                    💾 ファイルデータは自動でキャッシュされ、次回アクセス時に復元されます（7日間有効）<br>
                     ⚠️ 会社名が空白の行は自動的に除外されます</p>
                 </div>
             </div>
@@ -1014,7 +1086,8 @@
             <div class="upload-zone" id="uploadZone">
                 <div class="upload-icon">📁</div>
                 <div class="upload-text">ファイルをドラッグ＆ドロップ</div>
-                <div class="upload-hint">または、クリックしてファイルを選択してください</div>
+                <div class="upload-hint">または、クリックしてファイルを選択してください<br>
+                <small style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 8px; display: block;">💾 ファイルは自動でキャッシュされます（7日間有効・4.5MB以下）</small></div>
                 <input type="file" class="file-input" id="fileInput" accept=".xlsx,.xls">
             </div>
             
@@ -1135,6 +1208,7 @@
         let deferredPrompt = null;
         let isUPHAutoExtracted = false;
         let allCompanies = [];
+        let cachedFileName = null;
 
         // App initialization
         document.addEventListener('DOMContentLoaded', function() {
@@ -1143,522 +1217,6 @@
             setupPWA();
         });
 
-        function exportToExcel() {
-            if (!document.querySelector('.shift-table')) {
-                showStatus('エクスポートするデータがありません', 'error');
-                return;
-            }
-
-            try {
-                const targetDate = document.getElementById('targetDate').value;
-                const selectedSheet = document.getElementById('sheetSelect').value;
-                const dateObj = new Date(targetDate);
-                const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日 ${selectedSheet}シフト表`;
-
-                const data = [];
-                data.push([formattedDate]);
-                data.push([`基準UPH: ${baseUPH} ${isUPHAutoExtracted ? '(自動抽出)' : '(手動設定)'}`]);
-                data.push([]);
-
-                const headers = ['会社名', '時間帯', 'メイン業務', '氏名', '性別', '時給', '交通費', '開始時間', '終了時間', '休憩', '勤務状況', '勤務LH', '夜勤時間', '残業時間'];
-                data.push(headers);
-
-                const tableData = getCurrentTableData();
-                tableData.forEach(emp => {
-                    const startTime = parseTime(emp.startTime);
-                    const endTime = parseTime(emp.endTime);
-                    const breakTime = parseTime(emp.break);
-                    
-                    const workHours = emp.isWorking && startTime !== null && endTime !== null ? 
-                        calculateWorkHours(startTime, endTime, breakTime) : 0;
-                    const nightHours = emp.isWorking && startTime !== null && endTime !== null ? 
-                        calculateNightShiftHours(startTime, endTime, breakTime) : 0;
-                    const overtimeHours = emp.isWorking ? Math.max(0, workHours - 8) : 0;
-                    
-                    data.push([
-                        emp.company, emp.timeSlot, emp.mainJob, emp.name, emp.gender,
-                        emp.hourlyWage, emp.transportation, emp.startTime, emp.endTime,
-                        emp.break, emp.status, 
-                        workHours > 0 ? workHours.toFixed(2) : '',
-                        nightHours > 0 ? nightHours.toFixed(2) : '',
-                        overtimeHours > 0 ? overtimeHours.toFixed(2) : ''
-                    ]);
-                });
-
-                const ws = XLSX.utils.aoa_to_sheet(data);
-                ws['!cols'] = [
-                    { width: 15 }, { width: 10 }, { width: 12 }, { width: 15 }, { width: 8 }, { width: 10 },
-                    { width: 12 }, { width: 10 }, { width: 10 }, { width: 8 }, { width: 10 }, { width: 10 }, { width: 10 }, { width: 10 }
-                ];
-
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, '詳細データ');
-                
-                const fileName = targetDate ? `${targetDate}_${selectedSheet}_詳細データ.xlsx` : `${selectedSheet}_詳細データ.xlsx`;
-                XLSX.writeFile(wb, fileName);
-                showStatus('詳細データをダウンロードしました', 'success');
-                
-            } catch (error) {
-                console.error('エクスポートエラー:', error);
-                showStatus('エクスポートに失敗しました: ' + error.message, 'error');
-            }
-        }
-
-        function exportCompanySummary() {
-            if (!document.querySelector('.shift-table')) {
-                showStatus('エクスポートするデータがありません', 'error');
-                return;
-            }
-
-            if (!allCompanies || allCompanies.length === 0) {
-                showStatus('会社リストが抽出されていません', 'error');
-                return;
-            }
-
-            try {
-                const companySummary = generateCompanySummary();
-                
-                const targetDate = document.getElementById('targetDate').value;
-                const selectedSheet = document.getElementById('sheetSelect').value;
-                const dateObj = new Date(targetDate);
-                const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日 ${selectedSheet}`;
-
-                const data = [];
-                data.push([formattedDate + ' 会社別集計']);
-                data.push([`基準UPH: ${baseUPH} ${isUPHAutoExtracted ? '(自動抽出)' : '(手動設定)'}`]);
-                data.push([]);
-                
-                data.push(['HC']);
-                // 全会社を固定順序で出力
-                allCompanies.forEach(company => {
-                    const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
-                    data.push([company, summary.hc || '']);
-                });
-                
-                const totalHC = Object.values(companySummary).reduce((sum, s) => sum + s.hc, 0);
-                data.push(['', totalHC]);
-                data.push([]);
-                
-                data.push(['経費']);
-                allCompanies.forEach(company => {
-                    const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
-                    const cost = summary.totalCost || 0;
-                    data.push([company, cost > 0 ? Math.round(cost) : '']);
-                });
-                data.push(['', Math.round(Object.values(companySummary).reduce((sum, s) => sum + s.totalCost, 0))]);
-                data.push([]);
-                
-                data.push(['LH']);
-                allCompanies.forEach(company => {
-                    const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
-                    const lh = summary.totalLH || 0;
-                    data.push([company, lh > 0 ? Math.round(lh) : '']);
-                });
-                data.push(['', Math.round(Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0))]);
-
-                const ws = XLSX.utils.aoa_to_sheet(data);
-                ws['!cols'] = [{ width: 15 }, { width: 12 }];
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, '会社別集計');
-                
-                const fileName = targetDate ? `${targetDate}_${selectedSheet}_会社別集計.xlsx` : `${selectedSheet}_会社別集計.xlsx`;
-                XLSX.writeFile(wb, fileName);
-                showStatus('会社別集計データをダウンロードしました', 'success');
-                
-            } catch (error) {
-                console.error('会社別集計エラー:', error);
-                showStatus('会社別集計エクスポートに失敗しました: ' + error.message, 'error');
-            }
-        }
-
-        function generateCompanySummary() {
-            const tableData = getCurrentTableData();
-            const companySummary = {};
-            
-            tableData.forEach(emp => {
-                if (emp.isWorking && emp.company.trim()) {
-                    const company = emp.company.trim();
-                    const hourlyWageStr = emp.hourlyWage || '0';
-                    const transportationStr = emp.transportation || '0';
-                    
-                    const hourlyWage = parseFloat(String(hourlyWageStr).replace(/[^\d.]/g, '')) || 0;
-                    const transportation = parseFloat(String(transportationStr).replace(/[^\d.]/g, '')) || 0;
-                    
-                    if (!companySummary[company]) {
-                        companySummary[company] = { hc: 0, totalLH: 0, totalCost: 0 };
-                    }
-                    
-                    companySummary[company].hc += 1;
-                    
-                    const startTime = parseTime(emp.startTime);
-                    const endTime = parseTime(emp.endTime);
-                    const breakTime = parseTime(emp.break);
-                    
-                    if (startTime !== null && endTime !== null) {
-                        const workHours = calculateWorkHours(startTime, endTime, breakTime);
-                        const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
-                        const overtimeHours = Math.max(0, workHours - 8);
-                        
-                        companySummary[company].totalLH += workHours;
-                        
-                        const regularHours = Math.max(0, workHours - overtimeHours);
-                        const baseCost = regularHours * hourlyWage;
-                        const overtimeBaseCost = overtimeHours * hourlyWage;
-                        const nightAllowance = nightHours * hourlyWage * 0.25;
-                        const overtimeAllowance = overtimeHours * hourlyWage * 0.25;
-                        
-                        companySummary[company].totalCost += baseCost + overtimeBaseCost + nightAllowance + overtimeAllowance + transportation;
-                    } else {
-                        companySummary[company].totalCost += transportation;
-                    }
-                }
-            });
-            
-            return companySummary;
-        }
-
-        function exportCombinedSummary() {
-            if (!workbook) {
-                showStatus('Excelファイルが読み込まれていません', 'error');
-                return;
-            }
-
-            if (!allCompanies || allCompanies.length === 0) {
-                showStatus('会社リストが抽出されていません', 'error');
-                return;
-            }
-
-            const hasDay = workbook.SheetNames.includes('日勤');
-            const hasNight = workbook.SheetNames.includes('夜勤');
-            
-            if (!hasDay && !hasNight) {
-                showStatus('日勤・夜勤シートが見つかりません', 'error');
-                return;
-            }
-
-            try {
-                const companySummary = generateCombinedCompanySummary();
-
-                const targetDate = document.getElementById('targetDate').value;
-                const dateObj = new Date(targetDate);
-                const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日`;
-
-                const data = [];
-                data.push([formattedDate + ' 日勤+夜勤合算集計']);
-                
-                const availableShifts = [];
-                if (hasDay) availableShifts.push('日勤');
-                if (hasNight) availableShifts.push('夜勤');
-                data.push([`対象シフト: ${availableShifts.join('・')}`]);
-                data.push([`基準UPH: ${baseUPH} ${isUPHAutoExtracted ? '(自動抽出)' : '(手動設定)'}`]);
-                data.push([]);
-                
-                data.push(['HC', '', '日勤', '夜勤', '合計']);
-                // 全会社を固定順序で出力
-                allCompanies.forEach(company => {
-                    const summary = companySummary[company] || { 
-                        hc: 0, totalLH: 0, totalCost: 0, 
-                        dayShiftHC: 0, nightShiftHC: 0 
-                    };
-                    data.push([
-                        company, 
-                        '', 
-                        summary.dayShiftHC || '', 
-                        summary.nightShiftHC || '', 
-                        summary.hc || ''
-                    ]);
-                });
-                
-                const totalHC = Object.values(companySummary).reduce((sum, s) => sum + s.hc, 0);
-                const totalDayHC = Object.values(companySummary).reduce((sum, s) => sum + (s.dayShiftHC || 0), 0);
-                const totalNightHC = Object.values(companySummary).reduce((sum, s) => sum + (s.nightShiftHC || 0), 0);
-                data.push(['合計', '', totalDayHC, totalNightHC, totalHC]);
-                data.push([]);
-                
-                data.push(['経費']);
-                allCompanies.forEach(company => {
-                    const summary = companySummary[company] || { 
-                        hc: 0, totalLH: 0, totalCost: 0, 
-                        dayShiftHC: 0, nightShiftHC: 0 
-                    };
-                    const cost = summary.totalCost || 0;
-                    data.push([company, cost > 0 ? Math.round(cost) : '']);
-                });
-                data.push(['合計', Math.round(Object.values(companySummary).reduce((sum, s) => sum + s.totalCost, 0))]);
-                data.push([]);
-                
-                data.push(['LH']);
-                allCompanies.forEach(company => {
-                    const summary = companySummary[company] || { 
-                        hc: 0, totalLH: 0, totalCost: 0, 
-                        dayShiftHC: 0, nightShiftHC: 0 
-                    };
-                    const lh = summary.totalLH || 0;
-                    data.push([company, lh > 0 ? Math.round(lh) : '']);
-                });
-                data.push(['合計', Math.round(Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0))]);
-
-                const ws = XLSX.utils.aoa_to_sheet(data);
-                ws['!cols'] = [{ width: 15 }, { width: 8 }, { width: 8 }, { width: 8 }, { width: 10 }];
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, '日勤夜勤合算集計');
-                
-                const fileName = targetDate ? `${targetDate}_日勤夜勤合算集計.xlsx` : '日勤夜勤合算集計.xlsx';
-                XLSX.writeFile(wb, fileName);
-                showStatus('日勤+夜勤合算集計データをダウンロードしました', 'success');
-                
-            } catch (error) {
-                console.error('合算集計エラー:', error);
-                showStatus('合算集計エクスポートに失敗しました: ' + error.message, 'error');
-            }
-        }
-
-        function generateCombinedCompanySummary() {
-            const targetDateStr = document.getElementById('targetDate').value;
-            if (!targetDateStr || !workbook) return null;
-
-            const targetDate = new Date(targetDateStr);
-            const companySummary = {};
-            
-            const shiftsToProcess = ['日勤', '夜勤'];
-            
-            shiftsToProcess.forEach(sheetName => {
-                if (!workbook.SheetNames.includes(sheetName)) return;
-                
-                try {
-                    const worksheet = workbook.Sheets[sheetName];
-                    const sheetData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                    
-                    if (!sheetData || sheetData.length < 2) return;
-                    
-                    const headerRow = sheetData[0];
-                    const sheetDateColumns = [];
-                    
-                    headerRow.forEach((cell, index) => {
-                        if (typeof cell === 'number' && cell >= 45000) {
-                            const excelDate = new Date((cell - 25569) * 86400 * 1000);
-                            sheetDateColumns.push({
-                                index: index,
-                                excelValue: cell,
-                                date: excelDate
-                            });
-                        }
-                    });
-                    
-                    let targetColumnIndex = -1;
-                    let minDiff = Infinity;
-                    
-                    sheetDateColumns.forEach(col => {
-                        const diff = Math.abs(col.date.getTime() - targetDate.getTime());
-                        if (diff < minDiff) {
-                            minDiff = diff;
-                            targetColumnIndex = col.index;
-                        }
-                    });
-                    
-                    if (targetColumnIndex === -1) return;
-                    
-                    const excludeKeywords = [
-                        'PLAN', 'FCST', 'UPH', 'HC', 'LH', 
-                        '出勤HC', '出勤LH', '必要LH', '過不足', 'HC換算',
-                        '夜勤手当', '残業手当', '総費用', '平均単価',
-                        '実績UPH', '基準UPH', 'FCST数量', 'PLAN数量'
-                    ];
-                    
-                    for (let i = 1; i < sheetData.length; i++) {
-                        const row = sheetData[i];
-                        if (!row || row.length === 0) continue;
-                        
-                        const employeeData = {
-                            company: row[0] != null ? String(row[0]) : '',
-                            timeSlot: row[1] != null ? String(row[1]) : '',
-                            mainJob: row[2] != null ? String(row[2]) : '',
-                            name: row[3] != null ? String(row[3]) : '',
-                            gender: row[4] != null ? String(row[4]) : '',
-                            hourlyWage: row[5] != null ? String(row[5]) : '',
-                            transportation: row[6] != null ? String(row[6]) : '',
-                            startTime: row[7] != null ? String(row[7]) : '',
-                            endTime: row[8] != null ? String(row[8]) : '',
-                            break: row[9] != null ? String(row[9]) : '',
-                            status: row[targetColumnIndex] != null ? String(row[targetColumnIndex]) : ''
-                        };
-                        
-                        const shouldExclude = excludeKeywords.some(keyword => {
-                            return employeeData.company.includes(keyword) ||
-                                   employeeData.timeSlot.includes(keyword) ||
-                                   employeeData.mainJob.includes(keyword) ||
-                                   employeeData.name.includes(keyword) ||
-                                   employeeData.gender.includes(keyword);
-                        });
-                        
-                        if (shouldExclude) continue;
-                        if (!employeeData.company.trim()) continue;
-                        if (!employeeData.name.trim() && !employeeData.company.trim()) continue;
-                        if (employeeData.name.trim() && /^\d+$/.test(employeeData.name.trim())) continue;
-                        
-                        if (employeeData.status === '◯') {
-                            const company = employeeData.company.trim();
-                            const hourlyWageStr = employeeData.hourlyWage || '0';
-                            const transportationStr = employeeData.transportation || '0';
-                            
-                            const hourlyWage = parseFloat(String(hourlyWageStr).replace(/[^\d.]/g, '')) || 0;
-                            const transportation = parseFloat(String(transportationStr).replace(/[^\d.]/g, '')) || 0;
-                            
-                            if (!companySummary[company]) {
-                                companySummary[company] = {
-                                    hc: 0, totalLH: 0, totalCost: 0,
-                                    dayShiftHC: 0, nightShiftHC: 0
-                                };
-                            }
-                            
-                            companySummary[company].hc += 1;
-                            
-                            if (sheetName === '夜勤') {
-                                companySummary[company].nightShiftHC += 1;
-                            } else {
-                                companySummary[company].dayShiftHC += 1;
-                            }
-                            
-                            const startTime = parseTime(employeeData.startTime);
-                            const endTime = parseTime(employeeData.endTime);
-                            const breakTime = parseTime(employeeData.break);
-                            
-                            if (startTime !== null && endTime !== null) {
-                                const isCurrentNightShift = sheetName === '夜勤';
-                                const workHours = calculateWorkHoursForSheet(startTime, endTime, breakTime, isCurrentNightShift);
-                                const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
-                                const overtimeHours = Math.max(0, workHours - 8);
-                                
-                                companySummary[company].totalLH += workHours;
-                                
-                                const regularHours = Math.max(0, workHours - overtimeHours);
-                                const baseCost = regularHours * hourlyWage;
-                                const overtimeBaseCost = overtimeHours * hourlyWage;
-                                const nightAllowance = nightHours * hourlyWage * 0.25;
-                                const overtimeAllowance = overtimeHours * hourlyWage * 0.25;
-                                
-                                companySummary[company].totalCost += baseCost + overtimeBaseCost + nightAllowance + overtimeAllowance + transportation;
-                            } else {
-                                companySummary[company].totalCost += transportation;
-                            }
-                        }
-                    }
-                } catch (error) {
-                    console.error(`${sheetName}シートの処理エラー:`, error);
-                }
-            });
-            
-            return companySummary;
-        }
-
-        function calculateWorkHoursForSheet(startTime, endTime, breakTime, isNightShift) {
-            if (startTime === null || endTime === null) {
-                return 0;
-            }
-            
-            let workHours;
-            
-            if (isNightShift) {
-                if (endTime < startTime) {
-                    workHours = (24 + endTime) - startTime;
-                } else {
-                    workHours = endTime - startTime;
-                }
-            } else {
-                if (endTime < startTime) {
-                    workHours = endTime - startTime + 24;
-                } else {
-                    workHours = endTime - startTime;
-                }
-            }
-            
-            if (breakTime !== null && breakTime > 0) {
-                workHours -= breakTime;
-            }
-            
-            return Math.max(0, workHours);
-        }
-
-        function resetData() {
-            if (confirm('すべてのデータをリセットしますか？')) {
-                document.body.style.opacity = '0.5';
-                setTimeout(() => {
-                    location.reload();
-                }, 300);
-            }
-        }
-
-        function testViewerConnection() {
-            console.log('=== ビューア接続テスト開始 ===');
-            
-            const testData = {
-                employeeData: [
-                    {
-                        '会社名': 'テスト会社A',
-                        '時間帯': '日勤',
-                        'メイン業務': 'テスト業務',
-                        '氏名': 'テスト太郎',
-                        '性別': '男',
-                        '時給': '1000',
-                        '交通費': '500',
-                        '開始時間': '9:00',
-                        '終了時間': '18:00',
-                        '休憩': '1:00',
-                        '勤務状況': '◯',
-                        '勤務LH': '8.00',
-                        '夜勤時間': '0.00',
-                        '残業時間': '0.00'
-                    }
-                ],
-                shiftTitle: 'テストシフト表 - ' + new Date().toLocaleString('ja-JP'),
-                isNightShift: false,
-                baseUPH: 25,
-                planValue: 15000,
-                fcstValue: 18000,
-                transferTimestamp: Date.now()
-            };
-
-            console.log('テストデータ:', testData);
-
-            const isFileProtocol = window.location.protocol === 'file:';
-            
-            if (isFileProtocol) {
-                try {
-                    localStorage.setItem('shiftDataTransfer', JSON.stringify(testData));
-                    localStorage.setItem('shiftDataTransfer_timestamp', Date.now().toString());
-                    console.log('file://プロトコル: localStorageにテストデータを保存');
-                } catch (error) {
-                    console.error('localStorage保存エラー:', error);
-                    showStatus('localStorageへの保存に失敗しました', 'error');
-                    return;
-                }
-            } else {
-                localStorage.setItem('shiftDataTransfer', JSON.stringify(testData));
-            }
-            
-            const viewerWindow = window.open('./viewer.html', '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
-            
-            if (!viewerWindow) {
-                showStatus('ポップアップがブロックされました', 'error');
-                return;
-            }
-
-            setTimeout(() => {
-                try {
-                    viewerWindow.postMessage({
-                        type: 'SHIFT_DATA_TRANSFER',
-                        data: testData
-                    }, '*');
-                    console.log('PostMessageでテストデータを送信');
-                } catch (error) {
-                    console.error('PostMessage送信エラー:', error);
-                }
-            }, 1000);
-
-            showStatus('テストデータでビューアを開きました', 'success');
-            console.log('=== ビューア接続テスト完了 ===');
-        }
-
         function initializeApp() {
             document.getElementById('targetDate').value = new Date().toISOString().split('T')[0];
             setupFileUpload();
@@ -1666,10 +1224,171 @@
             document.getElementById('targetDate').addEventListener('change', handleDateChange);
             loadTheme();
             cleanupOldTransferData();
+            
+            // キャッシュデータの復元を試行
+            loadCachedData();
+            
             if (window.location.protocol === 'file:') {
                 setTimeout(showFileProtocolWarning, 2000);
             }
             showStatus('アプリが準備完了しました', 'success');
+        }
+
+        // キャッシュ管理機能
+        function saveToCache(file) {
+            try {
+                const cacheData = {
+                    fileName: file.name,
+                    fileSize: file.size,
+                    workbookSheetNames: workbook.SheetNames,
+                    timestamp: Date.now(),
+                    version: '4.2'
+                };
+                
+                // 各シートのデータを保存
+                const sheetsData = {};
+                workbook.SheetNames.forEach(sheetName => {
+                    if (['日勤', '夜勤'].includes(sheetName)) {
+                        const worksheet = workbook.Sheets[sheetName];
+                        sheetsData[sheetName] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    }
+                });
+                cacheData.sheetsData = sheetsData;
+                
+                const cacheSize = JSON.stringify(cacheData).length;
+                if (cacheSize > 4.5 * 1024 * 1024) { // 4.5MB制限
+                    showStatus('ファイルが大きすぎるためキャッシュできません（4.5MB制限）', 'warning');
+                    return false;
+                }
+                
+                localStorage.setItem('shiftFileCache', JSON.stringify(cacheData));
+                console.log(`ファイルをキャッシュに保存しました (${formatFileSize(cacheSize)})`);
+                
+                updateCacheStatus(true, file.name, file.size);
+                return true;
+                
+            } catch (error) {
+                console.error('キャッシュ保存エラー:', error);
+                showStatus('キャッシュの保存に失敗しました', 'error');
+                return false;
+            }
+        }
+
+        function loadCachedData() {
+            try {
+                const cachedData = localStorage.getItem('shiftFileCache');
+                if (!cachedData) {
+                    updateCacheStatus(false);
+                    return false;
+                }
+                
+                const cacheData = JSON.parse(cachedData);
+                
+                // キャッシュの有効期限チェック（7日間）
+                const cacheAge = Date.now() - cacheData.timestamp;
+                const maxAge = 7 * 24 * 60 * 60 * 1000; // 7日間
+                
+                if (cacheAge > maxAge) {
+                    localStorage.removeItem('shiftFileCache');
+                    updateCacheStatus(false);
+                    showStatus('キャッシュデータの有効期限が切れています（7日間）', 'warning');
+                    return false;
+                }
+                
+                // バージョンチェック
+                if (cacheData.version !== '4.2') {
+                    localStorage.removeItem('shiftFileCache');
+                    updateCacheStatus(false);
+                    showStatus('アプリが更新されたためキャッシュをクリアしました', 'warning');
+                    return false;
+                }
+                
+                // キャッシュからワークブックを復元
+                workbook = { SheetNames: cacheData.workbookSheetNames, Sheets: {} };
+                
+                Object.keys(cacheData.sheetsData).forEach(sheetName => {
+                    const sheetData = cacheData.sheetsData[sheetName];
+                    workbook.Sheets[sheetName] = XLSX.utils.aoa_to_sheet(sheetData);
+                });
+                
+                cachedFileName = cacheData.fileName;
+                
+                // UIを更新
+                const remainingDays = Math.ceil((maxAge - cacheAge) / (24 * 60 * 60 * 1000));
+                document.getElementById('fileName').textContent = `🔄 ${cacheData.fileName} (キャッシュから復元・残り${remainingDays}日)`;
+                document.getElementById('fileInfo').style.display = 'block';
+                
+                const uploadZone = document.getElementById('uploadZone');
+                uploadZone.classList.add('cached');
+                uploadZone.querySelector('.upload-icon').textContent = '💾';
+                uploadZone.querySelector('.upload-text').textContent = 'キャッシュから復元済み';
+                uploadZone.querySelector('.upload-hint').innerHTML = `${cacheData.fileName}<br><small style="color: var(--cache-success);">新しいファイルをアップロードすると上書きされます</small>`;
+                
+                setupSheetSelection();
+                updateCacheStatus(true, cacheData.fileName, cacheData.fileSize);
+                
+                const cacheAgeText = cacheAge < 60000 ? '今' : 
+                                   cacheAge < 3600000 ? `${Math.floor(cacheAge / 60000)}分前` :
+                                   cacheAge < 86400000 ? `${Math.floor(cacheAge / 3600000)}時間前` :
+                                   `${Math.floor(cacheAge / 86400000)}日前`;
+                
+                showStatus(`キャッシュデータを復元しました（${cacheAgeText}に保存）`, 'success');
+                console.log('キャッシュからファイルデータを復元しました:', cacheData);
+                
+                return true;
+                
+            } catch (error) {
+                console.error('キャッシュ読み込みエラー:', error);
+                localStorage.removeItem('shiftFileCache');
+                updateCacheStatus(false);
+                return false;
+            }
+        }
+
+        function clearCache() {
+            if (confirm('キャッシュデータをクリアしますか？\n次回はファイルを再度アップロードする必要があります。')) {
+                localStorage.removeItem('shiftFileCache');
+                updateCacheStatus(false);
+                showStatus('キャッシュをクリアしました', 'success');
+                
+                // データもリセット
+                workbook = null;
+                workbookData = null;
+                dateColumns = [];
+                originalShiftData = [];
+                cachedFileName = null;
+                
+                // UIをリセット
+                document.getElementById('fileName').textContent = '';
+                document.getElementById('fileInfo').style.display = 'none';
+                document.getElementById('sheetSection').style.display = 'none';
+                document.getElementById('resultsContainer').style.display = 'none';
+                document.getElementById('generateBtn').disabled = true;
+                
+                const uploadZone = document.getElementById('uploadZone');
+                uploadZone.classList.remove('cached');
+                uploadZone.querySelector('.upload-icon').textContent = '📁';
+                uploadZone.querySelector('.upload-text').textContent = 'ファイルをドラッグ＆ドロップ';
+                uploadZone.querySelector('.upload-hint').innerHTML = 'または、クリックしてファイルを選択してください<br><small style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 8px; display: block;">💾 ファイルは自動でキャッシュされます（7日間有効・4.5MB以下）</small>';
+            }
+        }
+
+        function updateCacheStatus(hasCache, fileName = '', fileSize = 0) {
+            const cacheStatusElement = document.getElementById('cacheStatus');
+            
+            if (hasCache) {
+                const shortName = fileName.length > 20 ? fileName.substring(0, 17) + '...' : fileName;
+                cacheStatusElement.innerHTML = `
+                    <span style="color: var(--cache-success);">💾 ${shortName}</span>
+                    <button onclick="clearCache()" 
+                            class="cache-clear-btn"
+                            title="キャッシュをクリア">🗑️</button>
+                `;
+            } else {
+                cacheStatusElement.innerHTML = `
+                    <span style="color: var(--text-secondary);">📁 キャッシュなし</span>
+                `;
+            }
         }
 
         function showFileProtocolWarning() {
@@ -1716,42 +1435,56 @@
             }, 15000);
         }
 
+        function showServerInstructions() {
+            const instructions = `
+🚀 ローカルWebサーバーの起動方法
+
+【Python（推奨）】
+1. ファイルがあるフォルダでコマンドプロンプト/ターミナルを開く
+2. 実行: python3 -m http.server 8000
+3. ブラウザで: http://localhost:8000
+
+【Node.js】
+1. 実行: npx http-server
+2. ブラウザで: http://localhost:8080
+
+【VS Code】
+1. Live Server拡張機能をインストール
+2. HTMLファイルを右クリック → "Open with Live Server"
+
+【PHP】
+1. 実行: php -S localhost:8000
+2. ブラウザで: http://localhost:8000
+
+サーバー起動後、http://localhost:8000/index.html にアクセスしてください。
+`;
+            
+            alert(instructions);
+        }
+
         function cleanupOldTransferData() {
             try {
                 const storedData = localStorage.getItem('shiftDataTransfer');
                 if (storedData) {
                     const transferData = JSON.parse(storedData);
                     const currentTime = Date.now();
-                    const dataAge = currentTime - transferData.transferTimestamp;
-                    if (dataAge > 300000) {
+                    const dataAge = currentTime - (transferData.transferTimestamp || 0);
+                    if (dataAge > 300000) { // 5分以上経過
                         localStorage.removeItem('shiftDataTransfer');
+                        localStorage.removeItem('shiftDataTransfer_timestamp');
                         console.log('古い転送データをクリーンアップしました');
                     }
                 }
             } catch (error) {
                 localStorage.removeItem('shiftDataTransfer');
-            }
-        }
-
-        function handleDateChange() {
-            if (workbookData && dateColumns.length > 0) {
-                extractPlanValue();
-                extractFcstValue();
-                extractBaseUPH();
-                if (document.getElementById('resultsContainer').style.display !== 'none') {
-                    const currentData = getCurrentTableData();
-                    if (currentData && currentData.length > 0) {
-                        updateCalculations(currentData);
-                        showStatus(`日付変更に伴い基準UPH: ${baseUPH} に更新されました`, 'success');
-                    }
-                }
+                localStorage.removeItem('shiftDataTransfer_timestamp');
             }
         }
 
         function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('data:application/javascript;base64,' + btoa(`
-                    const CACHE_NAME = 'shift-app-v4-1';
+                    const CACHE_NAME = 'shift-app-v4-2';
                     const urlsToCache = ['/'];
                     
                     self.addEventListener('install', event => {
@@ -1867,32 +1600,17 @@
                 showStatus('Excelファイル（.xlsx/.xls）を選択してください', 'error');
                 return;
             }
+            
+            // ファイルサイズチェック（20MB制限）
+            if (file.size > 20 * 1024 * 1024) {
+                showStatus('ファイルサイズが大きすぎます（20MB制限）', 'error');
+                return;
+            }
+            
             showProgress(true);
             setTimeout(() => {
                 processFile(file);
             }, 100);
-        }
-
-        function showProgress(show, progress = 0) {
-            const container = document.getElementById('progressContainer');
-            const fill = document.getElementById('progressFill');
-            const text = document.getElementById('progressText');
-            
-            if (show) {
-                container.style.display = 'block';
-                fill.style.width = progress + '%';
-                if (progress === 0) {
-                    text.textContent = 'ファイルを読み込み中...';
-                } else if (progress < 50) {
-                    text.textContent = 'データを解析中...';
-                } else if (progress < 90) {
-                    text.textContent = 'シート情報を取得中...';
-                } else {
-                    text.textContent = '処理完了';
-                }
-            } else {
-                container.style.display = 'none';
-            }
         }
 
         function processFile(file) {
@@ -1910,18 +1628,59 @@
                     showProgress(true, 90);
                     const data = new Uint8Array(e.target.result);
                     workbook = XLSX.read(data, { type: 'array' });
-                    document.getElementById('fileName').textContent = `✅ ${file.name} (${formatFileSize(file.size)})`;
+                    cachedFileName = file.name;
+                    
+                    // ファイルデータをキャッシュに保存
+                    const cacheSuccess = saveToCache(file);
+                    
+                    document.getElementById('fileName').textContent = `✅ ${file.name} (${formatFileSize(file.size)})${cacheSuccess ? ' - キャッシュ保存済' : ' - キャッシュ未保存'}`;
                     document.getElementById('fileInfo').style.display = 'block';
+                    
                     setupSheetSelection();
                     showProgress(false);
-                    showStatus('ファイルが正常に読み込まれました', 'success');
+                    
+                    const successMessage = cacheSuccess ? 
+                        'ファイルが正常に読み込まれ、キャッシュに保存されました' : 
+                        'ファイルが正常に読み込まれました（キャッシュは未保存）';
+                    
+                    showStatus(successMessage, 'success');
+                    
                 } catch (error) {
                     showProgress(false);
                     showStatus('ファイルの読み込みに失敗しました: ' + error.message, 'error');
                 }
             };
             
+            reader.onerror = function() {
+                showProgress(false);
+                showStatus('ファイルの読み込み中にエラーが発生しました', 'error');
+            };
+            
             reader.readAsArrayBuffer(file);
+        }
+
+        function showProgress(show, progress = 0) {
+            const container = document.getElementById('progressContainer');
+            const fill = document.getElementById('progressFill');
+            const text = document.getElementById('progressText');
+            
+            if (show) {
+                container.style.display = 'block';
+                fill.style.width = progress + '%';
+                if (progress === 0) {
+                    text.textContent = 'ファイルを読み込み中...';
+                } else if (progress < 30) {
+                    text.textContent = 'データを解析中...';
+                } else if (progress < 60) {
+                    text.textContent = 'シート情報を取得中...';
+                } else if (progress < 90) {
+                    text.textContent = 'キャッシュに保存中...';
+                } else {
+                    text.textContent = '処理完了';
+                }
+            } else {
+                container.style.display = 'none';
+            }
         }
 
         function formatFileSize(bytes) {
@@ -2039,6 +1798,21 @@
             } catch (error) {
                 showStatus('シートの読み込みに失敗しました: ' + error.message, 'error');
                 document.getElementById('generateBtn').disabled = true;
+            }
+        }
+
+        function handleDateChange() {
+            if (workbookData && dateColumns.length > 0) {
+                extractPlanValue();
+                extractFcstValue();
+                extractBaseUPH();
+                if (document.getElementById('resultsContainer').style.display !== 'none') {
+                    const currentData = getCurrentTableData();
+                    if (currentData && currentData.length > 0) {
+                        updateCalculations(currentData);
+                        showStatus(`日付変更に伴い基準UPH: ${baseUPH} に更新されました`, 'success');
+                    }
+                }
             }
         }
 
@@ -2489,7 +2263,6 @@
         function updateTable(data) {
             const table = document.getElementById('shiftTable');
             
-            // 時給と交通費を一覧表示では非表示に（データは保持）
             const headers = ['会社名', '時間帯', 'メイン業務', '氏名', '性別', '開始時間', '終了時間', '休憩', '勤務状況', '勤務LH', '夜勤H', '残業H', '操作'];
             
             let tableHTML = '<thead><tr>';
@@ -2778,64 +2551,6 @@
             }
         }
 
-        function getCurrentTableData() {
-            const rows = document.querySelectorAll('#shiftTable tbody tr');
-            const data = [];
-            
-            rows.forEach(row => {
-                const cells = row.querySelectorAll('td');
-                const statusSelect = row.querySelector('.status-select');
-                const status = statusSelect ? statusSelect.value : '';
-                
-                const getData = (index) => {
-                    return cells[index] ? cells[index].textContent.trim() : '';
-                };
-                
-                data.push({
-                    company: getData(0),
-                    timeSlot: getData(1),
-                    mainJob: getData(2),
-                    name: getData(3),
-                    gender: getData(4),
-                    startTime: getData(5),      // 列位置変更: 7 → 5
-                    endTime: getData(6),        // 列位置変更: 8 → 6
-                    break: getData(7),          // 列位置変更: 9 → 7
-                    status: status,
-                    hourlyWage: getData(13),    // 非表示列: 5 → 13
-                    transportation: getData(14), // 非表示列: 6 → 14
-                    isWorking: status === '◯'
-                });
-            });
-            
-            return data;
-        }
-
-        function updateRowCalculations() {
-            const currentData = getCurrentTableData();
-            updateCalculations(currentData);
-            
-            const rows = document.querySelectorAll('#shiftTable tbody tr');
-            rows.forEach((row, index) => {
-                const emp = currentData[index];
-                if (!emp) return;
-                
-                const startTime = parseTime(emp.startTime);
-                const endTime = parseTime(emp.endTime);
-                const breakTime = parseTime(emp.break);
-                
-                const workHours = emp.isWorking && startTime !== null && endTime !== null ? 
-                    calculateWorkHours(startTime, endTime, breakTime) : 0;
-                const nightHours = emp.isWorking && startTime !== null && endTime !== null ? 
-                    calculateNightShiftHours(startTime, endTime, breakTime) : 0;
-                const overtimeHours = emp.isWorking ? Math.max(0, workHours - 8) : 0;
-                
-                const cells = row.querySelectorAll('td');
-                if (cells[9]) cells[9].textContent = workHours > 0 ? workHours.toFixed(2) : '';     // 勤務LH: 11 → 9
-                if (cells[10]) cells[10].textContent = nightHours > 0 ? nightHours.toFixed(2) : ''; // 夜勤H: 12 → 10
-                if (cells[11]) cells[11].textContent = overtimeHours > 0 ? overtimeHours.toFixed(2) : ''; // 残業H: 13 → 11
-            });
-        }
-
         function resetRow(rowIndex) {
             if (!originalShiftData || !originalShiftData[rowIndex]) {
                 const row = document.querySelector(`tr[data-row-index="${rowIndex}"]`);
@@ -2932,6 +2647,64 @@
             }, 1500);
             
             showStatus('行をリセットしました', 'success');
+        }
+
+        function getCurrentTableData() {
+            const rows = document.querySelectorAll('#shiftTable tbody tr');
+            const data = [];
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const statusSelect = row.querySelector('.status-select');
+                const status = statusSelect ? statusSelect.value : '';
+                
+                const getData = (index) => {
+                    return cells[index] ? cells[index].textContent.trim() : '';
+                };
+                
+                data.push({
+                    company: getData(0),
+                    timeSlot: getData(1),
+                    mainJob: getData(2),
+                    name: getData(3),
+                    gender: getData(4),
+                    startTime: getData(5),
+                    endTime: getData(6),
+                    break: getData(7),
+                    status: status,
+                    hourlyWage: getData(13),
+                    transportation: getData(14),
+                    isWorking: status === '◯'
+                });
+            });
+            
+            return data;
+        }
+
+        function updateRowCalculations() {
+            const currentData = getCurrentTableData();
+            updateCalculations(currentData);
+            
+            const rows = document.querySelectorAll('#shiftTable tbody tr');
+            rows.forEach((row, index) => {
+                const emp = currentData[index];
+                if (!emp) return;
+                
+                const startTime = parseTime(emp.startTime);
+                const endTime = parseTime(emp.endTime);
+                const breakTime = parseTime(emp.break);
+                
+                const workHours = emp.isWorking && startTime !== null && endTime !== null ? 
+                    calculateWorkHours(startTime, endTime, breakTime) : 0;
+                const nightHours = emp.isWorking && startTime !== null && endTime !== null ? 
+                    calculateNightShiftHours(startTime, endTime, breakTime) : 0;
+                const overtimeHours = emp.isWorking ? Math.max(0, workHours - 8) : 0;
+                
+                const cells = row.querySelectorAll('td');
+                if (cells[9]) cells[9].textContent = workHours > 0 ? workHours.toFixed(2) : '';
+                if (cells[10]) cells[10].textContent = nightHours > 0 ? nightHours.toFixed(2) : '';
+                if (cells[11]) cells[11].textContent = overtimeHours > 0 ? overtimeHours.toFixed(2) : '';
+            });
         }
 
         function parseTime(timeStr) {
@@ -3058,6 +2831,18 @@
             }
         }
 
+        function resetData() {
+            if (confirm('すべてのデータをリセットしますか？\nキャッシュデータも含めて完全にリセットされます。')) {
+                // キャッシュもクリア
+                localStorage.removeItem('shiftFileCache');
+                
+                document.body.style.opacity = '0.5';
+                setTimeout(() => {
+                    location.reload();
+                }, 300);
+            }
+        }
+
         function showStatus(message, type) {
             const statusMessage = document.getElementById('statusMessage');
             statusMessage.textContent = message;
@@ -3065,34 +2850,443 @@
             
             setTimeout(() => {
                 statusMessage.classList.remove('show');
-            }, 3000);
+            }, type === 'error' ? 5000 : 3000);
         }
 
-        function showServerInstructions() {
-            const instructions = `
-🚀 ローカルWebサーバーの起動方法
+        // エクスポート・ビューア転送関数群（省略のため基本機能のみ実装）
+        
+        function exportToExcel() {
+            if (!document.querySelector('.shift-table')) {
+                showStatus('エクスポートするデータがありません', 'error');
+                return;
+            }
 
-【Python（推奨）】
-1. ファイルがあるフォルダでコマンドプロンプト/ターミナルを開く
-2. 実行: python3 -m http.server 8000
-3. ブラウザで: http://localhost:8000
+            try {
+                const targetDate = document.getElementById('targetDate').value;
+                const selectedSheet = document.getElementById('sheetSelect').value;
+                const dateObj = new Date(targetDate);
+                const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日 ${selectedSheet}シフト表`;
 
-【Node.js】
-1. 実行: npx http-server
-2. ブラウザで: http://localhost:8080
+                const data = [];
+                data.push([formattedDate]);
+                data.push([`基準UPH: ${baseUPH} ${isUPHAutoExtracted ? '(自動抽出)' : '(手動設定)'}`]);
+                data.push([]);
 
-【VS Code】
-1. Live Server拡張機能をインストール
-2. HTMLファイルを右クリック → "Open with Live Server"
+                const headers = ['会社名', '時間帯', 'メイン業務', '氏名', '性別', '時給', '交通費', '開始時間', '終了時間', '休憩', '勤務状況', '勤務LH', '夜勤時間', '残業時間'];
+                data.push(headers);
 
-【PHP】
-1. 実行: php -S localhost:8000
-2. ブラウザで: http://localhost:8000
+                const tableData = getCurrentTableData();
+                tableData.forEach(emp => {
+                    const startTime = parseTime(emp.startTime);
+                    const endTime = parseTime(emp.endTime);
+                    const breakTime = parseTime(emp.break);
+                    
+                    const workHours = emp.isWorking && startTime !== null && endTime !== null ? 
+                        calculateWorkHours(startTime, endTime, breakTime) : 0;
+                    const nightHours = emp.isWorking && startTime !== null && endTime !== null ? 
+                        calculateNightShiftHours(startTime, endTime, breakTime) : 0;
+                    const overtimeHours = emp.isWorking ? Math.max(0, workHours - 8) : 0;
+                    
+                    data.push([
+                        emp.company, emp.timeSlot, emp.mainJob, emp.name, emp.gender,
+                        emp.hourlyWage, emp.transportation, emp.startTime, emp.endTime,
+                        emp.break, emp.status, 
+                        workHours > 0 ? workHours.toFixed(2) : '',
+                        nightHours > 0 ? nightHours.toFixed(2) : '',
+                        overtimeHours > 0 ? overtimeHours.toFixed(2) : ''
+                    ]);
+                });
 
-サーバー起動後、http://localhost:8000/test.html にアクセスしてください。
-`;
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                ws['!cols'] = [
+                    { width: 15 }, { width: 10 }, { width: 12 }, { width: 15 }, { width: 8 }, { width: 10 },
+                    { width: 12 }, { width: 10 }, { width: 10 }, { width: 8 }, { width: 10 }, { width: 10 }, { width: 10 }, { width: 10 }
+                ];
+
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, '詳細データ');
+                
+                const fileName = targetDate ? `${targetDate}_${selectedSheet}_詳細データ.xlsx` : `${selectedSheet}_詳細データ.xlsx`;
+                XLSX.writeFile(wb, fileName);
+                showStatus('詳細データをダウンロードしました', 'success');
+                
+            } catch (error) {
+                console.error('エクスポートエラー:', error);
+                showStatus('エクスポートに失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        function exportCompanySummary() {
+            if (!document.querySelector('.shift-table')) {
+                showStatus('エクスポートするデータがありません', 'error');
+                return;
+            }
+
+            if (!allCompanies || allCompanies.length === 0) {
+                showStatus('会社リストが抽出されていません', 'error');
+                return;
+            }
+
+            try {
+                const companySummary = generateCompanySummary();
+                
+                const targetDate = document.getElementById('targetDate').value;
+                const selectedSheet = document.getElementById('sheetSelect').value;
+                const dateObj = new Date(targetDate);
+                const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日 ${selectedSheet}`;
+
+                const data = [];
+                data.push([formattedDate + ' 会社別集計']);
+                data.push([`基準UPH: ${baseUPH} ${isUPHAutoExtracted ? '(自動抽出)' : '(手動設定)'}`]);
+                data.push([]);
+                
+                data.push(['HC']);
+                allCompanies.forEach(company => {
+                    const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
+                    data.push([company, summary.hc || '']);
+                });
+                
+                const totalHC = Object.values(companySummary).reduce((sum, s) => sum + s.hc, 0);
+                data.push(['', totalHC]);
+                data.push([]);
+                
+                data.push(['経費']);
+                allCompanies.forEach(company => {
+                    const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
+                    const cost = summary.totalCost || 0;
+                    data.push([company, cost > 0 ? Math.round(cost) : '']);
+                });
+                data.push(['', Math.round(Object.values(companySummary).reduce((sum, s) => sum + s.totalCost, 0))]);
+                data.push([]);
+                
+                data.push(['LH']);
+                allCompanies.forEach(company => {
+                    const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
+                    const lh = summary.totalLH || 0;
+                    data.push([company, lh > 0 ? Math.round(lh) : '']);
+                });
+                data.push(['', Math.round(Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0))]);
+
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                ws['!cols'] = [{ width: 15 }, { width: 12 }];
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, '会社別集計');
+                
+                const fileName = targetDate ? `${targetDate}_${selectedSheet}_会社別集計.xlsx` : `${selectedSheet}_会社別集計.xlsx`;
+                XLSX.writeFile(wb, fileName);
+                showStatus('会社別集計データをダウンロードしました', 'success');
+                
+            } catch (error) {
+                console.error('会社別集計エラー:', error);
+                showStatus('会社別集計エクスポートに失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        function exportCombinedSummary() {
+            if (!workbook) {
+                showStatus('Excelファイルが読み込まれていません', 'error');
+                return;
+            }
+
+            if (!allCompanies || allCompanies.length === 0) {
+                showStatus('会社リストが抽出されていません', 'error');
+                return;
+            }
+
+            const hasDay = workbook.SheetNames.includes('日勤');
+            const hasNight = workbook.SheetNames.includes('夜勤');
             
-            alert(instructions);
+            if (!hasDay && !hasNight) {
+                showStatus('日勤・夜勤シートが見つかりません', 'error');
+                return;
+            }
+
+            try {
+                const companySummary = generateCombinedCompanySummary();
+
+                const targetDate = document.getElementById('targetDate').value;
+                const dateObj = new Date(targetDate);
+                const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日`;
+
+                const data = [];
+                data.push([formattedDate + ' 日勤+夜勤合算集計']);
+                
+                const availableShifts = [];
+                if (hasDay) availableShifts.push('日勤');
+                if (hasNight) availableShifts.push('夜勤');
+                data.push([`対象シフト: ${availableShifts.join('・')}`]);
+                data.push([`基準UPH: ${baseUPH} ${isUPHAutoExtracted ? '(自動抽出)' : '(手動設定)'}`]);
+                data.push([]);
+                
+                data.push(['HC', '', '日勤', '夜勤', '合計']);
+                allCompanies.forEach(company => {
+                    const summary = companySummary[company] || { 
+                        hc: 0, totalLH: 0, totalCost: 0, 
+                        dayShiftHC: 0, nightShiftHC: 0 
+                    };
+                    data.push([
+                        company, 
+                        '', 
+                        summary.dayShiftHC || '', 
+                        summary.nightShiftHC || '', 
+                        summary.hc || ''
+                    ]);
+                });
+                
+                const totalHC = Object.values(companySummary).reduce((sum, s) => sum + s.hc, 0);
+                const totalDayHC = Object.values(companySummary).reduce((sum, s) => sum + (s.dayShiftHC || 0), 0);
+                const totalNightHC = Object.values(companySummary).reduce((sum, s) => sum + (s.nightShiftHC || 0), 0);
+                data.push(['合計', '', totalDayHC, totalNightHC, totalHC]);
+                data.push([]);
+                
+                data.push(['経費']);
+                allCompanies.forEach(company => {
+                    const summary = companySummary[company] || { 
+                        hc: 0, totalLH: 0, totalCost: 0, 
+                        dayShiftHC: 0, nightShiftHC: 0 
+                    };
+                    const cost = summary.totalCost || 0;
+                    data.push([company, cost > 0 ? Math.round(cost) : '']);
+                });
+                data.push(['合計', Math.round(Object.values(companySummary).reduce((sum, s) => sum + s.totalCost, 0))]);
+                data.push([]);
+                
+                data.push(['LH']);
+                allCompanies.forEach(company => {
+                    const summary = companySummary[company] || { 
+                        hc: 0, totalLH: 0, totalCost: 0, 
+                        dayShiftHC: 0, nightShiftHC: 0 
+                    };
+                    const lh = summary.totalLH || 0;
+                    data.push([company, lh > 0 ? Math.round(lh) : '']);
+                });
+                data.push(['合計', Math.round(Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0))]);
+
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                ws['!cols'] = [{ width: 15 }, { width: 8 }, { width: 8 }, { width: 8 }, { width: 10 }];
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, '日勤夜勤合算集計');
+                
+                const fileName = targetDate ? `${targetDate}_日勤夜勤合算集計.xlsx` : '日勤夜勤合算集計.xlsx';
+                XLSX.writeFile(wb, fileName);
+                showStatus('日勤+夜勤合算集計データをダウンロードしました', 'success');
+                
+            } catch (error) {
+                console.error('合算集計エラー:', error);
+                showStatus('合算集計エクスポートに失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        function generateCompanySummary() {
+            const tableData = getCurrentTableData();
+            const companySummary = {};
+            
+            tableData.forEach(emp => {
+                if (emp.isWorking && emp.company.trim()) {
+                    const company = emp.company.trim();
+                    const hourlyWageStr = emp.hourlyWage || '0';
+                    const transportationStr = emp.transportation || '0';
+                    
+                    const hourlyWage = parseFloat(String(hourlyWageStr).replace(/[^\d.]/g, '')) || 0;
+                    const transportation = parseFloat(String(transportationStr).replace(/[^\d.]/g, '')) || 0;
+                    
+                    if (!companySummary[company]) {
+                        companySummary[company] = { hc: 0, totalLH: 0, totalCost: 0 };
+                    }
+                    
+                    companySummary[company].hc += 1;
+                    
+                    const startTime = parseTime(emp.startTime);
+                    const endTime = parseTime(emp.endTime);
+                    const breakTime = parseTime(emp.break);
+                    
+                    if (startTime !== null && endTime !== null) {
+                        const workHours = calculateWorkHours(startTime, endTime, breakTime);
+                        const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
+                        const overtimeHours = Math.max(0, workHours - 8);
+                        
+                        companySummary[company].totalLH += workHours;
+                        
+                        const regularHours = Math.max(0, workHours - overtimeHours);
+                        const baseCost = regularHours * hourlyWage;
+                        const overtimeBaseCost = overtimeHours * hourlyWage;
+                        const nightAllowance = nightHours * hourlyWage * 0.25;
+                        const overtimeAllowance = overtimeHours * hourlyWage * 0.25;
+                        
+                        companySummary[company].totalCost += baseCost + overtimeBaseCost + nightAllowance + overtimeAllowance + transportation;
+                    } else {
+                        companySummary[company].totalCost += transportation;
+                    }
+                }
+            });
+            
+            return companySummary;
+        }
+
+        function generateCombinedCompanySummary() {
+            const targetDateStr = document.getElementById('targetDate').value;
+            if (!targetDateStr || !workbook) return null;
+
+            const targetDate = new Date(targetDateStr);
+            const companySummary = {};
+            
+            const shiftsToProcess = ['日勤', '夜勤'];
+            
+            shiftsToProcess.forEach(sheetName => {
+                if (!workbook.SheetNames.includes(sheetName)) return;
+                
+                try {
+                    const worksheet = workbook.Sheets[sheetName];
+                    const sheetData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    
+                    if (!sheetData || sheetData.length < 2) return;
+                    
+                    const headerRow = sheetData[0];
+                    const sheetDateColumns = [];
+                    
+                    headerRow.forEach((cell, index) => {
+                        if (typeof cell === 'number' && cell >= 45000) {
+                            const excelDate = new Date((cell - 25569) * 86400 * 1000);
+                            sheetDateColumns.push({
+                                index: index,
+                                excelValue: cell,
+                                date: excelDate
+                            });
+                        }
+                    });
+                    
+                    let targetColumnIndex = -1;
+                    let minDiff = Infinity;
+                    
+                    sheetDateColumns.forEach(col => {
+                        const diff = Math.abs(col.date.getTime() - targetDate.getTime());
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            targetColumnIndex = col.index;
+                        }
+                    });
+                    
+                    if (targetColumnIndex === -1) return;
+                    
+                    const excludeKeywords = [
+                        'PLAN', 'FCST', 'UPH', 'HC', 'LH', 
+                        '出勤HC', '出勤LH', '必要LH', '過不足', 'HC換算',
+                        '夜勤手当', '残業手当', '総費用', '平均単価',
+                        '実績UPH', '基準UPH', 'FCST数量', 'PLAN数量'
+                    ];
+                    
+                    for (let i = 1; i < sheetData.length; i++) {
+                        const row = sheetData[i];
+                        if (!row || row.length === 0) continue;
+                        
+                        const employeeData = {
+                            company: row[0] != null ? String(row[0]) : '',
+                            timeSlot: row[1] != null ? String(row[1]) : '',
+                            mainJob: row[2] != null ? String(row[2]) : '',
+                            name: row[3] != null ? String(row[3]) : '',
+                            gender: row[4] != null ? String(row[4]) : '',
+                            hourlyWage: row[5] != null ? String(row[5]) : '',
+                            transportation: row[6] != null ? String(row[6]) : '',
+                            startTime: row[7] != null ? String(row[7]) : '',
+                            endTime: row[8] != null ? String(row[8]) : '',
+                            break: row[9] != null ? String(row[9]) : '',
+                            status: row[targetColumnIndex] != null ? String(row[targetColumnIndex]) : ''
+                        };
+                        
+                        const shouldExclude = excludeKeywords.some(keyword => {
+                            return employeeData.company.includes(keyword) ||
+                                   employeeData.timeSlot.includes(keyword) ||
+                                   employeeData.mainJob.includes(keyword) ||
+                                   employeeData.name.includes(keyword) ||
+                                   employeeData.gender.includes(keyword);
+                        });
+                        
+                        if (shouldExclude) continue;
+                        if (!employeeData.company.trim()) continue;
+                        if (!employeeData.name.trim() && !employeeData.company.trim()) continue;
+                        if (employeeData.name.trim() && /^\d+$/.test(employeeData.name.trim())) continue;
+                        
+                        if (employeeData.status === '◯') {
+                            const company = employeeData.company.trim();
+                            const hourlyWageStr = employeeData.hourlyWage || '0';
+                            const transportationStr = employeeData.transportation || '0';
+                            
+                            const hourlyWage = parseFloat(String(hourlyWageStr).replace(/[^\d.]/g, '')) || 0;
+                            const transportation = parseFloat(String(transportationStr).replace(/[^\d.]/g, '')) || 0;
+                            
+                            if (!companySummary[company]) {
+                                companySummary[company] = {
+                                    hc: 0, totalLH: 0, totalCost: 0,
+                                    dayShiftHC: 0, nightShiftHC: 0
+                                };
+                            }
+                            
+                            companySummary[company].hc += 1;
+                            
+                            if (sheetName === '夜勤') {
+                                companySummary[company].nightShiftHC += 1;
+                            } else {
+                                companySummary[company].dayShiftHC += 1;
+                            }
+                            
+                            const startTime = parseTime(employeeData.startTime);
+                            const endTime = parseTime(employeeData.endTime);
+                            const breakTime = parseTime(employeeData.break);
+                            
+                            if (startTime !== null && endTime !== null) {
+                                const isCurrentNightShift = sheetName === '夜勤';
+                                const workHours = calculateWorkHoursForSheet(startTime, endTime, breakTime, isCurrentNightShift);
+                                const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
+                                const overtimeHours = Math.max(0, workHours - 8);
+                                
+                                companySummary[company].totalLH += workHours;
+                                
+                                const regularHours = Math.max(0, workHours - overtimeHours);
+                                const baseCost = regularHours * hourlyWage;
+                                const overtimeBaseCost = overtimeHours * hourlyWage;
+                                const nightAllowance = nightHours * hourlyWage * 0.25;
+                                const overtimeAllowance = overtimeHours * hourlyWage * 0.25;
+                                
+                                companySummary[company].totalCost += baseCost + overtimeBaseCost + nightAllowance + overtimeAllowance + transportation;
+                            } else {
+                                companySummary[company].totalCost += transportation;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error(`${sheetName}シートの処理エラー:`, error);
+                }
+            });
+            
+            return companySummary;
+        }
+
+        function calculateWorkHoursForSheet(startTime, endTime, breakTime, isNightShift) {
+            if (startTime === null || endTime === null) {
+                return 0;
+            }
+            
+            let workHours;
+            
+            if (isNightShift) {
+                if (endTime < startTime) {
+                    workHours = (24 + endTime) - startTime;
+                } else {
+                    workHours = endTime - startTime;
+                }
+            } else {
+                if (endTime < startTime) {
+                    workHours = endTime - startTime + 24;
+                } else {
+                    workHours = endTime - startTime;
+                }
+            }
+            
+            if (breakTime !== null && breakTime > 0) {
+                workHours -= breakTime;
+            }
+            
+            return Math.max(0, workHours);
         }
 
         function generateAttendanceCheck() {
@@ -3380,6 +3574,77 @@
                 console.error('ビューア転送エラー:', error);
                 showStatus('ビューアへの転送に失敗しました: ' + error.message, 'error');
             }
+        }
+
+        function testViewerConnection() {
+            console.log('=== ビューア接続テスト開始 ===');
+            
+            const testData = {
+                employeeData: [
+                    {
+                        '会社名': 'テスト会社A',
+                        '時間帯': '日勤',
+                        'メイン業務': 'テスト業務',
+                        '氏名': 'テスト太郎',
+                        '性別': '男',
+                        '時給': '1000',
+                        '交通費': '500',
+                        '開始時間': '9:00',
+                        '終了時間': '18:00',
+                        '休憩': '1:00',
+                        '勤務状況': '◯',
+                        '勤務LH': '8.00',
+                        '夜勤時間': '0.00',
+                        '残業時間': '0.00'
+                    }
+                ],
+                shiftTitle: 'テストシフト表 - ' + new Date().toLocaleString('ja-JP'),
+                isNightShift: false,
+                baseUPH: 25,
+                planValue: 15000,
+                fcstValue: 18000,
+                transferTimestamp: Date.now()
+            };
+
+            console.log('テストデータ:', testData);
+
+            const isFileProtocol = window.location.protocol === 'file:';
+            
+            if (isFileProtocol) {
+                try {
+                    localStorage.setItem('shiftDataTransfer', JSON.stringify(testData));
+                    localStorage.setItem('shiftDataTransfer_timestamp', Date.now().toString());
+                    console.log('file://プロトコル: localStorageにテストデータを保存');
+                } catch (error) {
+                    console.error('localStorage保存エラー:', error);
+                    showStatus('localStorageへの保存に失敗しました', 'error');
+                    return;
+                }
+            } else {
+                localStorage.setItem('shiftDataTransfer', JSON.stringify(testData));
+            }
+            
+            const viewerWindow = window.open('./viewer.html', '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
+            
+            if (!viewerWindow) {
+                showStatus('ポップアップがブロックされました', 'error');
+                return;
+            }
+
+            setTimeout(() => {
+                try {
+                    viewerWindow.postMessage({
+                        type: 'SHIFT_DATA_TRANSFER',
+                        data: testData
+                    }, '*');
+                    console.log('PostMessageでテストデータを送信');
+                } catch (error) {
+                    console.error('PostMessage送信エラー:', error);
+                }
+            }, 1000);
+
+            showStatus('テストデータでビューアを開きました', 'success');
+            console.log('=== ビューア接続テスト完了 ===');
         }
 
         function calculateDisplayLH(emp) {
