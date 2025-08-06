@@ -177,7 +177,6 @@
         .calendar td {
             border: 1px solid #ddd;
             padding: 4px;
-            height: 80px;
             vertical-align: top;
             position: relative;
             background: white;
@@ -186,6 +185,15 @@
 
         .calendar td:hover:not(.other-month) {
             background: #ffe0e0;
+        }
+
+        /* 動的な高さ計算 */
+        .calendar.weeks-5 td {
+            height: 95px;
+        }
+
+        .calendar.weeks-6 td {
+            height: 80px;
         }
 
         .day-content {
@@ -200,22 +208,27 @@
             color: #333;
             margin-bottom: 4px;
             text-align: center;
+            flex-shrink: 0;
         }
 
         .handwrite-box {
             flex: 1;
-            border: 1px solid #ccc;
-            border-radius: 3px;
             background: white;
             min-height: 40px;
         }
 
         .other-month {
             background: #f9f9f9;
+            opacity: 0.5;
         }
 
         .other-month .day-number {
-            color: #ccc;
+            color: #bbb;
+            font-size: 0.9em;
+        }
+
+        .other-month .handwrite-box {
+            background: #f5f5f5;
         }
 
         .other-month:hover {
@@ -243,16 +256,20 @@
             color: #3498db;
         }
 
-        /* 印刷用スタイル */
+        /* 印刷用スタイル - A4横向け */
         @media print {
             @page {
-                margin: 8mm;
+                margin: 10mm 8mm;
+                size: A4 landscape;
             }
 
             body {
                 background: white;
                 padding: 0;
                 font-size: 12px;
+                line-height: 1.3;
+                width: 100%;
+                height: 100vh;
             }
 
             .container {
@@ -260,6 +277,10 @@
                 border-radius: 0;
                 max-width: none;
                 width: 100%;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
             }
 
             .header, .controls {
@@ -268,22 +289,30 @@
 
             .calendar-container {
                 padding: 0;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                height: calc(100vh - 20mm);
+                overflow: hidden;
             }
 
             .shift-header {
-                margin-bottom: 8px;
-                padding: 6px;
+                margin-bottom: 3mm;
+                padding: 3mm 4mm;
                 background: white !important;
                 border: 2px solid #333;
                 border-radius: 0;
+                flex-shrink: 0;
+                height: auto;
             }
 
             .shift-title {
                 font-size: 2.4em;
-                margin-bottom: 8px;
+                margin-bottom: 3mm;
                 text-shadow: none;
                 color: #333 !important;
                 font-weight: bold;
+                text-align: center;
             }
 
             .submission-info {
@@ -293,74 +322,136 @@
                 align-items: center !important;
                 flex-direction: row !important;
                 width: 100%;
+                margin-top: 2mm;
             }
 
             .submission-info .info-item {
                 font-size: 14px;
-                display: inline-block !important;
+                display: inline-flex !important;
+                align-items: center;
                 flex: none !important;
-            }
-
-            .submission-info .info-item:first-child {
-                text-align: left;
-            }
-
-            .submission-info .info-item:last-child {
-                text-align: right;
+                font-weight: bold;
             }
 
             .handwrite-space {
-                border-bottom: 1px solid #333;
-                min-width: 120px;
+                border-bottom: 1.5px solid #333;
+                min-width: 140px;
+                height: 1.2em;
+                margin-left: 6px;
             }
 
             .calendar {
                 font-size: 10px;
+                border-collapse: collapse;
                 border: 2px solid #333;
                 box-shadow: none;
+                width: 100%;
+                height: calc(100vh - 45mm);
+                table-layout: fixed;
+                margin: 0;
+                flex: 1;
             }
 
             .calendar th {
                 background: #f0f0f0 !important;
                 color: #333 !important;
-                padding: 4px 2px;
+                padding: 2mm 1mm;
                 border: 1px solid #333;
-                font-size: 10px;
+                font-size: 11px;
+                font-weight: bold;
+                height: 6mm;
+                text-align: center;
+                width: calc(100% / 7);
+                vertical-align: middle;
             }
 
             .calendar td {
-                height: 38px;
                 border: 1px solid #333;
                 background: white !important;
-                padding: 2px;
+                padding: 1.5mm;
+                width: calc(100% / 7);
+                vertical-align: top;
+                height: calc((100vh - 51mm) / 6);
+                min-height: 25mm;
+            }
+
+            .calendar.weeks-6 td {
+                height: calc((100vh - 51mm) / 7);
+                min-height: 22mm;
+            }
+
+            .calendar tbody {
+                height: calc(100vh - 51mm);
+            }
+
+            .calendar tr {
+                height: auto;
             }
 
             .calendar td.other-month {
                 background: #f8f8f8 !important;
-                opacity: 0.6;
+                opacity: 0.4;
+            }
+
+            .calendar td.other-month .handwrite-box {
+                background: #f0f0f0 !important;
             }
 
             .handwrite-box {
-                border: 1px solid #666;
-                min-height: 22px;
                 background: white !important;
+                flex: 1;
+                min-height: calc(100% - 6mm);
             }
 
             .day-number {
-                font-size: 0.9em;
-                margin-bottom: 1px;
+                font-size: 1.0em;
+                margin-bottom: 1mm;
+                line-height: 1.2;
+                font-weight: bold;
+                text-align: center;
+                height: 4mm;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .day-content {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5mm;
             }
 
             .today {
-                background: #f0f0f0 !important;
+                background: #f5f5f5 !important;
             }
 
             .today .day-number {
                 font-weight: bold !important;
+                color: #333 !important;
             }
 
             .weekend {
                 background: white !important;
+            }
+
+            .sunday .day-number {
+                color: #e74c3c !important;
+            }
+
+            .saturday .day-number {
+                color: #3498db !important;
+            }
+
+            .other-month .day-number {
+                color: #bbb !important;
+                font-size: 0.9em !important;
+                font-weight: normal !important;
+            }
+
+            /* 印刷時のテーブル固定 */
+            .calendar {
+                page-break-inside: avoid;
             }
         }
 
@@ -402,7 +493,11 @@
                 font-size: 12px;
             }
 
-            .calendar td {
+            .calendar.weeks-5 td {
+                height: 75px;
+            }
+
+            .calendar.weeks-6 td {
                 height: 60px;
             }
 
@@ -539,6 +634,7 @@
             
             // カレンダー本体を生成
             const calendarBody = document.getElementById('calendarBody');
+            const calendar = document.getElementById('calendar');
             calendarBody.innerHTML = '';
             
             // 月の最初の日と最後の日を取得
@@ -562,6 +658,9 @@
             // 必要な週数を計算（最低5週、最大6週）
             const totalCells = startingDayOfWeek + daysInMonth;
             const weeksNeeded = Math.ceil(totalCells / 7);
+            
+            // 動的クラス追加
+            calendar.className = `calendar weeks-${weeksNeeded}`;
             
             // カレンダーを生成
             for (let week = 0; week < weeksNeeded; week++) {
