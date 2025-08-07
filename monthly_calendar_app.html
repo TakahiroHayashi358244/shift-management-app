@@ -746,25 +746,10 @@
 
         // 印刷機能
         function printCalendar() {
-            // 印刷前の準備
-            document.body.classList.add('preparing-print');
-            
-            // レンダリング完了を待つ
+            // 印刷前に少し待機してレンダリングを確実にする
             setTimeout(() => {
-                // 印刷時専用の調整
-                const calendar = document.getElementById('calendar');
-                const calendarBody = document.getElementById('calendarBody');
-                
-                // テーブルレイアウトを強制的に再計算
-                calendar.style.tableLayout = 'fixed';
-                calendar.style.width = 'calc(148mm - 6mm)';
-                
-                // さらに待機してから印刷
-                setTimeout(() => {
-                    window.print();
-                    document.body.classList.remove('preparing-print');
-                }, 200);
-            }, 300);
+                window.print();
+            }, 100);
         }
 
         // 初期化
