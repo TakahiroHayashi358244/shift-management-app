@@ -1060,9 +1060,9 @@
                     <a href="./fukugen.html" target="_blank" class="viewer-app-btn">
                         📊 詳細データ復元
                     </a>
-                    <a href="./mobile.html" target="_blank" class="viewer-app-btn" style="background: linear-gradient(45deg, #9C27B0, #E91E63);">
+                    <button onclick="showMobileQR()" class="viewer-app-btn" style="background: linear-gradient(45deg, #9C27B0, #E91E63);">
                         📱 モバイル版
-                    </a>                    
+                    </button>                 
                     <button class="install-btn" id="installBtn" onclick="installApp()">
                         📱 アプリをインストール
                     </button>
@@ -1232,6 +1232,137 @@
                 setTimeout(showFileProtocolWarning, 2000);
             }
             showStatus('アプリが準備完了しました', 'success');
+        }
+
+        function showMobileQR() {
+            const qrWindow = window.open('', '_blank', 'width=500,height=600,scrollbars=no,resizable=yes,location=no,menubar=no,toolbar=no');
+            
+            if (!qrWindow) {
+                showStatus('ポップアップがブロックされました。ブラウザ設定を確認してください', 'error');
+                return;
+            }
+
+            const qrHTML = `<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>モバイル版QRコード</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', 'Noto Sans JP', system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #9C27B0 0%, #E91E63 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .qr-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+        }
+        .qr-title {
+            color: #333;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .qr-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+        .qr-image {
+            width: 280px;
+            height: 280px;
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            margin: 0 auto 20px;
+            display: block;
+            background: white;
+        }
+        .qr-instructions {
+            color: #555;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            text-align: left;
+            padding: 15px;
+            background: rgba(156, 39, 176, 0.1);
+            border-radius: 8px;
+        }
+        .close-btn {
+            background: linear-gradient(45deg, #9C27B0, #E91E63);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .close-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(156, 39, 176, 0.3);
+        }
+        .error-message {
+            color: #f44336;
+            font-size: 0.9rem;
+            margin: 10px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="qr-container">
+        <h2 class="qr-title">📱 モバイル版シフト管理アプリ</h2>
+        <p class="qr-subtitle">スマートフォン・タブレットでQRコードを読み取ってアクセス</p>
+        
+        <img src="https://takahirohayashi358244.github.io/shift-management-app/mobile-QR.png" 
+             alt="モバイル版QRコード" 
+             class="qr-image"
+             onerror="showError()">
+        
+        <div class="qr-instructions">
+            <strong>📖 使用方法:</strong><br>
+            1️⃣ スマートフォンのカメラアプリを開く<br>
+            2️⃣ 上のQRコードにカメラを向ける<br>
+            3️⃣ 表示されたリンクをタップ<br>
+            4️⃣ モバイル版シフト管理アプリが開きます
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            QRコードの読み込みに失敗しました。<br>
+            直接URLにアクセスしてください。
+        </div>
+        
+        <button class="close-btn" onclick="window.close()">❌ 閉じる</button>
+    </div>
+
+    <script>
+        function showError() {
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+    </script>
+</body>
+</html>`;
+
+            qrWindow.document.write(qrHTML);
+            qrWindow.document.close();
+            
+            showStatus('モバイル版QRコードを表示しました', 'success');
         }
 
         // キャッシュ管理機能
@@ -2853,7 +2984,7 @@
             }, type === 'error' ? 5000 : 3000);
         }
 
-        // エクスポート・ビューア転送関数群（省略のため基本機能のみ実装）
+        // エクスポート・ビューア転送関数群
         
         function exportToExcel() {
             if (!document.querySelector('.shift-table')) {
