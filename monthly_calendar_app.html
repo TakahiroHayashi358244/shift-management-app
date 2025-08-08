@@ -18,6 +18,109 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            transition: background 0.5s ease;
+        }
+
+        /* 月ごとの色テーマ定義 */
+        .theme-0 { /* 1月 - 雪・氷のイメージ */
+            --primary-color: #74b9ff;
+            --secondary-color: #0984e3;
+            --accent-color: #e3f2fd;
+            --bg-gradient-start: #74b9ff;
+            --bg-gradient-end: #0984e3;
+        }
+
+        .theme-1 { /* 2月 - バレンタイン・梅のイメージ */
+            --primary-color: #fd79a8;
+            --secondary-color: #e84393;
+            --accent-color: #fce4ec;
+            --bg-gradient-start: #fd79a8;
+            --bg-gradient-end: #e84393;
+        }
+
+        .theme-2 { /* 3月 - 桜・春のイメージ */
+            --primary-color: #ff7675;
+            --secondary-color: #d63031;
+            --accent-color: #ffe5e5;
+            --bg-gradient-start: #ff7675;
+            --bg-gradient-end: #d63031;
+        }
+
+        .theme-3 { /* 4月 - 新緑・桜のイメージ */
+            --primary-color: #a29bfe;
+            --secondary-color: #6c5ce7;
+            --accent-color: #f3f2ff;
+            --bg-gradient-start: #a29bfe;
+            --bg-gradient-end: #6c5ce7;
+        }
+
+        .theme-4 { /* 5月 - 緑・爽やかなイメージ */
+            --primary-color: #00b894;
+            --secondary-color: #00a085;
+            --accent-color: #e8f8f5;
+            --bg-gradient-start: #00b894;
+            --bg-gradient-end: #00a085;
+        }
+
+        .theme-5 { /* 6月 - 紫陽花・雨のイメージ */
+            --primary-color: #6c5ce7;
+            --secondary-color: #5f3dc4;
+            --accent-color: #f3f2ff;
+            --bg-gradient-start: #6c5ce7;
+            --bg-gradient-end: #5f3dc4;
+        }
+
+        .theme-6 { /* 7月 - 夏・太陽のイメージ */
+            --primary-color: #fdcb6e;
+            --secondary-color: #e17055;
+            --accent-color: #fff8e1;
+            --bg-gradient-start: #fdcb6e;
+            --bg-gradient-end: #e17055;
+        }
+
+        .theme-7 { /* 8月 - 夏祭り・海のイメージ */
+            --primary-color: #00cec9;
+            --secondary-color: #00b3b3;
+            --accent-color: #e0f7fa;
+            --bg-gradient-start: #00cec9;
+            --bg-gradient-end: #00b3b3;
+        }
+
+        .theme-8 { /* 9月 - 秋・コスモスのイメージ */
+            --primary-color: #e17055;
+            --secondary-color: #d63031;
+            --accent-color: #ffeaa7;
+            --bg-gradient-start: #e17055;
+            --bg-gradient-end: #d63031;
+        }
+
+        .theme-9 { /* 10月 - 紅葉・オレンジのイメージ */
+            --primary-color: #fd8f02;
+            --secondary-color: #e67e22;
+            --accent-color: #fff3cd;
+            --bg-gradient-start: #fd8f02;
+            --bg-gradient-end: #e67e22;
+        }
+
+        .theme-10 { /* 11月 - 秋深し・落ち着いたイメージ */
+            --primary-color: #8b4513;
+            --secondary-color: #a0522d;
+            --accent-color: #f5deb3;
+            --bg-gradient-start: #8b4513;
+            --bg-gradient-end: #a0522d;
+        }
+
+        .theme-11 { /* 12月 - クリスマス・冬のイメージ */
+            --primary-color: #e74c3c;
+            --secondary-color: #c0392b;
+            --accent-color: #ffebee;
+            --bg-gradient-start: #e74c3c;
+            --bg-gradient-end: #c0392b;
+        }
+
+        /* テーマが適用された時の背景 */
+        body[class*="theme-"] {
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
         }
 
         .container {
@@ -34,6 +137,12 @@
             color: white;
             padding: 30px;
             text-align: center;
+            transition: background 0.5s ease;
+        }
+
+        /* テーマが適用された時のヘッダー */
+        body[class*="theme-"] .header {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
         }
 
         .header h1 {
@@ -81,6 +190,12 @@
             border-color: #FF6B6B;
         }
 
+        /* テーマが適用された時のフォーカス色 */
+        body[class*="theme-"] select:focus, 
+        body[class*="theme-"] input:focus {
+            border-color: var(--primary-color);
+        }
+
         .btn {
             padding: 12px 25px;
             border: none;
@@ -98,9 +213,19 @@
             color: white;
         }
 
+        /* テーマが適用された時のプライマリボタン */
+        body[class*="theme-"] .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+        }
+
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        /* テーマが適用された時のホバー効果 */
+        body[class*="theme-"] .btn-primary:hover {
+            box-shadow: 0 5px 15px rgba(var(--primary-color), 0.4);
         }
 
         .btn-print {
@@ -128,6 +253,12 @@
             background: #f8f9fa;
             border-radius: 10px;
             border: 2px solid #FF6B6B;
+            transition: border-color 0.5s ease;
+        }
+
+        /* テーマが適用された時のシフトヘッダー */
+        body[class*="theme-"] .shift-header {
+            border-color: var(--primary-color);
         }
 
         .shift-title {
@@ -179,6 +310,12 @@
             text-align: center;
             font-weight: bold;
             font-size: 1em;
+            transition: background 0.5s ease;
+        }
+
+        /* テーマが適用された時のテーブルヘッダー */
+        body[class*="theme-"] .calendar th {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
         }
 
         .calendar td {
@@ -192,6 +329,11 @@
 
         .calendar td:hover:not(.other-month) {
             background: #ffe0e0;
+        }
+
+        /* テーマが適用された時のホバー効果 */
+        body[class*="theme-"] .calendar td:hover:not(.other-month) {
+            background: var(--accent-color);
         }
 
         /* 動的な高さ計算 */
@@ -353,7 +495,7 @@
                 </div>
             </div>
             <div class="controls-row">
-                <button class="btn btn-primary" onclick="generateCalendar()">カレンダー月確定</button>
+                <button class="btn btn-primary" onclick="generateCalendar()">提出日確定</button>
                 <button class="btn btn-pdf" onclick="downloadPDF()">📄 PDF作成</button>
             </div>
         </div>
@@ -438,11 +580,23 @@
             return `${year}年${month}月${day}日`;
         }
 
+        // 月ごとのテーマを適用
+        function applyMonthTheme(month) {
+            const body = document.body;
+            // 既存のテーマクラスを削除
+            body.className = body.className.replace(/theme-\d+/g, '').trim();
+            // 新しいテーマクラスを追加
+            body.classList.add(`theme-${month}`);
+        }
+
         // カレンダー生成
         function generateCalendar() {
             const year = parseInt(document.getElementById('year').value);
             const month = parseInt(document.getElementById('month').value);
             const submissionDate = document.getElementById('submissionDate').value;
+            
+            // 月ごとのテーマを適用
+            applyMonthTheme(month);
             
             // タイトル設定
             const title = `希望シフト表 - ${year}年 ${month + 1}月`;
@@ -657,9 +811,15 @@
             // 提出日を設定
             setDefaultSubmissionDate();
             
-            // 年月変更時に提出日も更新
-            document.getElementById('year').addEventListener('change', setDefaultSubmissionDate);
-            document.getElementById('month').addEventListener('change', setDefaultSubmissionDate);
+            // 年月変更時に提出日も更新し、カレンダーも再生成
+            document.getElementById('year').addEventListener('change', function() {
+                setDefaultSubmissionDate();
+                generateCalendar();
+            });
+            document.getElementById('month').addEventListener('change', function() {
+                setDefaultSubmissionDate();
+                generateCalendar();
+            });
             
             // 初期カレンダーを生成
             generateCalendar();
