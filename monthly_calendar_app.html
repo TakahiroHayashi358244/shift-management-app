@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>希望シフト表作成・印刷アプリ</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -106,9 +108,14 @@
             color: white;
         }
 
-        .btn-print:hover {
+        .btn-pdf {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-pdf:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
         }
 
         .calendar-container {
@@ -256,205 +263,6 @@
             color: #3498db;
         }
 
-        /* 印刷用スタイル - A5横向け */
-        @media print {
-            @page {
-                margin: 8mm 6mm;
-                size: A5 landscape;
-            }
-
-            body {
-                background: white;
-                padding: 0;
-                font-size: 10px;
-                line-height: 1.2;
-                width: 100%;
-                height: 100vh;
-            }
-
-            .container {
-                box-shadow: none;
-                border-radius: 0;
-                max-width: none;
-                width: 100%;
-                height: 100vh;
-                display: flex;
-                flex-direction: column;
-                overflow: hidden;
-            }
-
-            .header, .controls {
-                display: none;
-            }
-
-            .calendar-container {
-                padding: 0;
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                height: calc(100vh - 16mm);
-                overflow: hidden;
-            }
-
-            .shift-header {
-                margin-bottom: 2mm;
-                padding: 2mm 3mm;
-                background: white !important;
-                border: 1.5px solid #333;
-                border-radius: 0;
-                flex-shrink: 0;
-                height: auto;
-            }
-
-            .shift-title {
-                font-size: 1.8em;
-                margin-bottom: 2mm;
-                text-shadow: none;
-                color: #333 !important;
-                font-weight: bold;
-                text-align: center;
-            }
-
-            .submission-info {
-                font-size: 11px;
-                display: flex !important;
-                justify-content: space-between !important;
-                align-items: center !important;
-                flex-direction: row !important;
-                width: 100%;
-                margin-top: 1.5mm;
-            }
-
-            .submission-info .info-item {
-                font-size: 11px;
-                display: inline-flex !important;
-                align-items: center;
-                flex: none !important;
-                font-weight: bold;
-            }
-
-            .handwrite-space {
-                border-bottom: 1px solid #333;
-                min-width: 100px;
-                height: 1.1em;
-                margin-left: 4px;
-            }
-
-            .calendar {
-                font-size: 8px;
-                border-collapse: collapse;
-                border: 1.5px solid #333;
-                box-shadow: none;
-                width: 100%;
-                height: calc(100vh - 32mm);
-                table-layout: fixed;
-                margin: 0;
-                flex: 1;
-            }
-
-            .calendar th {
-                background: #e8e8e8 !important;
-                color: #333 !important;
-                padding: 1.5mm 0.8mm;
-                border: 1px solid #333;
-                font-size: 9px;
-                font-weight: bold;
-                height: 5mm;
-                text-align: center;
-                width: calc(100% / 7);
-                vertical-align: middle;
-            }
-
-            .calendar td {
-                border: 1px solid #333;
-                background: white !important;
-                padding: 1mm;
-                width: calc(100% / 7);
-                vertical-align: top;
-                height: calc((100vh - 37mm) / 6);
-                min-height: 18mm;
-            }
-
-            .calendar.weeks-6 td {
-                height: calc((100vh - 37mm) / 7);
-                min-height: 15mm;
-            }
-
-            .calendar tbody {
-                height: calc(100vh - 37mm);
-            }
-
-            .calendar tr {
-                height: auto;
-            }
-
-            .calendar td.other-month {
-                background: #f5f5f5 !important;
-                opacity: 0.4;
-            }
-
-            .calendar td.other-month .handwrite-box {
-                background: #eeeeee !important;
-            }
-
-            .handwrite-box {
-                background: white !important;
-                flex: 1;
-                min-height: calc(100% - 4mm);
-            }
-
-            .day-number {
-                font-size: 1.4em;
-                margin-bottom: 0.8mm;
-                line-height: 1.1;
-                font-weight: bold;
-                text-align: center;
-                height: 3.5mm;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .day-content {
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                gap: 0.3mm;
-            }
-
-            .today {
-                background: #f0f0f0 !important;
-            }
-
-            .today .day-number {
-                font-weight: bold !important;
-                color: #333 !important;
-            }
-
-            .weekend {
-                background: white !important;
-            }
-
-            .sunday .day-number {
-                color: #e74c3c !important;
-            }
-
-            .saturday .day-number {
-                color: #3498db !important;
-            }
-
-            .other-month .day-number {
-                color: #bbb !important;
-                font-size: 0.8em !important;
-                font-weight: normal !important;
-            }
-
-            /* 印刷時のテーブル固定 */
-            .calendar {
-                page-break-inside: avoid;
-            }
-        }
-
         @media (max-width: 768px) {
             .controls-row {
                 flex-direction: column;
@@ -511,7 +319,7 @@
     <div class="container">
         <div class="header">
             <h1>📅 希望シフト表</h1>
-            <p>作成・印刷アプリ（A5横向け印刷対応）</p>
+            <p>作成・PDF出力アプリ（A4横向け対応）</p>
         </div>
 
         <div class="controls">
@@ -545,8 +353,8 @@
                 </div>
             </div>
             <div class="controls-row">
-                <button class="btn btn-primary" onclick="generateCalendar()">希望シフト表生成</button>
-                <button class="btn btn-print" onclick="printCalendar()">A5横向けで印刷</button>
+                <button class="btn btn-primary" onclick="generateCalendar()">カレンダー月確定</button>
+                <button class="btn btn-pdf" onclick="downloadPDF()">📄 PDF作成</button>
             </div>
         </div>
 
@@ -597,13 +405,24 @@
             }
         }
 
-        // 提出日を選択した月の10日に設定
+        // 提出日を選択した月の前月15日に設定
         function setDefaultSubmissionDate() {
-            const year = parseInt(document.getElementById('year').value);
-            const month = parseInt(document.getElementById('month').value);
-            const dateString = year + '-' + 
-                             String(month + 1).padStart(2, '0') + '-' + 
-                             '10';
+            const selectedYear = parseInt(document.getElementById('year').value);
+            const selectedMonth = parseInt(document.getElementById('month').value);
+            
+            // 前月の計算
+            let prevYear = selectedYear;
+            let prevMonth = selectedMonth - 1;
+            
+            // 1月の場合は前年の12月
+            if (prevMonth < 0) {
+                prevYear = selectedYear - 1;
+                prevMonth = 11;
+            }
+            
+            const dateString = prevYear + '-' + 
+                             String(prevMonth + 1).padStart(2, '0') + '-' + 
+                             '15';
             document.getElementById('submissionDate').value = dateString;
         }
 
@@ -722,12 +541,109 @@
             }
         }
 
-        // 印刷機能
-        function printCalendar() {
-            // 印刷前に少し待機してレンダリングを確実にする
-            setTimeout(() => {
-                window.print();
-            }, 100);
+        // PDF出力機能（A4横向け、完全表示対応）
+        function downloadPDF() {
+            // ローディング表示
+            const pdfBtn = document.querySelector('.btn-pdf');
+            const originalText = pdfBtn.textContent;
+            pdfBtn.textContent = '📄 PDF作成中...';
+            pdfBtn.disabled = true;
+            
+            // カレンダーコンテナを取得
+            const calendarContainer = document.querySelector('.calendar-container');
+            
+            // 一時的にスタイルを調整（完全表示のため）
+            const originalStyle = calendarContainer.style.cssText;
+            calendarContainer.style.background = 'white';
+            calendarContainer.style.padding = '20px';
+            calendarContainer.style.minWidth = '100%';
+            calendarContainer.style.overflow = 'visible';
+            
+            // 実際のコンテナサイズを取得
+            const containerRect = calendarContainer.getBoundingClientRect();
+            const containerWidth = Math.max(containerRect.width, 900); // 最小幅を保証
+            const containerHeight = Math.max(containerRect.height, 650); // 最小高さを保証
+            
+            // html2canvasでキャプチャ（実サイズベース）
+            html2canvas(calendarContainer, {
+                scale: 2, // 高解像度だが処理速度も考慮
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                logging: false,
+                allowTaint: false,
+                width: containerWidth,
+                height: containerHeight,
+                scrollX: 0,
+                scrollY: 0,
+                x: 0,
+                y: 0
+            }).then(canvas => {
+                // スタイルを元に戻す
+                calendarContainer.style.cssText = originalStyle;
+                
+                // PDFを作成（A4横向け）
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'landscape',
+                    unit: 'mm',
+                    format: 'a4',
+                    compress: true
+                });
+                
+                // A4横向けサイズ（mm）
+                const pdfWidth = 297;
+                const pdfHeight = 210;
+                const margin = 10;
+                const availableWidth = pdfWidth - (margin * 2);
+                const availableHeight = pdfHeight - (margin * 2);
+                
+                // 画像をPDFに追加（マージン付きでフィット）
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                
+                // 画像のアスペクト比を計算
+                const canvasAspect = canvas.width / canvas.height;
+                const availableAspect = availableWidth / availableHeight;
+                
+                let imgWidth, imgHeight;
+                
+                if (canvasAspect > availableAspect) {
+                    // 幅に合わせる
+                    imgWidth = availableWidth;
+                    imgHeight = availableWidth / canvasAspect;
+                } else {
+                    // 高さに合わせる
+                    imgHeight = availableHeight;
+                    imgWidth = availableHeight * canvasAspect;
+                }
+                
+                // 中央配置
+                const offsetX = margin + (availableWidth - imgWidth) / 2;
+                const offsetY = margin + (availableHeight - imgHeight) / 2;
+                
+                pdf.addImage(imgData, 'JPEG', offsetX, offsetY, imgWidth, imgHeight, '', 'FAST');
+                
+                // ファイル名を生成
+                const year = document.getElementById('year').value;
+                const month = parseInt(document.getElementById('month').value) + 1;
+                const fileName = `希望シフト表_${year}年${String(month).padStart(2, '0')}月_A4.pdf`;
+                
+                // PDFをダウンロード
+                pdf.save(fileName);
+                
+                // ボタンを元に戻す
+                pdfBtn.textContent = originalText;
+                pdfBtn.disabled = false;
+            }).catch(error => {
+                console.error('PDF生成エラー:', error);
+                alert('PDF生成中にエラーが発生しました。しばらく待ってから再度お試しください。');
+                
+                // スタイルを元に戻す
+                calendarContainer.style.cssText = originalStyle;
+                
+                // ボタンを元に戻す
+                pdfBtn.textContent = originalText;
+                pdfBtn.disabled = false;
+            });
         }
 
         // 初期化
