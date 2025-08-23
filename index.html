@@ -2566,7 +2566,26 @@
             const employeeName = nameCell ? nameCell.textContent.trim() : '';
             
             if (row.classList.contains('confirmed')) {
+                // 確定解除: 編集を再度可能に
                 row.classList.remove('confirmed');
+                
+                // 編集可能なセルを再度有効化
+                const editableCells = row.querySelectorAll('.editable-cell');
+                editableCells.forEach(cell => {
+                    cell.contentEditable = true;
+                    cell.style.backgroundColor = '';
+                    cell.style.cursor = 'text';
+                    cell.style.opacity = '';
+                });
+                
+                // ステータス選択も再度有効化
+                const statusSelect = row.querySelector('.status-select');
+                if (statusSelect) {
+                    statusSelect.disabled = false;
+                    statusSelect.style.backgroundColor = '';
+                    statusSelect.style.cursor = 'pointer';
+                    statusSelect.style.opacity = '';
+                }
                 
                 const confirmBtn = row.querySelector('.row-confirm-btn');
                 if (confirmBtn) {
@@ -2577,22 +2596,42 @@
                 
                 const name = employeeName || '行';
                 showStatus(`${name}の確定を解除しました`, 'success');
+                
             } else {
                 if (!employeeName.trim()) {
                     showStatus('氏名は必須項目です', 'error');
                     return;
                 }
                 
+                // 確定: 編集をロック
                 row.classList.add('confirmed');
+                
+                // 編集可能なセルを無効化
+                const editableCells = row.querySelectorAll('.editable-cell');
+                editableCells.forEach(cell => {
+                    cell.contentEditable = false;
+                    cell.style.backgroundColor = 'rgba(200, 200, 200, 0.3)';
+                    cell.style.cursor = 'not-allowed';
+                    cell.style.opacity = '0.8';
+                });
+                
+                // ステータス選択も無効化
+                const statusSelect = row.querySelector('.status-select');
+                if (statusSelect) {
+                    statusSelect.disabled = true;
+                    statusSelect.style.backgroundColor = 'rgba(200, 200, 200, 0.3)';
+                    statusSelect.style.cursor = 'not-allowed';
+                    statusSelect.style.opacity = '0.8';
+                }
                 
                 const confirmBtn = row.querySelector('.row-confirm-btn');
                 if (confirmBtn) {
-                    confirmBtn.innerHTML = '✓';
+                    confirmBtn.innerHTML = '🔒';
                     confirmBtn.title = '確定済み（クリックで解除）';
                 }
                 
                 const name = employeeName || '行';
-                showStatus(`${name}を確定しました`, 'success');
+                showStatus(`${name}を確定しました（編集がロックされました）`, 'success');
                 
                 row.style.transform = 'scale(1.02)';
                 setTimeout(() => {
