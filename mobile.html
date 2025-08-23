@@ -1153,11 +1153,11 @@
                                     </div>
                                     <div class="detail-row">
                                         <span class="detail-label">時給</span>
-                                        <span class="detail-input" style="background-color: #f8f9fa;">${emp.hourlyWage}</span>
+                                        <span class="detail-input" style="background-color: #f8f9fa;" data-field="hourlyWage" data-original="${emp.hourlyWage}">${emp.hourlyWage}</span>
                                     </div>
                                     <div class="detail-row">
                                         <span class="detail-label">交通費</span>
-                                        <span class="detail-input" style="background-color: #f8f9fa;">${emp.transportation}</span>
+                                        <span class="detail-input" style="background-color: #f8f9fa;" data-field="transportation" data-original="${emp.transportation}">${emp.transportation}</span>
                                     </div>
                                 </div>
                             </div>
@@ -1585,6 +1585,13 @@
                 const endTimeInput = item.querySelector('[data-field="endTime"]');
                 const breakInput = item.querySelector('[data-field="break"]');
                 
+                // 実際の時給と交通費データを取得
+                const hourlyWageElement = item.querySelector('[data-field="hourlyWage"]');
+                const transportationElement = item.querySelector('[data-field="transportation"]');
+                
+                const hourlyWage = hourlyWageElement ? hourlyWageElement.textContent.trim() : '1000';
+                const transportation = transportationElement ? transportationElement.textContent.trim() : '500';
+                
                 data.push({
                     company: company,
                     name: name,
@@ -1593,8 +1600,8 @@
                     startTime: startTimeInput ? startTimeInput.value : '',
                     endTime: endTimeInput ? endTimeInput.value : '',
                     break: breakInput ? breakInput.value : '',
-                    hourlyWage: '1000', // デフォルト値
-                    transportation: '500', // デフォルト値
+                    hourlyWage: hourlyWage,
+                    transportation: transportation,
                     isWorking: status === '○' || status === '◯'
                 });
             });
