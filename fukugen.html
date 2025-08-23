@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#2196F3">
-    <title>詳細データ復元ビューア v1.1</title>
+    <title>詳細データ復元ビューア v1.2</title>
     
-    <!-- Excel読み込み用ライブラリ -->
+    <!-- Excelライブラリ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Chart.jsライブラリ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     
     <style>
         :root {
@@ -318,6 +320,56 @@
             color: var(--text-secondary);
         }
 
+        /* Chart Panel Styles */
+        .chart-analysis-panel {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        .chart-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .chart-tab-btn {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .chart-tab-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .chart-tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
         .table-container {
             background: var(--surface);
             border-radius: 16px;
@@ -400,51 +452,51 @@
             vertical-align: top;
         }
 
-        /* カラム幅の設定 */
+        /* Column widths */
         .employee-table th:nth-child(1),
-        .employee-table td:nth-child(1) { width: 100px; } /* 会社名 */
+        .employee-table td:nth-child(1) { width: 100px; }
         
         .employee-table th:nth-child(2),
-        .employee-table td:nth-child(2) { width: 80px; } /* 時間帯 */
+        .employee-table td:nth-child(2) { width: 80px; }
         
         .employee-table th:nth-child(3),
-        .employee-table td:nth-child(3) { width: 100px; } /* メイン業務 */
+        .employee-table td:nth-child(3) { width: 100px; }
         
         .employee-table th:nth-child(4),
-        .employee-table td:nth-child(4) { width: 120px; } /* 氏名 */
+        .employee-table td:nth-child(4) { width: 120px; }
         
         .employee-table th:nth-child(5),
-        .employee-table td:nth-child(5) { width: 60px; } /* 性別 */
+        .employee-table td:nth-child(5) { width: 60px; }
         
         .employee-table th:nth-child(6),
-        .employee-table td:nth-child(6) { width: 80px; } /* 時給 */
+        .employee-table td:nth-child(6) { width: 80px; }
         
         .employee-table th:nth-child(7),
-        .employee-table td:nth-child(7) { width: 80px; } /* 交通費 */
+        .employee-table td:nth-child(7) { width: 80px; }
         
         .employee-table th:nth-child(8),
-        .employee-table td:nth-child(8) { width: 90px; } /* 開始時間 */
+        .employee-table td:nth-child(8) { width: 90px; }
         
         .employee-table th:nth-child(9),
-        .employee-table td:nth-child(9) { width: 90px; } /* 終了時間 */
+        .employee-table td:nth-child(9) { width: 90px; }
         
         .employee-table th:nth-child(10),
-        .employee-table td:nth-child(10) { width: 70px; } /* 休憩 */
+        .employee-table td:nth-child(10) { width: 70px; }
         
         .employee-table th:nth-child(11),
-        .employee-table td:nth-child(11) { width: 80px; } /* 勤務状況 */
+        .employee-table td:nth-child(11) { width: 80px; }
         
         .employee-table th:nth-child(12),
-        .employee-table td:nth-child(12) { width: 80px; } /* 勤務LH */
+        .employee-table td:nth-child(12) { width: 80px; }
         
         .employee-table th:nth-child(13),
-        .employee-table td:nth-child(13) { width: 80px; } /* 夜勤時間 */
+        .employee-table td:nth-child(13) { width: 80px; }
         
         .employee-table th:nth-child(14),
-        .employee-table td:nth-child(14) { width: 80px; } /* 残業時間 */
+        .employee-table td:nth-child(14) { width: 80px; }
         
         .employee-table th:last-child,
-        .employee-table td:last-child { width: 100px; } /* 操作 */
+        .employee-table td:last-child { width: 100px; }
 
         .employee-table tr:hover {
             background: rgba(33, 150, 243, 0.05);
@@ -557,25 +609,10 @@
             margin-right: 4px;
         }
 
-        .row-reset-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
         .row-reset-btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
             background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
-        }
-
-        .row-reset-btn:hover::before {
-            left: 100%;
         }
 
         .row-confirm-btn {
@@ -596,25 +633,10 @@
             box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
         }
 
-        .row-confirm-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
         .row-confirm-btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 16px rgba(76, 175, 80, 0.4);
             background: linear-gradient(135deg, #43A047 0%, #2E7D32 100%);
-        }
-
-        .row-confirm-btn:hover::before {
-            left: 100%;
         }
 
         .action-buttons {
@@ -762,6 +784,15 @@
                 flex-direction: column;
             }
 
+            .chart-tabs {
+                flex-direction: column;
+            }
+
+            .chart-container {
+                height: 300px;
+                padding: 15px;
+            }
+
             .employee-table {
                 font-size: 0.8rem;
                 table-layout: auto;
@@ -776,7 +807,6 @@
                 min-width: 60px;
             }
 
-            /* モバイルでのカラム幅リセット */
             .employee-table th,
             .employee-table td {
                 width: auto !important;
@@ -814,7 +844,8 @@
             .theme-toggle,
             .row-reset-btn,
             .row-confirm-btn,
-            .add-row-btn {
+            .add-row-btn,
+            .chart-analysis-panel {
                 display: none;
             }
 
@@ -835,7 +866,7 @@
                     <div class="logo">📊</div>
                     <div>
                         <h1 class="title">詳細データ復元ビューア</h1>
-                        <p class="subtitle">エクスポートされたExcelファイルを読み込んで編集・管理（v1.1会社別集計改良版）</p>
+                        <p class="subtitle">エクスポートされたExcelファイルを読み込んで編集・管理（v1.2グラフ分析改良版）</p>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -890,6 +921,26 @@
             <div class="summary-grid" id="summaryGrid"></div>
         </div>
 
+        <!-- Chart Analysis Panel -->
+        <div class="chart-analysis-panel" id="chartAnalysisPanel">
+            <div class="step-header">
+                <div class="step-number">📊</div>
+                <div>
+                    <h3>グラフ分析</h3>
+                    <p class="step-description">シフトデータの可視化・パターン分析</p>
+                </div>
+            </div>
+            <div class="chart-tabs">
+                <button class="chart-tab-btn active" onclick="showChart('timeSlot')">時間帯別出勤者</button>
+                <button class="chart-tab-btn" onclick="showChart('company')">会社別分析</button>
+                <button class="chart-tab-btn" onclick="showChart('pattern')">勤務LH分布</button>
+                <button class="chart-tab-btn" onclick="showChart('cost')">コスト分析</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="analysisChart"></canvas>
+            </div>
+        </div>
+
         <!-- Employee Table Section -->
         <div class="table-container hidden" id="tableContainer">
             <div class="step-header">
@@ -904,14 +955,17 @@
                 <button class="add-row-btn" onclick="addNewRow()">
                     ➕ 新しい従業員を追加
                 </button>
+                <button class="action-btn primary" onclick="toggleChartAnalysis()">
+                    📊 グラフ分析
+                </button>
                 <button class="action-btn" onclick="exportToExcel()">
                     📊 編集データをエクスポート
                 </button>
                 <button class="action-btn success" onclick="exportCompanySummary()">
-                    📈 会社別集計（v1.1改良版）
+                    📈 会社別集計（v1.2改良版）
                 </button>
                 <button class="action-btn danger" onclick="clearData()">
-                    🔄 データクリア
+                    🗑 データクリア
                 </button>
             </div>
             
@@ -931,12 +985,14 @@
         let originalEmployeeData = [];
         let shiftTitle = '';
         let isNightShift = false;
-        let allCompanies = []; // 全会社リスト
+        let allCompanies = [];
+        let currentChart = null;
+        let currentChartType = 'timeSlot';
 
         // App initialization
         document.addEventListener('DOMContentLoaded', function() {
             initializeApp();
-            setupDataReceiver(); // データ受信機能を追加
+            setupDataReceiver();
         });
 
         function initializeApp() {
@@ -948,7 +1004,6 @@
         // PostMessageでデータを受信する機能
         function setupDataReceiver() {
             window.addEventListener('message', function(event) {
-                // セキュリティチェック（同一オリジンのみ許可）
                 if (event.origin !== window.location.origin) {
                     return;
                 }
@@ -958,25 +1013,19 @@
                         const transferData = event.data.data;
                         console.log('データを受信しました:', transferData);
                         
-                        // 受信したデータを設定
                         employeeData = transferData.employeeData || [];
                         originalEmployeeData = JSON.parse(JSON.stringify(employeeData));
                         shiftTitle = transferData.shiftTitle || 'シフトデータ';
                         isNightShift = transferData.isNightShift || false;
                         
-                        // 全会社リストを抽出
                         extractAllCompanies(employeeData);
                         
-                        // ファイルアップロードセクションを非表示
                         const uploadContainer = document.querySelector('.step-container');
                         if (uploadContainer) {
                             uploadContainer.style.display = 'none';
                         }
                         
-                        // 受信完了メッセージを表示
                         showReceivedDataInfo(transferData);
-                        
-                        // データを表示
                         displayData();
                         
                         showStatus(`${employeeData.length}件のデータを受信しました`, 'success');
@@ -989,11 +1038,9 @@
             });
         }
 
-        // 受信データ情報を表示
         function showReceivedDataInfo(transferData) {
             const uploadContainer = document.querySelector('.step-container');
             
-            // 受信データ情報パネルを作成
             const receivedInfoPanel = document.createElement('div');
             receivedInfoPanel.className = 'step-container';
             receivedInfoPanel.innerHTML = `
@@ -1023,13 +1070,11 @@
                 </div>
             `;
             
-            // 元のアップロードコンテナと入れ替え
             if (uploadContainer && uploadContainer.parentNode) {
                 uploadContainer.parentNode.insertBefore(receivedInfoPanel, uploadContainer);
             }
         }
 
-        // ファイルアップロード画面を再表示
         function showFileUpload() {
             const uploadContainers = document.querySelectorAll('.step-container');
             uploadContainers.forEach(container => {
@@ -1040,7 +1085,6 @@
             });
         }
 
-        // 全会社リストを抽出する関数
         function extractAllCompanies(data) {
             const companiesSet = new Set();
             
@@ -1054,19 +1098,17 @@
             data.forEach(emp => {
                 const companyName = emp['会社名'] ? emp['会社名'].trim() : '';
                 
-                // 除外キーワードをチェック
                 const shouldExclude = excludeKeywords.some(keyword => 
                     companyName.includes(keyword)
                 );
                 
                 if (shouldExclude) return;
                 if (!companyName) return;
-                if (/^\d+$/.test(companyName)) return; // 数字のみは除外
+                if (/^\d+$/.test(companyName)) return;
                 
                 companiesSet.add(companyName);
             });
             
-            // Gworkerを最初に、その後はアルファベット順・あいうえお順でソート
             allCompanies = Array.from(companiesSet).sort((a, b) => {
                 if (a === 'Gworker') return -1;
                 if (b === 'Gworker') return 1;
@@ -1107,7 +1149,6 @@
             const uploadZone = document.getElementById('uploadZone');
             const fileInput = document.getElementById('fileInput');
 
-            // Drag & drop events
             uploadZone.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 uploadZone.classList.add('drag-over');
@@ -1128,7 +1169,6 @@
                 }
             });
 
-            // Click to select
             uploadZone.addEventListener('click', () => {
                 fileInput.click();
             });
@@ -1193,11 +1233,9 @@
                     const data = new Uint8Array(e.target.result);
                     workbook = XLSX.read(data, { type: 'array' });
                     
-                    // Show file info
                     document.getElementById('fileName').textContent = `✅ ${file.name} (${formatFileSize(file.size)})`;
                     document.getElementById('fileInfo').style.display = 'block';
                     
-                    // Process Excel data
                     processExcelData();
                     
                     showProgress(false);
@@ -1218,7 +1256,6 @@
                 throw new Error('有効なExcelファイルではありません');
             }
 
-            // 最初のシートを読み込み
             const firstSheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[firstSheetName];
             const sheetData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
@@ -1227,13 +1264,9 @@
                 throw new Error('データが不十分です');
             }
 
-            // タイトル行を取得（最初の行）
             shiftTitle = sheetData[0][0] || 'シフトデータ';
-            
-            // 夜勤かどうかを判定
             isNightShift = shiftTitle.includes('夜勤');
 
-            // ヘッダー行を見つける（通常は3行目）
             let headerRowIndex = -1;
             for (let i = 0; i < Math.min(5, sheetData.length); i++) {
                 const row = sheetData[i];
@@ -1250,12 +1283,10 @@
             const headers = sheetData[headerRowIndex];
             employeeData = [];
 
-            // データ行を処理
             for (let i = headerRowIndex + 1; i < sheetData.length; i++) {
                 const row = sheetData[i];
                 if (!row || row.length === 0) continue;
 
-                // 空白行をスキップ
                 const hasData = row.some(cell => cell && String(cell).trim() !== '');
                 if (!hasData) continue;
 
@@ -1266,7 +1297,6 @@
                     }
                 });
 
-                // 最低限必要なデータがある場合のみ追加
                 if (employee['氏名'] || employee['会社名']) {
                     employeeData.push(employee);
                 }
@@ -1276,13 +1306,8 @@
                 throw new Error('従業員データが見つかりません');
             }
 
-            // オリジナルデータのバックアップを作成
             originalEmployeeData = JSON.parse(JSON.stringify(employeeData));
-
-            // 全会社リストを抽出
             extractAllCompanies(employeeData);
-
-            // UI更新
             displayData();
         }
 
@@ -1290,11 +1315,9 @@
             displaySummary();
             displayEmployeeTable();
             
-            // Show result sections
             document.getElementById('dataSummary').classList.remove('hidden');
             document.getElementById('tableContainer').classList.remove('hidden');
             
-            // Scroll to results
             document.getElementById('dataSummary').scrollIntoView({ 
                 behavior: 'smooth',
                 block: 'start'
@@ -1304,13 +1327,11 @@
         function displaySummary() {
             const summaryGrid = document.getElementById('summaryGrid');
             
-            // Calculate summary data
             const totalEmployees = employeeData.length;
             const workingEmployees = employeeData.filter(emp => emp['勤務状況'] === '◯').length;
             const absentEmployees = employeeData.filter(emp => emp['勤務状況'] === '欠勤').length;
             const vacationEmployees = employeeData.filter(emp => emp['勤務状況'] === '有休').length;
             
-            // Count companies
             const companies = new Set();
             employeeData.forEach(emp => {
                 if (emp['会社名'] && emp['会社名'].trim()) {
@@ -1318,7 +1339,6 @@
                 }
             });
 
-            // Calculate total working hours
             let totalWorkingHours = 0;
             employeeData.forEach(emp => {
                 if (emp['勤務状況'] === '◯') {
@@ -1369,11 +1389,9 @@
                 return;
             }
 
-            // ヘッダーを作成（編集操作列を追加）
             const firstEmployee = employeeData[0];
             let headers = Object.keys(firstEmployee);
             
-            // 必要なヘッダーが存在しない場合は追加
             const requiredHeaders = ['会社名', '時間帯', 'メイン業務', '氏名', '性別', '時給', '交通費', '開始時間', '終了時間', '休憩', '勤務状況'];
             requiredHeaders.forEach(header => {
                 if (!headers.includes(header)) {
@@ -1381,7 +1399,6 @@
                 }
             });
             
-            // 操作列を追加
             headers.push('操作');
             
             let tableHTML = '<thead><tr>';
@@ -1390,7 +1407,6 @@
             });
             tableHTML += '</tr></thead><tbody>';
             
-            // データ行を作成
             employeeData.forEach((employee, index) => {
                 const isWorking = employee['勤務状況'] === '◯';
                 const rowClass = isWorking ? 'working' : '';
@@ -1410,7 +1426,6 @@
                         let cellClass = '';
                         let cellContent = '';
                         
-                        // 勤務状況のセルは選択ボックスに
                         if (header === '勤務状況') {
                             const statusOptions = ['◯', '欠勤', '有休'];
                             let statusSelect = `<select class="status-select" data-row-index="${index}" data-field="${header}">`;
@@ -1423,7 +1438,6 @@
                             cellContent = statusSelect;
                             cellClass = 'status-cell';
                         } else {
-                            // 編集可能セル
                             cellClass = 'editable-cell';
                             if (['開始時間', '終了時間', '休憩'].includes(header)) {
                                 cellClass += ' time-cell';
@@ -1440,7 +1454,6 @@
             tableHTML += '</tbody>';
             table.innerHTML = tableHTML;
             
-            // Add edit listeners
             addEditListeners();
         }
 
@@ -1448,7 +1461,6 @@
             const editableCells = document.querySelectorAll('.editable-cell div[contenteditable]');
             const statusSelects = document.querySelectorAll('.status-select');
             
-            // 編集可能セルのリスナー
             editableCells.forEach(cell => {
                 cell.addEventListener('blur', function() {
                     const row = this.closest('tr');
@@ -1456,27 +1468,28 @@
                     const field = this.getAttribute('data-field');
                     const newValue = this.textContent.trim();
                     
-                    // データを更新
                     if (!employeeData[rowIndex]) {
                         employeeData[rowIndex] = {};
                     }
                     employeeData[rowIndex][field] = newValue;
                     
-                    // 時間関連の計算を更新
                     if (['開始時間', '終了時間', '休憩'].includes(field)) {
                         updateRowCalculations(rowIndex);
                     }
                     
-                    // サマリーを更新
                     displaySummary();
                     
-                    // Visual feedback
                     this.style.background = 'rgba(76, 175, 80, 0.2)';
                     setTimeout(() => {
                         this.style.background = '';
                     }, 1000);
                     
                     showStatus('変更が保存されました', 'success');
+                    
+                    // グラフが表示されている場合は更新
+                    if (document.getElementById('chartAnalysisPanel').style.display !== 'none') {
+                        updateChart();
+                    }
                 });
                 
                 cell.addEventListener('keydown', function(e) {
@@ -1487,7 +1500,6 @@
                 });
             });
             
-            // 勤務状況セレクトボックスのリスナー
             statusSelects.forEach(select => {
                 select.addEventListener('change', function() {
                     const rowIndex = parseInt(this.getAttribute('data-row-index'));
@@ -1495,17 +1507,14 @@
                     const newStatus = this.value;
                     const row = this.closest('tr');
                     
-                    // データを更新
                     if (!employeeData[rowIndex]) {
                         employeeData[rowIndex] = {};
                     }
                     employeeData[rowIndex][field] = newStatus;
                     
-                    // 行のスタイルを更新
                     if (newStatus === '◯') {
                         row.classList.add('working');
                         
-                        // 時間が空白の場合はデフォルト値を設定
                         const startTimeDiv = row.querySelector('[data-field="開始時間"]');
                         const endTimeDiv = row.querySelector('[data-field="終了時間"]');
                         const breakDiv = row.querySelector('[data-field="休憩"]');
@@ -1527,7 +1536,6 @@
                     } else {
                         row.classList.remove('working');
                         
-                        // 欠勤・有休の場合は時間をクリア
                         if (['欠勤', '有休'].includes(newStatus)) {
                             ['開始時間', '終了時間', '休憩'].forEach(timeField => {
                                 const timeDiv = row.querySelector(`[data-field="${timeField}"]`);
@@ -1539,8 +1547,12 @@
                         }
                     }
                     
-                    // サマリーを更新
                     displaySummary();
+                    
+                    // グラフが表示されている場合は更新
+                    if (document.getElementById('chartAnalysisPanel').style.display !== 'none') {
+                        updateChart();
+                    }
                     
                     showStatus(`勤務状況を「${newStatus}」に変更しました`, 'success');
                 });
@@ -1560,12 +1572,10 @@
                 const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
                 const overtimeHours = Math.max(0, workHours - 8);
                 
-                // データを更新
                 employee['勤務LH'] = workHours.toFixed(2);
                 employee['夜勤時間'] = nightHours.toFixed(2);
                 employee['残業時間'] = overtimeHours.toFixed(2);
                 
-                // テーブル内の計算列も更新
                 const row = document.querySelector(`tr[data-row-index="${rowIndex}"]`);
                 if (row) {
                     const lhCell = row.querySelector('[data-field="勤務LH"]');
@@ -1601,7 +1611,6 @@
             displayEmployeeTable();
             displaySummary();
             
-            // 新しい行の最初のセルにフォーカス
             const newRowIndex = employeeData.length - 1;
             const newRow = document.querySelector(`tr[data-row-index="${newRowIndex}"]`);
             if (newRow) {
@@ -1618,12 +1627,10 @@
             if (originalEmployeeData[rowIndex]) {
                 if (!confirm('この行を元の状態に戻しますか？')) return;
                 
-                // 元データで上書き
                 employeeData[rowIndex] = JSON.parse(JSON.stringify(originalEmployeeData[rowIndex]));
             } else {
                 if (!confirm('この行をクリアしますか？')) return;
                 
-                // 新規追加行の場合は空にリセット
                 Object.keys(employeeData[rowIndex]).forEach(key => {
                     employeeData[rowIndex][key] = '';
                 });
@@ -1641,25 +1648,376 @@
             const nameField = employeeData[rowIndex]['氏名'] || '';
             
             if (row.classList.contains('confirmed')) {
-                // 確定解除
                 row.classList.remove('confirmed');
                 showStatus(`${nameField || '行'}の確定を解除しました`, 'success');
             } else {
-                // 必須項目のチェック
                 if (!nameField.trim()) {
                     showStatus('氏名は必須項目です', 'error');
                     return;
                 }
                 
-                // 行を確定状態にする
                 row.classList.add('confirmed');
                 showStatus(`${nameField}を確定しました`, 'success');
                 
-                // 確定時のアニメーション効果
                 row.style.transform = 'scale(1.02)';
                 setTimeout(() => {
                     row.style.transform = '';
                 }, 200);
+            }
+        }
+
+        // Chart Analysis Functions
+        function toggleChartAnalysis() {
+            console.log('toggleChartAnalysis called'); // デバッグ用
+            
+            try {
+                const chartPanel = document.getElementById('chartAnalysisPanel');
+                if (!chartPanel) {
+                    console.error('chartAnalysisPanel element not found');
+                    showStatus('グラフパネルが見つかりません', 'error');
+                    return;
+                }
+
+                // Chart.jsの読み込み確認
+                if (typeof Chart === 'undefined') {
+                    console.error('Chart.js library not loaded');
+                    showStatus('Chart.jsライブラリの読み込みに失敗しました。ページを再読み込みしてください。', 'error');
+                    return;
+                }
+
+                if (chartPanel.style.display === 'none' || !chartPanel.style.display) {
+                    chartPanel.style.display = 'block';
+                    
+                    // データの確認
+                    if (!employeeData || employeeData.length === 0) {
+                        showStatus('グラフ生成に必要なデータがありません', 'error');
+                        return;
+                    }
+                    
+                    generateChart(currentChartType);
+                    chartPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    showStatus('グラフ分析パネルを表示しました', 'success');
+                } else {
+                    chartPanel.style.display = 'none';
+                    if (currentChart) {
+                        currentChart.destroy();
+                        currentChart = null;
+                    }
+                    showStatus('グラフ分析パネルを非表示にしました', 'success');
+                }
+            } catch (error) {
+                console.error('toggleChartAnalysis error:', error);
+                showStatus('グラフ表示でエラーが発生しました: ' + error.message, 'error');
+            }
+        }
+
+        function showChart(type) {
+            currentChartType = type;
+            
+            // Update active tab
+            document.querySelectorAll('.chart-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            generateChart(type);
+        }
+
+        function generateChart(type) {
+            const ctx = document.getElementById('analysisChart').getContext('2d');
+            
+            if (currentChart) {
+                currentChart.destroy();
+            }
+            
+            let chartData = getChartData(type);
+            
+            const chartConfig = {
+                type: getChartType(type),
+                data: chartData,
+                options: getChartOptions(type)
+            };
+            
+            currentChart = new Chart(ctx, chartConfig);
+        }
+
+        function getChartData(type) {
+            const workingEmployees = employeeData.filter(emp => emp['勤務状況'] === '◯');
+            
+            switch (type) {
+                case 'timeSlot':
+                    return generateTimeSlotData(workingEmployees);
+                case 'company':
+                    return generateCompanyData(workingEmployees);
+                case 'pattern':
+                    return generatePatternData(employeeData);
+                case 'cost':
+                    return generateCostData(workingEmployees);
+                default:
+                    return { labels: [], datasets: [] };
+            }
+        }
+
+        function generateTimeSlotData(workingEmployees) {
+            const timeSlots = {};
+            
+            // 7-19時の時間帯を初期化
+            for (let hour = 7; hour <= 18; hour++) {
+                timeSlots[`${hour}-${hour + 1}`] = 0;
+            }
+            
+            workingEmployees.forEach(emp => {
+                const startTime = parseTime(emp['開始時間']);
+                const endTime = parseTime(emp['終了時間']);
+                
+                if (startTime !== null && endTime !== null) {
+                    let currentHour = Math.floor(startTime);
+                    let endHour = Math.floor(endTime);
+                    
+                    // 夜勤対応
+                    if (isNightShift && endTime < startTime) {
+                        endHour += 24;
+                    }
+                    
+                    while (currentHour < endHour || (currentHour === endHour && endTime > currentHour)) {
+                        const slotKey = `${currentHour}-${currentHour + 1}`;
+                        if (timeSlots.hasOwnProperty(slotKey)) {
+                            timeSlots[slotKey]++;
+                        }
+                        currentHour++;
+                        
+                        if (currentHour >= 24) {
+                            currentHour = 0;
+                        }
+                    }
+                }
+            });
+            
+            return {
+                labels: Object.keys(timeSlots),
+                datasets: [{
+                    label: '出勤者数',
+                    data: Object.values(timeSlots),
+                    backgroundColor: 'rgba(33, 150, 243, 0.6)',
+                    borderColor: 'rgba(33, 150, 243, 1)',
+                    borderWidth: 2
+                }]
+            };
+        }
+
+        function generateCompanyData(workingEmployees) {
+            const companyData = {};
+            
+            allCompanies.forEach(company => {
+                companyData[company] = 0;
+            });
+            
+            workingEmployees.forEach(emp => {
+                const company = emp['会社名'] ? emp['会社名'].trim() : '';
+                if (companyData.hasOwnProperty(company)) {
+                    companyData[company]++;
+                }
+            });
+            
+            // データが0でない会社のみ表示
+            const filteredLabels = [];
+            const filteredData = [];
+            
+            Object.keys(companyData).forEach(company => {
+                if (companyData[company] > 0) {
+                    filteredLabels.push(company);
+                    filteredData.push(companyData[company]);
+                }
+            });
+            
+            return {
+                labels: filteredLabels,
+                datasets: [{
+                    label: '出勤者数',
+                    data: filteredData,
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                        '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'
+                    ],
+                    borderWidth: 2
+                }]
+            };
+        }
+
+        function generatePatternData(allEmployees) {
+            // 勤務LH分布を生成
+            const hourRanges = {
+                '4時間未満': 0,
+                '4-6時間': 0,
+                '6-8時間': 0,
+                '8-9時間': 0,
+                '9-10時間': 0,
+                '10時間以上': 0
+            };
+            
+            // 出勤者のみを対象に勤務時間を分析
+            const workingEmployees = allEmployees.filter(emp => emp['勤務状況'] === '◯');
+            
+            workingEmployees.forEach(emp => {
+                let workHours = 0;
+                
+                // 勤務LH欄がある場合はそれを使用
+                if (emp['勤務LH'] && emp['勤務LH'] !== '') {
+                    workHours = parseFloat(emp['勤務LH']) || 0;
+                } else {
+                    // なければ開始・終了時間から計算
+                    const startTime = parseTime(emp['開始時間']);
+                    const endTime = parseTime(emp['終了時間']);
+                    const breakTime = parseTime(emp['休憩']);
+                    
+                    if (startTime !== null && endTime !== null) {
+                        workHours = calculateWorkHours(startTime, endTime, breakTime);
+                    }
+                }
+                
+                // 時間帯別に分類
+                if (workHours < 4) {
+                    hourRanges['4時間未満']++;
+                } else if (workHours < 6) {
+                    hourRanges['4-6時間']++;
+                } else if (workHours < 8) {
+                    hourRanges['6-8時間']++;
+                } else if (workHours < 9) {
+                    hourRanges['8-9時間']++;
+                } else if (workHours < 10) {
+                    hourRanges['9-10時間']++;
+                } else {
+                    hourRanges['10時間以上']++;
+                }
+            });
+            
+            return {
+                labels: Object.keys(hourRanges),
+                datasets: [{
+                    label: '従業員数',
+                    data: Object.values(hourRanges),
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                        '#9966FF', '#FF9F40'
+                    ],
+                    borderWidth: 2
+                }]
+            };
+        }
+
+        function generateCostData(workingEmployees) {
+            const costData = {};
+            
+            allCompanies.forEach(company => {
+                costData[company] = 0;
+            });
+            
+            workingEmployees.forEach(emp => {
+                const company = emp['会社名'] ? emp['会社名'].trim() : '';
+                if (!costData.hasOwnProperty(company)) return;
+                
+                const hourlyWage = parseFloat(String(emp['時給'] || '0').replace(/[^\d.]/g, '')) || 0;
+                const transportation = parseFloat(String(emp['交通費'] || '0').replace(/[^\d.]/g, '')) || 0;
+                
+                const startTime = parseTime(emp['開始時間']);
+                const endTime = parseTime(emp['終了時間']);
+                const breakTime = parseTime(emp['休憩']);
+                
+                if (startTime !== null && endTime !== null) {
+                    const workHours = calculateWorkHours(startTime, endTime, breakTime);
+                    const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
+                    const overtimeHours = Math.max(0, workHours - 8);
+                    
+                    const regularHours = Math.max(0, workHours - overtimeHours);
+                    const baseCost = regularHours * hourlyWage;
+                    const overtimeBaseCost = overtimeHours * hourlyWage;
+                    const nightAllowance = nightHours * hourlyWage * 0.25;
+                    const overtimeAllowance = overtimeHours * hourlyWage * 0.25;
+                    
+                    costData[company] += baseCost + overtimeBaseCost + nightAllowance + overtimeAllowance + transportation;
+                } else {
+                    costData[company] += transportation;
+                }
+            });
+            
+            // データが0でない会社のみ表示
+            const filteredLabels = [];
+            const filteredData = [];
+            
+            Object.keys(costData).forEach(company => {
+                if (costData[company] > 0) {
+                    filteredLabels.push(company);
+                    filteredData.push(Math.round(costData[company]));
+                }
+            });
+            
+            return {
+                labels: filteredLabels,
+                datasets: [{
+                    label: '総コスト (円)',
+                    data: filteredData,
+                    backgroundColor: 'rgba(255, 152, 0, 0.6)',
+                    borderColor: 'rgba(255, 152, 0, 1)',
+                    borderWidth: 2
+                }]
+            };
+        }
+
+        function getChartType(type) {
+            switch (type) {
+                case 'timeSlot':
+                case 'cost':
+                    return 'bar';
+                case 'company':
+                case 'pattern':
+                    return 'doughnut';
+                default:
+                    return 'bar';
+            }
+        }
+
+        function getChartOptions(type) {
+            const baseOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: type === 'company' || type === 'pattern',
+                        position: 'right'
+                    }
+                }
+            };
+            
+            if (type === 'timeSlot' || type === 'cost') {
+                baseOptions.scales = {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                if (type === 'cost') {
+                                    return '¥' + value.toLocaleString();
+                                }
+                                return value + (type === 'timeSlot' ? '人' : '');
+                            }
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: type === 'timeSlot' ? '時間帯' : '会社名'
+                        }
+                    }
+                };
+            }
+            
+            return baseOptions;
+        }
+
+        function updateChart() {
+            if (currentChart && document.getElementById('chartAnalysisPanel').style.display !== 'none') {
+                const chartData = getChartData(currentChartType);
+                currentChart.data = chartData;
+                currentChart.update();
             }
         }
 
@@ -1735,9 +2093,7 @@
             const nightEnd = 5.0;    // 5:00
             let nightHours = 0;
             
-            // 夜勤時間帯（22:00-5:00）の重複を計算
             if (endTime < startTime) {
-                // 日をまたぐ場合
                 if (startTime <= nightStart) {
                     nightHours += (24 - nightStart);
                 } else if (startTime < 24) {
@@ -1750,7 +2106,6 @@
                     nightHours += endTime;
                 }
             } else {
-                // 日をまたがない場合
                 const shiftStart = Math.max(startTime, nightStart);
                 const shiftEnd = Math.min(endTime, 24);
                 
@@ -1767,7 +2122,6 @@
                 }
             }
             
-            // 休憩時間の調整
             if (nightHours > 0 && breakTime !== null && breakTime > 0) {
                 const breakAdjustment = Math.min(breakTime, nightHours);
                 nightHours = Math.max(0, nightHours - breakAdjustment);
@@ -1792,16 +2146,13 @@
             }
 
             try {
-                // タイトル行とデータを含むシートデータを作成
                 const exportData = [];
-                exportData.push([shiftTitle]); // タイトル行
-                exportData.push([]); // 空行
+                exportData.push([shiftTitle]);
+                exportData.push([]);
                 
-                // ヘッダー行
                 const headers = Object.keys(employeeData[0]);
                 exportData.push(headers);
                 
-                // データ行
                 employeeData.forEach(employee => {
                     const row = headers.map(header => employee[header] || '');
                     exportData.push(row);
@@ -1809,7 +2160,6 @@
 
                 const ws = XLSX.utils.aoa_to_sheet(exportData);
                 
-                // Set column widths
                 const columnWidths = [];
                 headers.forEach(header => {
                     const maxLength = Math.max(
@@ -1823,7 +2173,7 @@
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, '編集済みデータ');
                 
-                const fileName = `${shiftTitle.replace(/[^\w\d]/g, '_')}_編集済み_v1.1.xlsx`;
+                const fileName = `${shiftTitle.replace(/[^\w\d]/g, '_')}_編集済み_v1.2.xlsx`;
                 XLSX.writeFile(wb, fileName);
                 
                 showStatus('編集データをエクスポートしました', 'success');
@@ -1850,11 +2200,9 @@
                 data.push([shiftTitle + ' 会社別集計']);
                 data.push([]);
                 
-                // HC集計
                 data.push(['HC（人数）集計']);
                 data.push(['会社名', 'HC']);
                 
-                // 全会社を固定順序で出力
                 allCompanies.forEach(company => {
                     const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
                     data.push([company, summary.hc || '']);
@@ -1864,20 +2212,18 @@
                 data.push(['合計', totalHC]);
                 data.push([]);
                 
-                // LH集計
                 data.push(['LH（労働時間）集計']);
                 data.push(['会社名', 'LH']);
                 allCompanies.forEach(company => {
                     const summary = companySummary[company] || { hc: 0, totalLH: 0, totalCost: 0 };
                     const lh = summary.totalLH || 0;
-                    data.push([company, lh > 0 ? Math.round(lh * 10) / 10 : '']); // 小数点1位まで
+                    data.push([company, lh > 0 ? Math.round(lh * 10) / 10 : '']);
                 });
                 
                 const totalLH = Object.values(companySummary).reduce((sum, s) => sum + s.totalLH, 0);
                 data.push(['合計', Math.round(totalLH * 10) / 10]);
                 data.push([]);
                 
-                // 経費集計
                 data.push(['経費集計（手当込み）']);
                 data.push(['会社名', '総費用（円）']);
                 allCompanies.forEach(company => {
@@ -1890,7 +2236,6 @@
                 data.push(['合計', Math.round(totalCost)]);
                 data.push([]);
                 
-                // 平均時給集計
                 data.push(['平均時給集計']);
                 data.push(['会社名', '平均時給（円/時）']);
                 allCompanies.forEach(company => {
@@ -1904,18 +2249,17 @@
 
                 const ws = XLSX.utils.aoa_to_sheet(data);
                 
-                // 列幅の設定
                 ws['!cols'] = [
-                    { width: 20 }, // 会社名列
-                    { width: 15 }  // 数値列
+                    { width: 20 },
+                    { width: 15 }
                 ];
 
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, '会社別集計');
                 
-                const fileName = `${shiftTitle.replace(/[^\w\d]/g, '_')}_会社別集計_v1.1.xlsx`;
+                const fileName = `${shiftTitle.replace(/[^\w\d]/g, '_')}_会社別集計_v1.2.xlsx`;
                 XLSX.writeFile(wb, fileName);
-                showStatus('会社別集計データ（v1.1改良版）をエクスポートしました', 'success');
+                showStatus('会社別集計データ（v1.2改良版）をエクスポートしました', 'success');
                 
             } catch (error) {
                 console.error('会社別集計エラー:', error);
@@ -1927,19 +2271,16 @@
             const companySummary = {};
             
             employeeData.forEach(emp => {
-                // 出勤者のみを対象
                 if (emp['勤務状況'] === '◯') {
                     const company = (emp['会社名'] || '').trim();
-                    if (!company) return; // 会社名が空の場合はスキップ
+                    if (!company) return;
                     
-                    // 時給と交通費の安全な取得
                     const hourlyWageStr = emp['時給'] || '0';
                     const transportationStr = emp['交通費'] || '0';
                     
                     const hourlyWage = parseFloat(String(hourlyWageStr).replace(/[^\d.]/g, '')) || 0;
                     const transportation = parseFloat(String(transportationStr).replace(/[^\d.]/g, '')) || 0;
                     
-                    // 初期化
                     if (!companySummary[company]) {
                         companySummary[company] = { 
                             hc: 0, 
@@ -1950,7 +2291,6 @@
                     
                     companySummary[company].hc += 1;
                     
-                    // 時間の計算
                     const startTime = parseTime(emp['開始時間']);
                     const endTime = parseTime(emp['終了時間']);
                     const breakTime = parseTime(emp['休憩']);
@@ -1958,28 +2298,18 @@
                     if (startTime !== null && endTime !== null) {
                         const workHours = calculateWorkHours(startTime, endTime, breakTime);
                         const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
-                        const overtimeHours = Math.max(0, workHours - 8); // 8時間超過分
+                        const overtimeHours = Math.max(0, workHours - 8);
                         
                         companySummary[company].totalLH += workHours;
                         
-                        // 費用計算
-                        // 基本給（通常時間分）
                         const regularHours = Math.max(0, workHours - overtimeHours);
                         const baseCost = regularHours * hourlyWage;
-                        
-                        // 残業時間の基本時給
                         const overtimeBaseCost = overtimeHours * hourlyWage;
-                        
-                        // 夜勤手当（22:00-5:00の0.25倍増し）
                         const nightAllowance = nightHours * hourlyWage * 0.25;
-                        
-                        // 残業代（8時間超過分の0.25倍増し）
                         const overtimeAllowance = overtimeHours * hourlyWage * 0.25;
                         
-                        // 総費用
                         companySummary[company].totalCost += baseCost + overtimeBaseCost + nightAllowance + overtimeAllowance + transportation;
                     } else {
-                        // 時間が設定されていない場合は交通費のみ
                         companySummary[company].totalCost += transportation;
                     }
                 }
@@ -1996,8 +2326,14 @@
                 workbook = null;
                 shiftTitle = '';
                 
+                if (currentChart) {
+                    currentChart.destroy();
+                    currentChart = null;
+                }
+                
                 document.getElementById('dataSummary').classList.add('hidden');
                 document.getElementById('tableContainer').classList.add('hidden');
+                document.getElementById('chartAnalysisPanel').style.display = 'none';
                 document.getElementById('fileInfo').style.display = 'none';
                 document.getElementById('fileInput').value = '';
                 
