@@ -1907,6 +1907,14 @@
                     const currentData = getCurrentTableData();
                     if (currentData && currentData.length > 0) {
                         updateCalculations(currentData);
+                        
+                        // 拡張グラフパネルが表示されている場合は自動更新
+                        const chartPanel = document.getElementById('chartAnalysisPanel');
+                        if (chartPanel && chartPanel.style.display !== 'none') {
+                            updateChart();
+                            console.log('日付変更によりグラフを自動更新しました');
+                        }
+                        
                         showStatus(`日付変更に伴い基準UPH: ${baseUPH} に更新されました`, 'success');
                     }
                 }
