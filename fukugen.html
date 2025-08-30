@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#2196F3">
-    <title>詳細データ復元ビューア v1.2</title>
+    <title>詳細データ復元ビューア v1.3 - 費用分析機能追加版（夜勤手当・残業代込み）</title>
     
     <!-- Excelライブラリ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -318,6 +318,75 @@
         .summary-unit {
             font-size: 0.8rem;
             color: var(--text-secondary);
+        }
+
+        /* 詳細費用分析パネル用スタイル */
+        .calculation-panel {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .calc-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .calc-card {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(76, 175, 80, 0.1));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .calc-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .calc-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .calc-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .calc-unit {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .calc-input {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            width: 100%;
+            max-width: 120px;
+            margin: 4px auto;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
         }
 
         /* Chart Panel Styles */
@@ -708,6 +777,27 @@
             display: none !important;
         }
 
+        /* 基準UPH自動抽出関連のスタイル */
+        .uph-auto-indicator {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 4px;
+            display: inline-block;
+        }
+
+        .uph-manual-indicator {
+            background: linear-gradient(45deg, #FF9800, #FFC107);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 4px;
+            display: inline-block;
+        }
+
         /* Animations */
         @keyframes slideDown {
             from {
@@ -778,6 +868,11 @@
 
             .summary-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .calc-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 12px;
             }
 
             .action-buttons {
@@ -866,7 +961,7 @@
                     <div class="logo">📊</div>
                     <div>
                         <h1 class="title">詳細データ復元ビューア</h1>
-                        <p class="subtitle">エクスポートされたExcelファイルを読み込んで編集・管理（v1.2グラフ分析改良版）</p>
+                        <p class="subtitle">エクスポートされたExcelファイルを読み込んで編集・管理（v1.3費用分析改良版）</p>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -883,7 +978,7 @@
         <!-- File Upload Section -->
         <section class="step-container">
             <div class="step-header">
-                <div class="step-number">📁</div>
+                <div class="step-number">📄</div>
                 <div>
                     <h2 class="step-title">エクスポートされたExcelファイルを読み込み</h2>
                     <p class="step-description">シフト管理アプリからエクスポートされた詳細データファイル（.xlsx/.xls）をアップロード</p>
@@ -891,7 +986,7 @@
             </div>
             
             <div class="upload-zone" id="uploadZone">
-                <div class="upload-icon">📁</div>
+                <div class="upload-icon">📄</div>
                 <div class="upload-text">Excelファイルをドラッグ＆ドロップ</div>
                 <div class="upload-hint">または、クリックしてファイルを選択してください</div>
                 <input type="file" class="file-input" id="fileInput" accept=".xlsx,.xls">
@@ -919,6 +1014,18 @@
                 </div>
             </div>
             <div class="summary-grid" id="summaryGrid"></div>
+        </div>
+
+        <!-- 詳細費用分析パネル -->
+        <div class="calculation-panel hidden" id="calculationPanel">
+            <div class="calc-header">
+                <div class="step-number">💰</div>
+                <div>
+                    <h3>LH計算・費用分析</h3>
+                    <p class="step-description">労働時間と生産性の詳細分析（夜勤手当・残業代込み）</p>
+                </div>
+            </div>
+            <div class="calc-grid" id="calcGrid"></div>
         </div>
 
         <!-- Chart Analysis Panel -->
@@ -959,10 +1066,10 @@
                     📊 グラフ分析
                 </button>
                 <button class="action-btn" onclick="exportToExcel()">
-                    📊 編集データをエクスポート
+                    📊 集計データをエクスポート
                 </button>
                 <button class="action-btn success" onclick="exportCompanySummary()">
-                    📈 会社別集計（v1.2改良版）
+                    📈 会社別集計エクスポート
                 </button>
                 <button class="action-btn danger" onclick="clearData()">
                     🗑 データクリア
@@ -988,6 +1095,12 @@
         let allCompanies = [];
         let currentChart = null;
         let currentChartType = 'timeSlot';
+        
+        // 費用分析用の変数
+        let planValue = 12200;
+        let fcstValue = 16273;
+        let baseUPH = 22;
+        let isUPHAutoExtracted = false;
 
         // App initialization
         document.addEventListener('DOMContentLoaded', function() {
@@ -1017,6 +1130,11 @@
                         originalEmployeeData = JSON.parse(JSON.stringify(employeeData));
                         shiftTitle = transferData.shiftTitle || 'シフトデータ';
                         isNightShift = transferData.isNightShift || false;
+                        
+                        // 費用分析用データも受信
+                        planValue = transferData.planValue || 12200;
+                        fcstValue = transferData.fcstValue || 16273;
+                        baseUPH = transferData.baseUPH || 22;
                         
                         extractAllCompanies(employeeData);
                         
@@ -1064,7 +1182,7 @@
                     </div>
                     <div style="margin-top: 12px;">
                         <button class="action-btn" onclick="showFileUpload()" style="background: linear-gradient(45deg, #9C27B0, #673AB7); font-size: 0.8rem; padding: 8px 14px;">
-                            📁 ファイルから読み込み
+                            📄 ファイルから読み込み
                         </button>
                     </div>
                 </div>
@@ -1283,6 +1401,9 @@
             const headers = sheetData[headerRowIndex];
             employeeData = [];
 
+            // PLANとFCST値を抽出（簡単な実装）
+            extractPlanAndFcstValues(sheetData);
+
             for (let i = headerRowIndex + 1; i < sheetData.length; i++) {
                 const row = sheetData[i];
                 if (!row || row.length === 0) continue;
@@ -1311,11 +1432,35 @@
             displayData();
         }
 
+        function extractPlanAndFcstValues(sheetData) {
+            // シンプルな実装：シート内からPLANとFCSTの値を検索
+            for (let i = 0; i < sheetData.length; i++) {
+                const row = sheetData[i];
+                if (!row) continue;
+                
+                for (let j = 0; j < row.length; j++) {
+                    const cell = String(row[j]).toUpperCase();
+                    if (cell.includes('PLAN') && row[j + 1] && typeof row[j + 1] === 'number') {
+                        planValue = row[j + 1];
+                    }
+                    if (cell.includes('FCST') && row[j + 1] && typeof row[j + 1] === 'number') {
+                        fcstValue = row[j + 1];
+                    }
+                    if (cell.includes('UPH') && row[j + 1] && typeof row[j + 1] === 'number') {
+                        baseUPH = row[j + 1];
+                        isUPHAutoExtracted = true;
+                    }
+                }
+            }
+        }
+
         function displayData() {
             displaySummary();
+            displayDetailedCalculations();
             displayEmployeeTable();
             
             document.getElementById('dataSummary').classList.remove('hidden');
+            document.getElementById('calculationPanel').classList.remove('hidden');
             document.getElementById('tableContainer').classList.remove('hidden');
             
             document.getElementById('dataSummary').scrollIntoView({ 
@@ -1379,6 +1524,139 @@
                     <div class="summary-unit">時間</div>
                 </div>
             `;
+        }
+
+        function displayDetailedCalculations() {
+            const calcGrid = document.getElementById('calcGrid');
+            
+            let totalLH = 0;
+            let totalCost = 0;
+            let totalNightAllowance = 0;
+            let totalOvertimeAllowance = 0;
+            let workingCount = 0;
+            
+            employeeData.forEach(emp => {
+                if (emp['勤務状況'] === '◯') {
+                    workingCount++;
+                    
+                    const startTime = parseTime(emp['開始時間']);
+                    const endTime = parseTime(emp['終了時間']);
+                    const breakTime = parseTime(emp['休憩']);
+                    
+                    const hourlyWageStr = emp['時給'] != null ? String(emp['時給']) : '0';
+                    const transportationStr = emp['交通費'] != null ? String(emp['交通費']) : '0';
+                    
+                    const hourlyWage = parseFloat(hourlyWageStr.replace(/[^\d.]/g, '')) || 0;
+                    const transportation = parseFloat(transportationStr.replace(/[^\d.]/g, '')) || 0;
+                    
+                    if (startTime !== null && endTime !== null) {
+                        const workHours = calculateWorkHours(startTime, endTime, breakTime);
+                        const nightHours = calculateNightShiftHours(startTime, endTime, breakTime);
+                        const overtimeHours = Math.max(0, workHours - 8);
+                        
+                        totalLH += workHours;
+                        
+                        const regularHours = Math.max(0, workHours - overtimeHours);
+                        const baseCost = regularHours * hourlyWage;
+                        const overtimeBaseCost = overtimeHours * hourlyWage;
+                        const nightAllowance = nightHours * hourlyWage * 0.25;
+                        totalNightAllowance += nightAllowance;
+                        const overtimeAllowance = overtimeHours * hourlyWage * 0.25;
+                        totalOvertimeAllowance += overtimeAllowance;
+                        
+                        totalCost += baseCost + overtimeBaseCost + nightAllowance + overtimeAllowance + transportation;
+                    } else {
+                        totalCost += transportation;
+                    }
+                }
+            });
+            
+            const requiredLH = planValue / baseUPH;
+            const shortage = totalLH - requiredLH;
+            const currentUPH = totalLH > 0 ? planValue / totalLH : 0;
+            const averageHourlyCost = totalLH > 0 ? totalCost / totalLH : 0;
+            
+            const uphIndicator = isUPHAutoExtracted ? 
+                '<span class="uph-auto-indicator">自動</span>' : 
+                '<span class="uph-manual-indicator">手動</span>';
+            
+            calcGrid.innerHTML = `
+                <div class="calc-card">
+                    <div class="calc-label">FCST数量</div>
+                    <div class="calc-value">${fcstValue.toLocaleString()}</div>
+                    <div class="calc-unit">個</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">出勤HC</div>
+                    <div class="calc-value">${workingCount}</div>
+                    <div class="calc-unit">人</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">出勤LH</div>
+                    <div class="calc-value">${totalLH.toFixed(1)}</div>
+                    <div class="calc-unit">時間</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">平均単価</div>
+                    <div class="calc-value">¥${Math.round(averageHourlyCost).toLocaleString()}</div>
+                    <div class="calc-unit">円/時</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">PLAN数量</div>
+                    <input type="number" class="calc-input" value="${planValue}" onchange="updatePlan(this.value)">
+                    <div class="calc-unit">個</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">基準UPH ${uphIndicator}</div>
+                    <input type="number" class="calc-input" value="${baseUPH}" onchange="updateUPH(this.value)" step="0.1">
+                    <div class="calc-unit">個/時 📊 (${workingCount}人)</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">必要LH</div>
+                    <div class="calc-value">${requiredLH.toFixed(1)}</div>
+                    <div class="calc-unit">時間</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">実績UPH</div>
+                    <div class="calc-value" style="color: ${currentUPH >= baseUPH ? 'var(--secondary-color)' : '#f44336'}">${Math.round(currentUPH)}</div>
+                    <div class="calc-unit">個/時</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">過不足</div>
+                    <div class="calc-value" style="color: ${shortage >= 0 ? 'var(--secondary-color)' : '#f44336'}">${shortage.toFixed(1)}</div>
+                    <div class="calc-unit">時間</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">夜勤手当</div>
+                    <div class="calc-value">¥${Math.round(totalNightAllowance).toLocaleString()}</div>
+                    <div class="calc-unit">円 (22-5時)</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">残業手当</div>
+                    <div class="calc-value">¥${Math.round(totalOvertimeAllowance).toLocaleString()}</div>
+                    <div class="calc-unit">円 (8h超)</div>
+                </div>
+                <div class="calc-card">
+                    <div class="calc-label">総費用</div>
+                    <div class="calc-value">¥${Math.round(totalCost).toLocaleString()}</div>
+                    <div class="calc-unit">円 (手当込)</div>
+                </div>
+            `;
+        }
+
+        function updatePlan(value) {
+            planValue = parseFloat(value) || 12200;
+            displayDetailedCalculations();
+        }
+
+        function updateUPH(value) {
+            const newUPH = parseFloat(value) || 22;
+            if (newUPH !== baseUPH) {
+                baseUPH = newUPH;
+                isUPHAutoExtracted = false;
+                displayDetailedCalculations();
+                showStatus(`基準UPHを ${baseUPH} に手動変更しました`, 'success');
+            }
         }
 
         function displayEmployeeTable() {
@@ -1478,6 +1756,7 @@
                     }
                     
                     displaySummary();
+                    displayDetailedCalculations();
                     
                     this.style.background = 'rgba(76, 175, 80, 0.2)';
                     setTimeout(() => {
@@ -1548,6 +1827,7 @@
                     }
                     
                     displaySummary();
+                    displayDetailedCalculations();
                     
                     // グラフが表示されている場合は更新
                     if (document.getElementById('chartAnalysisPanel').style.display !== 'none') {
@@ -1610,6 +1890,7 @@
             employeeData.push(newEmployee);
             displayEmployeeTable();
             displaySummary();
+            displayDetailedCalculations();
             
             const newRowIndex = employeeData.length - 1;
             const newRow = document.querySelector(`tr[data-row-index="${newRowIndex}"]`);
@@ -1638,6 +1919,7 @@
             
             displayEmployeeTable();
             displaySummary();
+            displayDetailedCalculations();
             showStatus('行をリセットしました', 'success');
         }
 
@@ -1861,7 +2143,7 @@
             workingEmployees.forEach(emp => {
                 let workHours = 0;
                 
-                // 勤務LH欄がある場合はそれを使用
+                // 勤務LH欄があるばらそれを使用
                 if (emp['勤務LH'] && emp['勤務LH'] !== '') {
                     workHours = parseFloat(emp['勤務LH']) || 0;
                 } else {
@@ -2173,7 +2455,7 @@
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, '編集済みデータ');
                 
-                const fileName = `${shiftTitle.replace(/[^\w\d]/g, '_')}_編集済み_v1.2.xlsx`;
+                const fileName = `${shiftTitle.replace(/[^\w\d]/g, '_')}_編集済み_v1.3.xlsx`;
                 XLSX.writeFile(wb, fileName);
                 
                 showStatus('編集データをエクスポートしました', 'success');
@@ -2257,9 +2539,9 @@
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, '会社別集計');
                 
-                const fileName = `${shiftTitle.replace(/[^\w\d]/g, '_')}_会社別集計_v1.2.xlsx`;
+                const fileName = `${shiftTitle.replace(/[^\w\d]/g, '_')}_会社別集計_v1.3.xlsx`;
                 XLSX.writeFile(wb, fileName);
-                showStatus('会社別集計データ（v1.2改良版）をエクスポートしました', 'success');
+                showStatus('会社別集計データ（v1.3改良版）をエクスポートしました', 'success');
                 
             } catch (error) {
                 console.error('会社別集計エラー:', error);
@@ -2332,6 +2614,7 @@
                 }
                 
                 document.getElementById('dataSummary').classList.add('hidden');
+                document.getElementById('calculationPanel').classList.add('hidden');
                 document.getElementById('tableContainer').classList.add('hidden');
                 document.getElementById('chartAnalysisPanel').style.display = 'none';
                 document.getElementById('fileInfo').style.display = 'none';
